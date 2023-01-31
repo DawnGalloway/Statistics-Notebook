@@ -1,0 +1,375 @@
+---
+title: "Residuals"
+author: "Dawn Galloway"
+date: "1/9/2023"
+output: 
+  html_document:
+    code_folding: hide
+    theme: cerulean
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# An Eplanation of Residuals, Sums of Squares, and R-Squared
+
+We begin by plotting the temperature and barometric pressure for 21 non-consecutive days in Rexburg, Idaho and then draw the regression line. 
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(data.table)
+theme_set(theme_minimal())
+
+
+weather_hist <- data.table(
+  Date = c("2022-01-25", "2022-01-26", "2022-01-27", "2022-02-27", "2022-01-28",
+           "2022-03-21", "2022-03-22", "2022-04-27", "2022-04-28", "2022-05-08",
+           "2022-05-09", "2022-06-19", "2022-06-20", "2022-07-24", "2022-07-25",
+           "2022-08-28", "2022-08-29", "2022-09-30", "2022-10-01", "2022-11-26",
+           "2022-11-27", "2022-12-23", "2022-12-24", "2023-06-27", "2023-07-27"),
+  Temperature = c(21, 16, 10, 25, 37, 
+           39, 50, 59, 52, 48,
+           46, 66, 64, 91, 88,
+           81, 88, 63, 59, 30,
+           36, 16, 25, 34, 34),
+  Barometer = c(30.50, 30.46, 30.89, 30.73, 30.46,
+                30.50, 30.42, 29.87, 29.78, 29.56, 
+                29.79, 29.83, 30.19, 29.91, 29.97,
+                29.82, 30.05, 30.03, 30.07, 30.19,
+                29.93, 30.36, 30.59, 30.19, 30.33)
+)
+
+points <- "palegreen"
+reg_line <- "palegreen4"
+mean_line <- "grey"
+center_pt <- "palegreen4"
+
+# construct a weather plot
+wplot <- ggplot(weather_hist, aes(y=Temperature, x=Barometer)) +
+  geom_point(color=points) +
+  geom_smooth(method="lm", se=F, formula=y~x, color=reg_line) +
+  geom_hline(yintercept = mean(weather_hist$Temperature),
+             color = mean_line,
+             linetype = "dotted") +
+  annotate("text", 
+           30.9, 
+           mean(weather_hist$Temperature) + 3, 
+           label = "Mean",
+           color = mean_line)
+
+wplot + labs(title="Rexburg, Idaho Barometric Pressure and Temperature") +
+  geom_point(data=weather_hist, aes(x=30.07, y=59), color=center_pt) +
+  annotate("text", 
+           30.07, 
+           59 + 2, 
+           label = "(30.07, 59)",
+           color = center_pt,
+           size = 3)
+
+
+  
+# create a base plot be removing some elements from the weather plot  
+bplot <- wplot +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.title = element_blank(),
+        axis.text = element_blank()) +
+  labs(subtitle="Rexburg, Idaho Barometric Pressure and Temperature") +
+  geom_point(data=weather_hist, aes(x=30.07, y=59), color=center_pt)
+
+bplot
+wplot + labs(title="Rexburg, Idaho Barometric Pressure and Temperature") 
+
+```
+The mean temperature is marked with a dotted grey line. The point (30.07, 59) is a point chosen for it's location near the center of the plot, but the terms we discuss apply to any point in the data. In the plots that follow, the tick marks, axis titles, and grid lines will be removed to make the plot less distracting.
+<br>
+<br>
+
+## Residuals
+
+
+```{r message=FALSE}
+# create the regression so we can pull values and predict
+mylm <- lm(Temperature ~ Barometer, data=weather_hist)
+summary(mylm)
+yhat <- round(predict(mylm, data.frame(Barometer=30.07)), 2)
+yhat
+```
+
+            A graphic or multiple graphics demonstrating that concept,
+            The mathematical formula defining that concept,
+            Written explanations explaining what values are possible for that concept, and what different values tell us about the regression.
+Distance between the dot Yi and the estimated line Y^i
+The residual is the distance between $y_i$ and predicted $y$ called $\hat{Y}_i$
+$$r_i = \underbrace{Y_i}_{\substack{\text{Observed} \\ \text{Y-value}}} - \underbrace{\hat{Y}_i}_{\substack{\text{Predicted} \\ \text{Y-value}}} \quad \text{residual}$$
+For our sample point (30.07, 64), the observed temperature is 64 while the regression line predicted a temperature of 'r yhat'.
+
+$$11.9 = \underbrace{64}_{\substack{\text{Observed} \\ \text{Temperature}}} - \underbrace{52.1}_{\substack{\text{Predicted} \\ \text{Temperature}}} \quad \text{residual}$$
+
+Distance between the dot Yi and the true line E{Yi}.
+
+```{r}
+bplot
+```
+
+
+i stands for individual
+ xi-xbar is the deviation
+areas don't exist
+cannot use the abs value instead of squaring because abs values aren't differentiatable
+n-1 (degrees of freedom) the very last person in has no freedom to select where they sit in the classroom
+if we try to use the same thing twice we get penalized -1
+when add up the squares and divide by n-1 we get the average(ish) of square or mean square divide sum of squares by degrees of freedom
+Yhat is the regression line, Ybar is the average flat line
+We can't get residuals until we get a line, but the line is picked by minimizing the residuals
+Residuals gave you the line as a gift
+residual tells how far you are from the line
+
+First, residuals are the key to obtaining the "least squares estimates" of the regression parameters and. give us the line
+
+Second, residuals are an important part in measuring the value of a regression, which is the proportion of variation in Y explained by the regression model.
+tell us the line
+
+hird, residuals give insight about how much an individual of a given x-value differs from average in their y-value.
+
+Residuals estimate tells us sigma2
+residual standard error is sqt(SSE/n-p)
+MSE = SSE/(n-p) Estimate of signma2 p is parameters
+Residual Standard Error is estimating the sigma of the dots
+Fourth, (and this one you haven't seen yet) residuals can be used to estimate the variance parameter of a regression, i.e.,in the equation
+
+Residuals estimate tells us sigma2
+residual standard error is sqt(SSE/n-p)
+Fifth, (and we will see this one in more detail next week) residuals can be used to determine if a linear regression model is appropriate for a given data set.
+
+We got line from residuals tell how good it is from residuals can estimpate the model praarmeters ilke sigma whether the residuals are appropriate
+
+Does god ever doanything unexpected He's steady and constant and true. There is no variability in him.
+                                                                                              What variance means is suddenly you're not where you used to be. God doesn't have any SSE
+
+Not sure where to put these                                                                                              Could we have a small p-value and a vary large R2?
+  pvalue measures the explanation compared to random chance--He's only seen it once a low slow and a million data points. But it's not normal
+  p-value measures whether their is a law
+If there is no law then who cares whether the data follows it
+If their is the law
+p-value doesn't mean you found truth but you found something significant.
+
+
+Maybe in closing or work into each section
+Residuals give us the line and R2
+value of a regression, which is the proportion of variation in Y explained by the regression model. The  SSR/SSTO
+
+
+what's difference and a residual and epsilon residual obs - predicted epsilon is the obs - actual 
+residual how far you think I'm from Christ epsilon is how far I am from Christ
+epsilon is theoretical assumption because it's based on a truth we can't see
+no other line can minimize the squares as much as the best fit
+
+1. What is a residual? What use does a single residual provide within a regression analysis? Specifically, what does a residual tell us about your predicted temperature for Monday?
+
+Be sure to present a graphic, mathematical equation, and written explanations as you answer these questions. Remember to present your work as a document that teaches at the level a Math 325 student would understand.
+
+Hint: See the "R Instructions" for Simple Linear Regression under "Plotting the Regression" for guidance on how to add a point or line segment to a scatterplot.
+
+
+
+
+<br>
+<br>
+
+## Sums of Squares
+
+
+
+##### SSE
+
+$\text{SSE} = \sum_{i=1}^n \left(Y_i - \hat{Y}_i\right)^2$
+Measures how much the residuals deviate from teh line
+Equals SSTO-SSR
+sum( (Y - mylm$fit)^2 )
+
+SSE is the unexplained variability
+sum( lmObject$res^2 )
+sum(cars.lm$res^2 )
+SSE is all the boxes added together
+
+SS an area measure is a square if we add up residuals we get zero every time 
+sum of square residual
+As the line moves to the middle of the data the SSE decreases 
+
+The SSE IS the unexplained the amount that we still have in errors (we don't like SSE because it's what we still don't know)
+
+
+
+What is SSE? How are they related? How do they differ? Find a way to both show and explain these values. How are they used to gain insight about data within a regression analysis? What is the smallest each of the values can be? The largest? Do we want each particular value to be large or small? Why?
+
+Be sure to present a graphic demonstrating each of these concepts as well as their respective mathematical formulas. Written explanations are also powerful in revealing these concepts. Remember, each of these measurements are not terribly useful on their own. It is their magnitude relative to each other that becomes meaningful, so while you may present each SS separately, they should eventually be discussed together.
+
+```{r}
+#sum( lmObject$res^2 )
+
+```
+
+<br>
+
+##### SSR
+
+$\text{SSR} = \sum_{i=1}^n \left(\hat{Y}_i - \bar{Y}\right)^2$
+Measures how much the regression line deviates from the average y-value
+Equals SSTO-SSE
+sum( (mylm$fit - mean(Y))^2 )
+
+SSR is the explained variablility
+SSR is reserved for how far the regression line is from Ybar
+best fit line
+The SSR is the part explained by the regression line (we like SSR because we understand) Subtract the R2 a barchart could show that.
+
+
+What is SSR? How are they related? How do they differ? Find a way to both show and explain these values. How are they used to gain insight about data within a regression analysis? What is the smallest each of the values can be? The largest? Do we want each particular value to be large or small? Why?
+
+Be sure to present a graphic demonstrating each of these concepts as well as their respective mathematical formulas. Written explanations are also powerful in revealing these concepts. Remember, each of these measurements are not terribly useful on their own. It is their magnitude relative to each other that becomes meaningful, so while you may present each SS separately, they should eventually be discussed together.
+
+```{r}
+#sum( (lmObject$fit - mean(YourData$Y))^2 )
+#cars.ssr <- sum( (cars.lm$fit - mean(cars$dist))^2 )
+```
+
+<br>
+
+##### SSTO
+
+plot above is the SSTO this is the total amount of variability in your data
+$\text{SSTO} = \sum_{i=1}^n \left(Y_i - \bar{Y}\right)^2$
+Measures how much the y-values deviate from the average y-value.
+Equals SSE + SSR
+sum( (Y - mean(Y))^2 )
+
+What is SSTO? How are they related? How do they differ? Find a way to both show and explain these values. How are they used to gain insight about data within a regression analysis? What is the smallest each of the values can be? The largest? Do we want each particular value to be large or small? Why?
+
+Be sure to present a graphic demonstrating each of these concepts as well as their respective mathematical formulas. Written explanations are also powerful in revealing these concepts. Remember, each of these measurements are not terribly useful on their own. 
+
+```{r}
+Y <- c(3.78, 6.08, 6.65, 9.25, 9.92)
+sum( (Y -mean(Y))^2)
+#sum( (YourData$Y - mean(YourData$Y))^2 )
+#cars.ssto <- sum( (cars$dist - mean(cars$dist))^2 )
+```{r}
+View(cars)
+fit <- lm(wt~disp, data=mtcars)
+cars$speed[23, ]
+
+cars$dist[23 = cars.lm$fitted.values[23]
+          
+library(tidyverse)
+cars2 <- cars[sample(1:50, 10), ]
+plot(dist ~ speed)
+ggplot(cars2, aes(x=speed, y=dist)) +
+  geom_point() +
+  geom_smooth(method="lm", se=F, formula=y~x) +
+  geom_point(aes(x=17.5, y=45.298), color="red", cex=2) +
+  geom_rect(aes(xmin=17.5, xmax=17.5 +.15, ymin=45.297, ymax=50, alpha=0.1)) +
+  geom_rect(aes(xmin=speed, xmax=speed+carslm$residuals$.15, ymin=dist, ymax=carslm$fitted.values), alpha=0.1, fill="blue") # change the residual
+
+ggplot(weather_hist, aes(y=Temperature, x=Barometer)) +
+  geom_point() +
+  geom_smooth(method="lm", se=F, forumula=y~x)
+
+```
+```
+
+<br>
+
+##### Relationship between SSE, SSR, and SSTO
+
+Can I overlay the graphs for comparison
+
+SSR A good regression should decrease the var so SSE should b e less than SSTO 
+
+It is their magnitude relative to each other that becomes meaningful, so while you may present each SS separately, they should eventually be discussed together.
+
+```{r}
+#cars.ssto <- sum( (cars$dist - mean(cars$dist))^2 )
+```
+
+
+<br>
+<br>
+
+## R-squared
+
+R2 is the ration between explanation and total SSR/SSTO
+cars.ssr/cars.ssto
+
+R2 of 1 gives you nothing because residuals are one, but .99 is good if you get really high R squared we suspect you did sometging wrong like using Y to predict Y
+R2 isn't necessarily the steepness but how tight the dots are line
+
+proportion or variation in Y that's used by using the regression (x variable)
+cool graph to make in r
+R2 is the part of the variability we've come to explain or 1-the part we hcan't explani
+R2 is not the portion of the data that has been explained by regression line the
+It's the variability (departure of the dot from average) that is explained by the data
+Why hard to understand R2, we don't know what proportion is or variability what is explained (if we have an R2 of one we've totally explained the data)
+R2 how close the data is to the line
+There are laws that exist but people don't follow them
+
+The above graphs reveal that the idea of correlation is tightly linked with sums of squares. In fact, the correlation squared is equal to SSR/SSTO. And this fraction, SSR/SSTO is called R2
+
+(“r-squared”).
+
+R-Squared (R2
+)
+R2=SSRSSTO=1−SSESSTOInterpretation: Proportion of variation in Y explained by the regression.
+
+The smallest R2
+can be is zero, and the largest it can be is 1. This is because SSR must be between 0 and SSTO, inclusive.
+
+
+R^2 the amount of hvariation in Y that we can explain with the regression (our regression has reduced the variation around Yhat)
+Why does dividing SSR/SSTO give a good we want Yhat to be far from yhat we're getting more explanation if it's close to 0 then it's close to the average not telling us anything
+Proportion of variation in Y explained by the regression.
+
+What is R-squared? It's definition is a simple statement "The proportion of variability in Y than can be explained by the regression." (Make sure you include this definition.) But understanding this definition can be tricky. Focus on the words "proportion," "variability," and "explained." Discuss these words. Visualize them. Refer back to your original explanations of the SS's.
+How is R-squared properly interpreted? How is it calculated? What information does it provide about a regression analysis? How does it differ from the information provided in the p-value for the slope term?
+
+Be sure to demonstrate the R-squared mathematically, graphically, and with written explanations. There are many ways to graphically show R-squared. Be creative as you come up with a way to visualize it.
+
+```{r}
+#cars.ssr/cars.ssto
+#r2 <-orange.ssr/orange.ssto
+```
+
+r is square root of r^2
+sqrt(cars.ssr/cars.ssto)
+not ri squared r squared  r is the correlation written R^2
+Any time you square a decimal it gets smaller R^2 is stricter on the correlation
+
+<br>
+<br>
+
+## MSE Mean Squared Error
+
+predict(orange.lm, data.frame(age=3*365))
+Residuals estimate tells us sigma2
+residual standard error is sqt(SSE/n-p)
+MSE is the average size of the boxes mean average se the errors
+
+What do the letters "MSE" stand for? How large can MSE get? How small? Does it measure the same thing that R-squared measures, or something different? Is it related to R-squared? How does it compare to the "residual standard error"? Where can you find the residual standard error in the regression summary output in R? Do we want the MSE and residual standard error to be large or small? Why? What units of measurement do both MSE and residual standard error have relative to the original data? In contrast, what units of measurement does R-squared have with respect to the original data? (For example, with the weather data, the units for high temperature are likely in "degrees Fahrenheit." So are any of the MSE, residual standard error, or R-squared in the same units of "degrees Fahrenheit"?)
+
+```{r}
+#par(mfrow=c(1,3))
+#plot(mthp.lm, which = 1:2)
+#plot(mthp.lm$residuals)
+
+```
+
+## Conclusion
+
+Maybe animation maybe nothing.
+
+```{r}
+
+```
+
