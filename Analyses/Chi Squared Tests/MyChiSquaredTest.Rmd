@@ -1,11 +1,23 @@
 ---
-title: "Chi Squared Test"
+title: "Big Bang Chi-Squared Analysis"
 output: 
   html_document:
     theme: cerulean
     code_folding: hide
 ---
+```{css, echo=FALSE}
+    body {background-color: black;
+    color: white;
+    }
 
+```
+<script type="text/javascript">
+ function showhide(id) {
+    var e = document.getElementById(id);
+    e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+ }
+</script>
+<br>
 
 <!-- Directions
 
@@ -22,10 +34,193 @@ Come up with a chi squared test analysis of your own creation.
     - Do not violate the "Human Subjects Rules" of the university: http://www.byui.edu/executive-strategy-and-planning/institutional-research/research-and-assessments/research-and-surveys
 
 * You need a sample size large enough to meet the requirements of the chi squared test. Unfortunately, the sample size is completely dependent on the situation you select. A good rule of thumb is 10 observations per "combination-group" in your data.
-
 -->
+
+```{r, include=FALSE}
+library(tidyverse)
+library(readr)
+# Check which ones you are actually using
+library(car)
+library(DT)
+library(pander)
+library(viridis)
+GSS2012 <- read_delim("../../Data/GSS2012.csv", 
+                      "\t", escape_double = FALSE, trim_ws = TRUE)
+
+# group the data, filter out na, change order levels
+GSSf <- GSS2012 %>% select(age, bigbang) %>% 
+  mutate(
+    bigbangf=case_when(
+      bigbang == 1 ~"True",
+      bigbang == 2 ~ "False",
+      bigbang == 8 ~ "Don't Know",
+      bigbang %in% c(0, 9) ~ "NA",
+      TRUE ~ "NA"),
+    agef= case_when(
+      age < 30 ~ "18 - 29",
+      age < 40 ~ "30 - 39",
+      age < 50 ~ "40 - 49",
+      age < 60 ~ "50 - 59",
+      age < 70 ~ "60 - 69",
+      age < 80 ~ "70 - 79",
+      age >= 80 ~ "80 or Older",
+      TRUE ~ "NA")) %>%  
+  filter(
+    bigbangf != "NA", 
+    agef != "NA") %>% 
+  mutate(
+    bigbangf=factor(bigbangf, levels = c("True", "False", "Don't Know")))
+
+# Make the col names more manageable
+AgeRange <- GSSf$agef
+Response <- GSSf$bigbangf
+
+# Don't run view on this large file--it may crash computer.
+# Also, change the delimeter to tab in the import box
+# Run this to see the names
+# names(GSS2012)
+# http://sda.berkeley.edu/sdaweb/analysis/?dataset=gss12
+# first run (unfiltered data)
+# x <- cbind(GSS2012$age, GSS2012$bigbang)
+# chisq.test(x)
+# table(GSS2012$age)
+# table(GSS2012$bigbang)
+# table(GSS2012$age, GSS2012$bigbang)
+
+# send table into the function
+# barplot(table(GSSf$age))
+# table(GSSf$bigbang)
+# table(GSSf$age, GSSf$bigbang)
+
+# barplot(table(GSSf$bigbangf))
+# barplot(table(GSSf$agef))
+# barplot(table(GSSf$agef, GSSf$bigbangf))
+
+# null is independent
+# mychi <- chisq.test(table(GSSf$agef, GSSf$bigbangf))
+# with a pvalue of whatever
+# mychi
+# requiremnet
+# should all be greater than five so requirement is mett
+# mychi$expected > 5
+# if you have a significant result why dig deeper, look at largest and smallest values this had a significantly higher (more counts than expected) negative means less counts
+# mychi$residuals
+# make sure to filter this out add
+```
+
+<figure>
+<center>
+<img src="../../Images/BigBang.webp">
+</center>
+<figcaption>Image from [Wired (Pasieka/Getty Images)](https://www.wired.com/story/to-understand-the-universe-physicists-are-building-their-own/)</figcaption>
+</figure>
+
+<br>
 
 
 ## Background
 
+Using the data from the General Social Survey 1972-2012 Cumulative Datafile, we asked, "Are a person's age range and belief in the Big Bang associated?"
 
+A table was created from the GSS data using the respondent's age and response to the following question:<br>
+<br>
+"Now, I would like to ask you a few short questions like those you might see on a television game show. For each statement that I read, please tell me if it is true or false. If you don't know or aren't sure, just tell me so, and we will skip to the next question. Remember true, false, or don't know. g.<br> 
+
+The universe began with a huge explosion. (Is that true or 
+false?)"<br>
+
+This analysis includes only answers of true, false, and don't know. If the value indicated that there wasn't a response or the question was, for some reason, inappropriate. The row was removed.<br>
+</div>
+
+<a href="javascript:showhide('datatable')">Data Table <span style="font-size:8pt;">(click to view)</span></a>
+
+<div id="datatable" style="display:none;">
+
+
+
+Click the "Code" button to see the data.
+
+
+```{r}
+# datatable
+datatable(GSSf, options=list(lengthMenu = c(5,10,30)), extensions="Responsive")
+```
+
+## Analysis
+
+#### Hypothesis
+
+$$
+H_0:\ \text{ A person's age range and their belief in the Big Bang are independent.}
+$$
+
+$$
+H_a:\ \text{A person's age range and their belief in the Big Bang are associated (not independent).}
+$$
+$$
+\alpha = 0.05
+$$
+
+#### Graphical and Numerical Summaries
+
+The table below summarizes the responses of participants as grouped by age range:
+
+```{r}
+# Create palette
+
+palette(c("#416ecc","#772ea4","#b52588","#e60d54","#f4c33e","#bd6127","#687652"))
+
+# send table into the function 
+pander(table("Age"=AgeRange, Response))
+```
+
+Notice, in the barplot, that the overall shape of the data is shaped differently. Some age ranges have more evenly divided responses than others. For example, in the 50 to 50 age range, the number of respondents for each answer are fairly similar, but for other age groups, like those in the 18-29 range, the differences in answers have more disparity. 
+
+```{r}
+# Or maybe these are better
+# par(bg = 'black', fg = 'white') 
+par(bg = 'black', fg = 'white', xpd=T, mar=par()$mar+c(0,0,0,6))
+barplot(table(AgeRange, Response), ylab="Number of Respondents", xlab = "Response to \"The Universe Began With a Huge Explosion\"", main = "Relationship of Age and Belief in the Big Bang", col=palette(), beside=TRUE, bty="n", col.axis= "white", col.lab="white", col.main="white")
+
+legend("topleft", col=palette(), pch=15, legend=c("18-29", "30-39","40-49", "50-59","60-69","70-79","80+"), bty="n", text.col = palette(), inset=c(1,0), xpd=TRUE)
+
+palette(c("deeppink","yellow3","navyblue"))
+barplot(table(Response, AgeRange), xlab="Number of Respondents", ylab = "Response to \"The Universe Began With a Huge Explosion\"", main = "Relationship of Age and Belief in the Big Bang", col=palette(), beside=TRUE, bty="n", col.axis= "white", col.lab="white", col.main="white", las=3)
+legend("topleft", col=palette(), pch=15, legend=c("True", "False","Don't Know"), bty="n", text.col = palette(), inset=c(1,0), xpd=TRUE)
+
+```
+
+#### Chi-squared Test
+
+To determine whether age range and belief in the Big Bang theory are associated. A chi-squared test was conducted.
+
+```{r, message="hide", warning=FALSE}
+#null is independent
+mychi <- chisq.test(table(AgeRange, Response))
+# with a pvalue of whatever
+pander(mychi)
+```
+
+With a $p$-value of 0.1185, we can conclude that there is insufficient evidence to reject the null.
+
+#### Assumptions
+
+The requirement for the chi-squared test are met because all of the expected counts are greater than 5. We can assume the results of the test are accurate.
+
+```{r}
+# requiremnet
+# should all be greater than five so requirement is met
+pander(mychi$expected)
+
+# Dig Deeper
+# look at largest and smallest values this had a significantly higher (more counts than expected) negative means less counts
+# pander(mychi$residuals)
+# make sure to filter this out add
+```
+
+
+## Conclusion
+
+The $p$-value of the chi-squared test was 0.1185. We have insufficient evidence to reject the null--a person's age range and belief in the big bang are independent. As the expected counts were all greater than five the assumptions of the test were met, so the results of the test are valid.
+<br>
+<br>

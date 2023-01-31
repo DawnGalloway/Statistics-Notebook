@@ -1,0 +1,96 @@
+---
+title: "Notes_Wk5"
+author: "Dawn Galloway"
+date: "1/30/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 2022-01-30 Monday
+
+
+How do we find the spread.
+The square root of MSE
+Here's the summary output where's the SSE
+By using teh degrees of freedom and resdiuals std error you can get back to 
+
+
+
+```{r s}
+library(ggplot2)
+cars.lm <- lm(dist~ speed, data=cars)
+summary(cars.lm)
+confint(cars.lm)
+
+SSE
+15.38^2
+*48 is the 
+
+#SSTO
+# SSTO = SSE + SSR
+R^2 = SSR/SSTO = 1- SSE= SSTO
+# Have to be able to go forward and backward with regression output most in cheet sheet
+```
+
+# Go back and look at last fridays class activity
+
+figure out how to say these
+
+```{r}
+#Faithful
+plot(waiting ~ eruptions, data=faithful, pch=21, col="darkgray")
+faith.lm <- lm(waiting ~ eruptions, data=faithful)
+abline(faith.lm, col="darkgray", lwd=2)
+abline(v=seq(1.2, 5, 0.5), lty=2, col="gray")
+abline(h=seq(50,905, 10), lty=2, col="gray")
+
+ggplot(faithful, aes(x=eruptions, y=waiting)) +
+  geom_point(fill="skybule", color="darkgray", pch=21) +
+  geom_smooth(method="lm", formula=y~x, se=T, color="darkgray")
+
+View(faithful)
+?faithful
+# confidence is always narrow middle less on the ends it's for the line
+
+# This code allows us to accurately (or at least with understanding of our inaccuracy) predict the time to the next eruption.
+mypreds <- predict(faith.lm, data.frame(eruptions=1.967), interval="prediction")
+# for prediction is for the dots
+# prediction always wider it accounts for band and dots
+# Notice that your prediction interval is about (not quite, but close) to 2 residual standard errors wider on each end than the confidence interval. Discuss with a peer why you think that is the case
+#At xbar the lowest variability
+myc <- predict(faith.lm, data.frame(eruptions=1.967), interval="confidence")
+# difference between xi and xh (xh might be in the data set, it's a new x)
+# MSE measures variance of the data around the line, the average
+
+
+# creates a condfidence band, the true line falls in there
+# but the data doesn't fall in there. We believe the average falls in 
+# Who collected this, 1.967
+# if I put conf on first it'll be hidden by prediction
+ggplot(faithful, aes(x=eruptions, y=waiting)) +
+  geom_point(fill="skyblue", color="darkgray", pch=21) +
+  geom_smooth(method="lm", formula=y~x, se=T, color="darkgray") +
+  geom_segment(aes(x=1.967, xend=1.967, y=mypreds[2], yend=mypreds[3], color = "Prediction", lwd=3)) + # se is standard error
+  geom_segment(aes(x=1.967, xend=1.967, y=myc[2], yend=myc[3], color = "Confidence", lwd=3)) 
+
+   
+```
+
+Confidence is for estimating the mean. Prediction is for estimating an individual. Learning when to use which takes practice. Confidence is always for mean average.
+
+Predict Interval says the actual temp or eruption will fall between _
+
+```{r}
+
+```
+
+## Wednesday
+
+
+
+```{r s}
+
+```

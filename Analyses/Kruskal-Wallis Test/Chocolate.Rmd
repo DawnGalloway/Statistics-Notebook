@@ -1,0 +1,216 @@
+---
+title: "Chocolate"
+output: 
+  html_document:
+    theme: cerulean
+    code_folding: hide
+---
+
+<script type="text/javascript">
+ function showhide(id) {
+    var e = document.getElementById(id);
+    e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+ }
+</script>
+
+```{r, include=FALSE}
+# Be sure to use your file menus at the top of R-Studio to:
+# "Session -> Set working directory -> To source file location"
+# Then play this chunk and the next one to get the data into R.
+library(mosaic)
+library(car)
+library(DT)
+library(pander)
+library(readr)
+library(viridis)
+library(tidyverse)
+Chocolate <- read_csv("C:/Users/rizen/OneDrive/Documents/BYUI/DataScience Certificate/INT STAT/Statistics-Notebook-master/Data/Chocolate.csv")
+```
+
+```{r}
+# Make a new column with Region as a factor
+
+
+Chocolate2 <- Chocolate %>% 
+  mutate(Region = factor(Location))
+
+levels(Chocolate2$Region) <- list(
+  'South America' = c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Eucador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"),
+  Oceania = c("Australia", "New Zealand", "Fiji"),
+  'North America' = c("Canada", "Costa Rica", "Dominican Republic", "Domincan Republic", "Grenada", "Guatemala", "Honduras", "Mexico", "Nicaragua", "Niacragua", "St. Lucia", "U.S.A.", "Martinique", "Puerto Rico"),
+  Europe = c("Austria", "Belgium", "Czech Republic", "Denmark", "Finland", "France", "Germany", "Hungary", "Iceland", "Ireland", "Italy", "Lithuania", "Netherlands", "Poland", "Portugal", "Russia", "Spain", "Sweden", "Switzerland", "Amsterdam", "Wales", "U.K.", "Scotland"),
+  Asia = c("India", "Israel", "Japan", "Philippines", "Russia", "Singapore", "South Korea", "Vietnam"),
+  Africa = c("Algeria", "Ghana", "Madagascar", "Sao Tome and Principe", "Sao Tome", "South Africa"))
+
+```
+
+
+
+<!-- Instructions:
+
+ Use the Chocolate dataset and a Kruskal-Wallis Test(s) to answer an interesting question(s) that you come up with. Need to find quantitative variable and a catagorical variable with 3 or more levels
+ glimpse() to see data percent cocoa could be changed to numeric 
+ 
+ About the dataset:
+ 
+  * Company: Name of the company manufacturing the bar.
+
+  * Orig: The specific geo-region of origin for the bar.
+
+  * Review: Date of publication of the review.
+
+  * Cocoa: Cocoa percentage (darkness) of the chocolate bar being reviewed.
+
+  * Location: Manufacturer base country.
+
+  * Rating: Expert rating for the bar.
+      5= Elite (Transcending beyond the ordinary limits)
+      4= Premium (Superior flavor development, character and style)
+      3= Satisfactory(3.0) to praiseworthy(3.75) (well made with special qualities)
+      2= Disappointing (Passable but contains at least one significant flaw)
+      1= Unpleasant (mostly unpalatable)
+
+   * Type: The variety (breed) of cocoa bean used, if provided.
+   
+   * BroadOrig: The broad geo-region of origin for the bean.
+
+Note this dataset and description come from: © 2018 Kaggle Inc for further details visit:
+
+[Kaggle.com](https://www.kaggle.com/rtatman/chocolate-bar-ratings/data)
+
+
+If you want to give your critiquers some ideas about what you have questions on and would like help with, place those details here.
+**Comments to Critiquers:** 
+I went with grouping Australia into Oceania. Is it too arbitrary? Also, since I ended up going with regions, I wonder whether I should have given Central America it's own Region. What do you think?
+
+I couldn't get datatable to work with my dataframe. I kept getting this error: Error in gsub : input string 1 is invalid UTF-8 Calls: One person said they fixed it by finding odd chararcters from other languages and removing them but I didn't see any.
+
+I'm still working on getting the x-axis labels turned. I have ggplot code for boxplot, but it was pulling an error. I'll have to consult a tutor on that one.
+<!--End your comments to your critiquers before this line.-->
+
+
+
+<!--Begin writing your Analysis after this point.-->
+
+## Background
+[Chocolate Bar Ratings](https://www.kaggle.com/rtatman/chocolate-bar-ratings/data) contains information and the ratings by experts of more than 1700 choclate bars, including details such as the company manufacturing the chocolate, the percent of cacao, the manufacturing location. Using the data, the question, "Do chocolate bars from manufactured in different regions have different distributions of ratings?" 
+
+Rating: Expert rating for the bar.
+
+  * 5= Elite (Transcending beyond the ordinary limits)
+  * 4= Premium (Superior flavor development, character and style)
+  * 3= Satisfactory(3.0) to praiseworthy(3.75) (well made with special qualities)
+  * 2= Disappointing (Passable but contains at least one significant flaw)
+  * 1= Unpleasant (mostly unpalatable)
+
+A column was added to the data, grouping manufacturers by continent/region. Depending on how continent is defined, Australia can stand alone, with New Zealand, or with New Zealand and various Pacific Ocean islands. This study uses the latter, Oceania, as the climates in Oceania are no more varied than in any continent and may be less so.
+</div>
+
+<a href="javascript:showhide('datatable')">Data Table <span style="font-size:8pt;">(click to view)</span></a>
+
+<div id="datatable" style="display:none;">
+
+
+The original data can be found at [Kaggle.com](https://www.kaggle.com/rtatman/chocolate-bar-ratings/data). 
+
+Click the "Code" button to see the data.
+
+
+```{r}
+# datatable(Chocolate2) Why isn't this working?!?
+pander(Chocolate2)
+```
+
+
+</div>
+
+</div>
+
+<br />
+
+## Analysis
+
+#### Hypothesis
+The null hypothesis is that the ratings from chocolate bars manufactured in different regions has the same distribution. The alternative hypothesis is that there is at least one sample with a greater or lesser distribution. The significance level will be 0.05.
+$$
+  H_0: \text{All samples are from the same distribution.}
+$$
+
+$$ 
+  H_a: \text{At least one sample's distribution is stochastically different.}
+$$
+
+ $$
+  \alpha = 0.05
+$$
+
+
+#### Graphics and Numerical Summaries
+
+The boxplots below show the expert's chocolate rating on a scale of one to five, with five being the highest, according to where in the world the chocolate was manufactured.
+
+
+```{r, boxplots}
+
+# boxplot(Rating ~ Region, data = Chocolate2, main="Chocolate Ratings by Manufacturing World Region", ylab="Expert's Rating on a Scale of 1-5", xlab="Manufacturing World Region", col = viridis(6), frame=FALSE, xaxt="n")
+#legend("bottomright", title="Region",c("South America", "Oceania", "North America", "Europe", "Asia", "Africa"), fill=viridis(6), cex=0.8)
+
+
+ggplot(data = Chocolate2, aes(x = Region, y = Rating, fill = Region)) +
+  geom_boxplot() + scale_fill_viridis(discrete=TRUE) +
+  ggtitle("Chocolate Ratings by Manufacturing World Region") +
+  theme(plot.title = element_text(hjust = 0, face = "bold", size = (16)),
+        panel.background = element_blank(),
+        axis.text = element_text(size = (10)),
+        axis.title = element_text(size = (12)),
+        axis.ticks.x=element_blank(),
+        axis.text.x=element_blank()) +
+  ylab("Expert's Rating on a Scale of 1-5") +
+  xlab("Manufacturing World Region") 
+
+
+```
+</br>
+
+Visually, the boxplots seem well aligned. Although, some region's ratings appear more skewed than others.
+The difference in the regions can be seen better in the five number summary below:
+```{r, warning= FALSE}
+
+
+Chocolate2 %>% 
+  group_by(Region) %>%
+  summarise(Min = min(Rating), Q1 = quantile(Rating, 0.25), Med = median(Rating), Mean = mean(Rating), Q3 = quantile(Rating, 0.75), Max = max(Rating)) %>% 
+  pander()
+```
+Europe and Africa had the lowest minumum rating while Oceania had the highest minimum. The medians the ratings of all regions were between 3 and 3.37. The maximum ratings were between 3.75 and 5. Interestingly, Europe which had the lowest minimum also had the highest maximum (5).
+
+</br>
+
+#### Kruskal-Wallis Rank Sum Test
+A Kruskal-Wallis Rank Sum Test was used to see whether any region's distribution stochastically different.
+
+```{r, warning=FALSE}
+# Kruskal-Wallis Rank Sum Test
+pander(kruskal.test(Rating~Region, data=Chocolate2))
+
+```
+
+While the median ratings of chocolate bars appeared similar, a range of one to five is small enough that tenths and thousandths of a point matter as evidenced by the p-value of 0.01938. There is sufficient evidence to reject the null hypothesis: $p < \alpha$.
+
+
+</div>
+</div>
+
+
+## Conclusion
+
+As the p-value is 0.01938, there is sufficient evidence to reject the null. At least one region's rating is stochastically different. The boxplots indicate that chocolate bars from Africa have the lowest median rating and are right-skewed while the remaining region's boxplot's are centered or left-skewed.
+
+
+
+
+```
+
+
+
+

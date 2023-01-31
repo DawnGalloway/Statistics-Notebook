@@ -18,6 +18,7 @@ library(mosaic)
 library(car)
 library(pander)
 library(DT) #You may need to run: install.packages("DT") 
+library(viridis)
 ```
 
 ```{r, eval=FALSE}
@@ -29,7 +30,7 @@ View(Friendly)
 
 <br />
 
-#### Background
+## Background
 
 Many teachers and other educators are interested in understanding how to best deliver new content to students. In general, they have two choices of how to do this.
 
@@ -81,17 +82,82 @@ datatable(Friendly, options=list(lengthMenu = c(3,10,30)))
 
 
 </div>
+
 </div>
 
 <br />
 
+## Analysis
 
-<!-- Begin writing your analysis below here. -->
+#### Hypothesis
+Using the data, we answer the question, "Does the `Meshed` approach have positive benefits on recall?" In other words, is the median numeber of words recalled using the Meshed approach higher than the median for those using standard free recall (`SFR`)?
+$$
+  H_0: \text{difference in medians} = 0
+$$
 
-<!-- Note that your goal is to use the Friendly data to show whether or not the Meshed or Before methods have any positive benefit on memory recall. -->
+$$ 
+  H_a: \text{difference in medians} > 0
+$$
+
+ The significance level will be set at 0.05.
+ $$
+  \alpha = 0.05
+$$
 
 
+#### Graphics and Numerical Summaries
 
+The boxplots below show the number of words recalled by individuals who used the `Meshed` approached compared to those who used the control group, standard free recall (`SFR`).
+
+
+```{r, boxplots}
+# Remove the data from those using the Before approach
+newdata <- Friendly %>% filter(condition != "Before")
+newdata$condition <- as.character(newdata$condition)
+boxplot(correct ~ condition, data = newdata, main="Student Memory Test Performance", ylab="Words Recalled Out of 40", xlab="Test Condition", col = viridis(2), frame=FALSE)
+
+#ggplot version: boxplot(correct~condition, data=newdata, main="Student Memory Test Performance", ylab="Words Recalled Out of 40", xlab="Test Condition", col = c("#66e0ff66", "#ff751a66"))
+
+
+```
+
+
+The difference in the two groups can be seen better in the five number summary below:
+```{r, summary}
+# Create a numeric vector with rent prices by gender
+sfrrecall <- filter(newdata, condition == "SFR")
+meshedrecall <- filter(newdata, condition == "Meshed")
+
+# Bind vectors
+recallTable <- rbind(SFR =favstats(sfrrecall$correct), Meshed=favstats(meshedrecall$correct))
+
+# Create the table
+# HOW DO YOU CENTER THE TITLE?
+pander(recallTable[c("min","Q1","median","mean","Q3","max","n")], caption="Summary of Words Correctly Recalled")
+```
+
+The median number of words recalled correctly by the individuals using `SFR` is 27 while the group using the `Meshed` approach had a median of 36.5. The minimum number of words recalled correctly by the `Meshed` group is 30 (nine words higher than the control group); however, 30 is an outlier. The maximum words recalled is only one number greater for the `Meshed` group--a perfect score of 40. 
+
+
+#### Wilcoxson Rank Sum Test
+A Wilcoxson Rank Sum Test was used to see whether the improvement in the median of the `Meshed` group is statistically significant.
+
+```{r, warning=FALSE}
+# Wilcoxson Rank Sum Test
+pander(wilcox.test(correct~condition, data=newdata, mu=0, alternative="greater", conf.level=0.95))
+
+```
+
+The p-value is 0.051, just barely higher than the level of significance. There is insufficient evidence to reject the null hypothesis: $p = 0.05075 > \alpha$.
+
+
+</div>
+</div>
+
+
+## Conclusion
+
+Although the improvement seems useful when viewing the side-by-side box plots, the difference in recalled words between the control group (`SFR`) and the `Meshed` group is not statistically significant. However, there were ties in the data so the p-value is not exact. It is recommended that a study be conducted with a larger sample size.
 
 
 

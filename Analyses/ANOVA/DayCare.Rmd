@@ -1,0 +1,254 @@
+---
+title: "Day Care Fines"
+output: 
+  html_document:
+    theme: cerulean
+    code_folding: hide
+---
+
+<script type="text/javascript">
+ function showhide(id) {
+    var e = document.getElementById(id);
+    e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+ }
+</script>
+
+```{r, include=FALSE}
+library(mosaic)
+library(DT)
+library(pander)
+library(car)
+library(tidyverse)
+library(viridis)
+
+# To get the "late" dataset into your R Console, 
+# you need to go to your file menu of R-Studio and select
+# "Session, Set working directory, To source file location"
+# Then click the green "play" arrow in 
+# the top right corner of this gray R-Chunk. 
+# Assignment notes
+# Do a two way ANOVA
+# If you end up violating the assumptions, you won't have to start over. Say didn't meet the requirements, here's the impact it has on my conclusions, the implications on the p-values and go forward
+# State the 3 hyp in words and symbols in the Background (you can use the cell means or effects size way of phrasing). If you're talking about it in terms of cell means the effects of these levels are all equal to 0. in cell means there's no equal zero--they're equal to each other. Pick one way and stick with it throughout your entire analysis
+# Have graphs to check requirements and one for each hypothesis.
+
+## Wide data from original article:
+late <- read.csv("../../Data/late.csv", header=TRUE) 
+
+# To get the "late" dataset into your R Console, 
+# you need to go to your file menu of R-Studio and select
+# "Session, Set working directory, To source file location"
+# Then click the green "play" arrow in 
+# the top right corner of this gray R-Chunk. 
+
+## Wide data from original article:
+
+## Change to "long" data for use in R:
+Late <- pivot_longer(late, #Start with wide data set late
+               cols = starts_with("Week"), #Find columns to gather from long data
+               names_to = "Week", #New column name of Weeks in long data
+               names_prefix = "Week", #Remove prefix of Week from Week1, Week2, ...
+               values_to = "NumberofLateChildren") #Name of data column in long data
+
+# Add column to indicate which Period: Pre Study, During Study, Post-Study
+Late$Period <- cut(as.numeric(Late$Week), c(0, 4, 16, 20), labels=c("Pre Fines","During Fines","Post Fines"), ordered_result=TRUE) 
+
+```
+
+
+
+----
+
+<!--If you want to give your critiquers some ideas about what you have questions on and would like help with, place those details here.-->
+
+**Comments to Critiquers:** 
+
+
+
+<!--End your comments to your critiquers before this line.-->
+
+----
+
+
+## Background {.tabset .tabset-fade}
+
+### Overview
+<!-- Be sure to add your own background here before beginning the Analysis. -->
+
+Data from from a study of 10 Israeli day cares in 1998 will be analyzed using a two-way ANOVA to determine whether fines have an effect on the number of children picked up late from day care. For more details on the study and data, use the tabs above.
+
+For convenience, a final column has been added to the data; "Period" groups the weeks into "Pre Fines," "During Fines," and "Post Fines" as designated in the study details.
+
+<!--End your background before here.-->
+<!--Click the little black arrow to 
+the left to expand/hide these next sections.-->
+### Study Details
+
+<div style="color:#a8a8a8;">
+This background is quoted directly from the article ["A Fine is a Price"](http://rady.ucsd.edu/faculty/directory/gneezy/pub/docs/fine.pdf). 
+</div>
+
+<div style="padding-left:30px; padding-right:30px;">
+
+There are two types of day-care centers in Israel: private and public. A study was conducted in 10 private day-care centers in the city of Haifa from January to June 1998. All of these centers are located in the same part of town, and there is no important difference among them. During the day children are organized into groups according to age, from 1 to 4 years old. Each day-care center is allowed to hold a maximum of 35 children. In some exceptional cases a few additional children are allowed. The fee for each child is NIS 1,400 per month. (The NIS is the New Israeli Shekel.) At the time of the study, a U.S. dollar was worth approximately NIS 3.68, so the fee was about $380 at that time. 
+
+The contract signed at the beginning of the year states that the day-care
+center operates between 0730 and 1600. There is no mention of what happens if parents come late to pick up their children. In particular, before the beginning of the study, there was no fine for coming late. When parents did not come on time, one of the teachers had to wait with the children concerned. Teachers would rotate in this task, which is considered part of the job of a teacher, a fact that is clearly explained when a teacher is hired. Parents rarely came after 1630. 
+
+A natural option [to fix the problem of parents showing up late] is to introduce a fine: every time a parent comes late, [they] will have to pay a fine. Will that reduce the number of parents who come late? If the fine is removed, will things revert back to the way they were originally?
+
+The overall period of the study was 20 weeks. In the first 4 weeks we
+simply recorded the number of parents who arrived late each week. At the
+beginning of the fifth week, we introduced a fine in six of the 10 day-care centers, which had been selected randomly. The announcement of the fine was made with a note posted on the bulletin board of the day-care center. Parents tend to look at this board every day, since important announcements are posted there. The announcement specified that the fine would be NIS 10 for a delay of 10 minutes or more. The fine was per child; thus, if parents had two children in the center and they came late, they had to pay NIS 20. Payment was made to the principal of the day-care center at the end of the month. Since monthly payments are made to the owner during the year, the fines were added to those amounts. The money was paid to the owner, rather then to the teacher who was staying late (and did not get any additional money). The teachers were informed of the fine but not of the study. Registering the names of parents who came late was a common practice in any case.
+
+At the beginning of the seventeenth week, the fine was removed with no explanation. Notice of the cancellation was posted on the board. If parents asked why the fines were removed, the principals were instructed to reply that the fine had been a trial for a limited time and that the results of this trial were now being evaluated.
+
+A comparison with other fines in Israel may give an idea of the size of
+the penalty that was introduced. A fine of NIS 10 is relatively small but not insignificant. In comparison, the fine for illegal parking is NIS 75; the fine for driving through a red light is NIS 1,000 plus penalties; the fine for not collecting the droppings of a dog is NIS 360. For many of these violations, however, detection and enforcement are low or, as in the case of dog dirt, nonexistent in practice. A baby-sitter earns between NIS 15 and NIS 20 per hour. The average gross salary per month in Israel at the time of the study was NIS 5,595.
+
+</div>
+
+
+### The Data (Wide)
+
+
+The `late` Day Care Center data is shown here in the "wide data format". 
+
+```{r, out.width=300}
+#Show the full width of the "Wide" version of the late data:
+pander(late, split.tables = Inf)
+```
+
+
+### The Data (Long)
+
+The `Late` Day Care Center data is shown here in the "long data format".
+
+```{r}
+pander(Late)
+```
+
+
+ 
+##  
+<!-- You can begin writing again after here.-->
+
+
+
+## Analysis
+
+### Hypothesis
+
+A two-way ANOVA with an interaction term will be used for the study of how fines affect late pick-up where $\mu$ represents the grand mean, $\alpha_{i}$ represents the Treatment factor with levels Fine and Control, $\beta_{j}$ represents the Period factor with levels Pre Fines, During Fines, and Post Fines, $\alpha\beta_{ij}$ represents the interaction of the factors Treatment and Period, and $\epsilon_{ijk}$ represents the normally distributed error term.
+$$
+  Y_{ijk} = \mu + \alpha_{i} + \beta_j + \alpha\beta_{ij} + \epsilon_{ijk}
+$$
+Using the model we ask the following questions represented by the corresponding hypotheses.
+
+1. Does the `Treatment` affect the average number of of children picked up late from day care?
+Factor: `Treatment` with levels Fine and Control.
+$$
+  H_0: \alpha_{Fine} = \alpha_{Control} = 0
+$$
+
+$$
+  H_a: \alpha_{Treatment} \neq 0 \ \text{for at least one}\ Treatment\in\{1=Fine, 2=Control\}
+$$
+
+
+2. Is the number of late children affected by the `Period` of the study?
+Factor: `Period` with levels Pre Fines, During Fines, and Post Fines.
+$$
+  H_0: \alpha_{Pre Study} = \alpha_{During Study} = \alpha_{Post Study} = 0
+$$
+
+$$
+  H_a: \alpha_{Period} \neq 0 \ \text{for at least one}\ Period\in\{1=Pre Fines, 2=During Fines, 3= Post Fines\}
+$$
+
+3. Does the effect of `Treatment` change for different `Periods` of the study?
+$$
+  H_0: \alpha\beta_{ij} = 0 \ \text{for all } i,j
+$$
+$$
+  H_a: \alpha\beta_{ij} \neq 0 \ \text{for at least one } i,j
+$$
+
+A significance level of $\alpha = 0.05$ will be used for this study.
+
+
+### Graphical Summaries
+<!-- He likes  plot and descriptive statistics first -->
+Below are the graphical summaries corresponding to the hypotheses. The data points  for the first two graphical summaries have been spread along the x-axis to better visualize overlapping data points.
+
+
+#### Treatment
+```{r}
+# Playing around with the code from the wool sample to see how it works
+
+xyplot(NumberofLateChildren ~ Treatment, data=Late, type=c("p","a"), main="Relationship of Lateness to Treatment Type", jitter.x=TRUE, pch=16, ylab="Number of Late Children", col="#ff471a")
+```
+The graph shows an upward trend in the mean number of children late, indicated by the orange line. From the summary table below we find that the Control group has a lower average mean number of late children.
+```{r}
+Late %>%
+  group_by(Treatment) %>%
+  summarize(`Mean Late Children`=mean(NumberofLateChildren)) %>%
+  pander(caption="Mean Late Children by Treatment Type")
+```
+
+#### Period 
+```{r}
+xyplot(NumberofLateChildren ~ Period, data=Late, type=c("p","a"), main="Relationship of Lateness to Peroid Type", jitter.x=TRUE, pch=16, ylab="Number of Late Children", col="#5cd65c")
+```
+As indicated by the green lines, the graph shows a fairly steep upward trend in the mean number of children late between from the Pre Fines period to the During Fines period, an increase of approximately 4 students. While the mean from the During Fines period to the Post Fines period appears almost level, an increase of just under two. 
+```{r}
+Late %>%
+  group_by(Period) %>%
+  summarize(`Mean Late Children`=mean(NumberofLateChildren)) %>%
+  pander(caption="Mean Late Children by Treatment Type")
+```
+
+#### Interaction
+
+```{r warning=FALSE}
+xyplot(NumberofLateChildren ~ Period, data=Late, groups=Treatment, type=c("p","a"), main="Significance of the Interaction of Treatment and Period", pch=16, ylab="Number of Late Children", auto.key=list(corner=c(1,1)))
+```
+As the first graph doesn't distinguish between pre, during, and post fines time periods, it's difficult to see the effects of the fine. While the second graph mixes day cares where fines were paid and those without fines (the control group). The interaction graphic most clearly illustrates how fines affect the numbers of children picked up late. Notice the group later given fines began the study with a lower mean number of students picked up late (blue line). During the period where those picking up the children paid fines, the control group's mean number of late children declined while the fined group's mean increased by alomst 6.5 (pink line). Even when the fines were no longer administered, the mean number of children picked up late continued to increase while the control group's mean dropped slightly (green line). The summary below contains the means for comparison.
+```{r warning=FALSE}
+Late %>%
+  group_by(Treatment, Period) %>%
+  summarise(ave=mean(NumberofLateChildren)) %>%
+  spread(Period, ave) %>% 
+  pander(caption="Mean Late Children According to Treatment and Period")
+
+```
+
+### Two-way ANOVA
+Though the data seems convincing, the p-value of a two-way ANOVA will clarify whether the differences are statistically significant.
+```{r}
+Late.aov <- aov(NumberofLateChildren ~ Treatment + Period + Treatment:Period, data=Late)
+summary(Late.aov) %>% pander()
+```
+
+Treatment, Period, and the interaction of Treatment and Period all significantly impacted the numbers of children picked up late. 
+
+
+<!--[Possibly
+Thus, we could perform an ANOVA that expands the model to include all possible interactions between Type, Treatment, and Uptake.
+CO2int.aov <- aov(uptake ~ Type * Treatment * as.factor(conc), data=CO2)
+pander(summary(CO2int.aov))
+Show req tests again
+plot(CO2int.aov, which=1:2)}-->
+
+### Requirements
+In order to know whether these results are only accurate, the data must meet the test's requirements. The left plot shows that the constant variance may not be satisfied as one of the fitted values has a much larger spread than the others. Although the residuls have a slight curve, the right plot shows that, for the most part, normality falls within the expected parameters which are represented by the dotted blue lines. Only one data point is outside the line. Because the constant variance assumption is violated, the results are not reliable.
+```{r, message=FALSE, results="hide"}
+par(mfrow = c(1,2))
+plot(Late.aov, which = 1)
+qqPlot(Late.aov$residuals, main="QQ Plot", ylab="Residuals", xlab="Norm Quantiles")
+```
+
+
+
+## Conclusion
+The test clearly showed that there was sufficient evidence to reject all of the null hypotheses: the means of the levels of Treatment were not equal to zero, the means of the Periods were not equal to zero, and the effect of Treatment and Period differs for at least one level of the other. If the results were reliable, it would be interesting to investigate the reasons why fines increased late pick-up times. However, the requirements for the test were not met, so the results are questionable.

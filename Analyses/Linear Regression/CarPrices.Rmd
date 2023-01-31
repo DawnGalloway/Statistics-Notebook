@@ -5,21 +5,163 @@ output:
     theme: cerulean
     code_folding: hide
 ---
-
+<script type="text/javascript">
+ function showhide(id) {
+    var e = document.getElementById(id);
+    e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+ }
+</script>
 <br>
 
+
+<!--
+#If your going to do 2d you can do by make and model, lots of numerics, there are multiple trims, you can filter it to two lines coups to conv or do all Coupe would be coupe or not coupe 
+#cyl is catagorical, Liter is not continous but could use it that way.
+lm(response ~ continuous + type + continuous:type, data=data)
+# It will change it to zero or 1 for you
+lm(formual=Price ~ Mileage + Type + Mileage:Type, data = CarPrices)
+table(carPrices$Type)
+Delete these words and write your own background here.  
+#I would use the Civic V Corolla as a spine
+# I want a test of beta 2 and beta 3 
+# Can call it requirements instead of limitations-->
+```{r, include=FALSE}
+install.packages('mosaic')
+library(tidyverse)
+library(mosaic)
+library(car)
+library(DT)
+library(pander)
+library(viridis)
+CarPrices <- read.csv("../../Data/CarPrices.csv", header=TRUE)
+CarPrices2<-filter(CarPrices, Model %in% c("Cavalier","Malibu"))
+SedanPrices<-filter(CarPrices2, Type=="Sedan")
+#View(SedanPrices)
+table(CarPrices$Model)
+
+```
 ## Background
 
-Delete these words and write your own background here.  
 
-```{r, include=FALSE}
-# Be sure to download the CarPrices.csv file and save it
-# into your Data folder prior to knitting this file.
-CarPrices <- read.csv("../Data/CarPrices.csv", header=TRUE)
+<br/>
+<center>
+<img src="../../Images/Chevrolet_logo.jpg">
+</center>
+<br/>
 
-# Remember, to get the CarPrices data into your Console you have
-# to use the "Import Dataset" option in the "Environment" window.
+This analysis compares two sedans from American car manufacture Chevrolet: the Cavalier and the Malibu. Is the price of a sedan affected by the mileage and model type?
+
+The data was filtered to contain only Cavilier and Malibu sedans (no coupes or hatchbacks). There are 30 Cavaliers and 30 Malibus.
+
+</div>
+
+<a href="javascript:showhide('datatable')">Data Table <span style="font-size:8pt;">(click to view)</span></a>
+
+<div id="datatable" style="display:none;">
+
+
+
+Click the "Code" button to see the data.
+
+
+```{r}
+# datatable
+datatable(SedanPrices, options=list(lengthMenu = c(5,10,30)), extensions="Responsive")
+```
+
+## The Model
+
+The multiple linear regression model was applied to the data set. to obtain two regression lines, one for each vehicle. 
+
+$$
+  \underbrace{Y_i}_{\text{Price}} = \overbrace{\beta_0 + \beta_1 \underbrace{X_{i1}}_{\text{Mileage}}}^{\text{Cavalier Line}} + \overbrace{\beta_2 \underbrace{X_{i2}}_{\text{Malibu}} + \beta_3 \underbrace{X_{i1} X_{i2}}_{\text{Interaction}}}^{\text{Adjustments to Line for Malibu}} + \epsilon_i
+$$
+
+$\beta_0$ is the base intercept for the Cavalier's regression line, and $\beta_1$ is the base slope coefficient. $\beta_2$ times the Malibu value is the adjustment needed for the Cavalier line's y-intecept, and $\beta_3$ is the difference in slopes for the two cars. $X_{i2} = 0$ is used when the sedan is a Cavalier while $X_{i2} = 1$ when the sedan is a Malibu. Below are the models when simplified according to their $X_{i2}$ value which were used to create regression lines for each model.
+
+<center>
+<!-- Can we use this? It's neat the way they created this table.-->
+| Vehicle | Value of $X_{i2}$ | Resulting Model   |
+|---------|-------------------|-------------------|
+| Cavalier| $X_{i2} = 0$      | $Y_i = \beta_0 + \beta_1 X_{i1} + \epsilon_i$ |
+| Malibu  | $X_{i2} = 1$      | $Y_i = (\beta_0 + \beta_2) + (\beta_1 + \beta_3) X_{i1} + \epsilon_i$ |
+
+</center>
+
+
+We will test $\beta_2$ and $\beta_3$ to see whether they are are different from zero. This will tell us whether the two models have different y-intercepts (intial price)Since  and whether they have different slopes (rate of depreciation).
+
+### Test for Equal y-Intercepts
+
+In the combined regression model, if $\beta_2 = 0$, then the regression lines have the same y-intercept. If $\beta_2$ is not equal to zero the y-intercepts are different. These hypotheses will be judged at the $\alpha=0.05$ significance level.
+
+$$
+  H_0: \beta_2 = 0 \quad \text{(Sedans have the same y-intercept)} \\
+  H_a: \beta_2 \neq 0 \quad \text{(Sedans have a different y-intercept)}\\
+  \alpha=0.05
+$$
+
+### Test for Equal Slopes
+
+If $\beta_3$ is zero, then the slopes of the two lines are the same. In other words, the relationship between price and mileage is the same for the two sedans. If $\beta_3$ is not zero, the relationship between price and mileage is different for the two models.  
+
+$$
+  H_0: \beta_3 = 0 \quad \text{(Sedans have the same relationship between price and mileage)} \\
+  H_a: \beta_3 \neq 0 \quad \text{(Sedans have a different price-mileage relationship)}\\
+  \alpha=0.05
+$$
+
+
+## Analysis
+
+The following table shows the summary of the multiple linear regression for the relationship between price and mileage by sedan type:
+
+```{r}
+## Code for the linear regression
+sedans.lm <- lm(Price ~ Mileage + Model + Mileage:Model, data=SedanPrices)
+pander(summary(sedans.lm, caption="Multiple Linear Regression Summary the Relationship Between Price and Mileage by Sedan Type "))
+```
+
+The summary of the multiple linear regression shows that the interaction of mileage and model is insignificant. So the model was simplified by removing the $\beta_3$ term. The new summary is below:
+
+```{r}
+sedansSim.lm <- lm(Price ~ Mileage + Model, data=SedanPrices)
+pander(summary(sedansSim.lm, caption="Simplified Linear Regression Summary the Relationship Between Price and Mileage by Sedan Type"))
+```
+
+Removing the insignificant $\beta_3$ term has affected the p-values of the remaining terms and all of the terms in the new model are significant. The Malibu line will begin with $3,897 more value than the Cavalier, but both will depreciate at a rate of $.11 times the mileage:
+<br/>
+$\hat{Y}_{Cavalier}$ = $15,244 - 0.1111{\underbrace{X_{i1}}_{\text{Mileage}}}$ <br/>
+$\hat{Y}_{Malibu}$ = $19,141 - 0.1111{\underbrace{X_{i1}}_{\text{Mileage}}}$ <br/>
+
+
+The scatterplot below shows the regression lines for the Cavalier and the Malibu. The lines are parallel because there is no change in slope.
+
+```{r}
+palette(c("#0040ff", "#00ff00"))
+plot(Price ~ Mileage, data=SedanPrices, col=Model, main="Relationship Between Price and Mileage", pch=16, ylab="Price in U.S. Dollars")
+abline(a= sedansSim.lm$coefficients[1], b=sedansSim.lm$coefficients[2], col=palette()[2])
+abline(a=sedansSim.lm$coefficients[1]+sedansSim.lm$coefficients[3], b=sedansSim.lm$coefficients[2], col=palette()[1])
+legend("topright", col=palette(), pch=16, legend=c("Chevy Malibu", "Chevy Corolla"), bty="n", text.col = palette())
 ```
 
 
+## Assumptions
 
+Below are plots to check the assumptions of the test. In the residual versus fitted plot, there does not seem to be a pattern so we can assume the linear relation assumption is satisfied. The variance does looks slightly unconstant but not enough to invalidate the results. The error terms in the QQ plot appear normal (within the dotted blue lines), and the residual versus order plot does not show a dramatic pattern, indicating the error terms are independent. No assumptions are violated.
+
+
+
+```{r, message=FALSE, results="hide"}
+# The code from the Civic v Corolla assumption plots was used to add titles
+par(mfrow=c(1,3))
+plot(sedansSim.lm, which=1, caption=NA)
+mtext(side=3, text="Residuals vs Fitted")
+qqPlot(sedansSim.lm$residuals)
+mtext(side=3,text="Residuals QQ Plot")
+plot(sedansSim.lm$residuals)
+mtext(side=3, text="Residuals vs Order")
+```
+
+## Conclusion
+For the test of equal y-intercepts, there is sufficient evidence to reject the null. The Chevy Cavalier's beginning price is $3,897 less expensive than the Malibu, p-value = 8.647e-58. For the test of equal slopes, there is insufficient evidence to reject the null, p-value = 0.7555. The linear regression indicates that value of the two sedans depreciates at the same rate, so the Malibu continues to be worth about the same amount more than the Cavalier as the mileage increases and the value decreases. The assumption plots indicate that the test results are reliable.

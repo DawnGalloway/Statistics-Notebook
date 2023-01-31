@@ -5,18 +5,27 @@ output:
     theme: cerulean
     code_folding: hide
 ---
-
+<script type="text/javascript">
+ function showhide(id) {
+    var e = document.getElementById(id);
+    e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+ }
+</script>
 ```{r, message=FALSE, warning=FALSE}
 # Load your libraries
+library(DT)
 library(car)
+library(pander)
 library(tidyverse)
+library(viridis)
 
 # Load your data after saving a csv file in your Data folder.
+# If your own data in an excel file, save it as csv (not csv utf-8)
 # You can use either 
-#   someName <- read.csv("../Data/YourDataFileName.csv", header=TRUE)
+#   crv <- read.csv("../../Data/CLcrv.csv", header=TRUE)
 # or
 #   library(readr)
-#   someName <- read_csv("../Data/YourDataFileName.csv")
+crv <- read_csv("../../Data/CLcrv.csv")
 
 # Don't forget to run "Session -> Set Working Directory -> To Source file location"
 
@@ -42,5 +51,116 @@ Come up with a simple linear regression of your own creation.
 
 
 ## Background
+In Idaho, SUVs and crossover vehicles are often in demand due to residents' outdoor lifestyle, but in the Pacific Northwest, smaller vehicles and hybrids are often desired as they are more enviroment-friendly. Sometimes, this results in being able to find better deals on used SUVs and crossovers in the PNW. As a bonus, the mild climate and lack of snow tend make it easier to find used vehicles in good condition in areas like Portland and Seattle.
+
+As part of the beginning research to purchase a used car, data was collected on Honda CRV's for sale on Portland's [craigslist](https://portland.craigslist.org/search/cto?query=crv).
+
+We answer the question, "Is there a linear relationship between the mileage and the price on Honda CRVs in the greater Portland area?"
+
+</div>
+
+<a href="javascript:showhide('datatable')">Data Table <span style="font-size:8pt;">(click to view)</span></a>
+
+<div id="datatable" style="display:none;">
+
+The data was scraped from Portland's Craigslist Cars and Trucks--by owner, using [ParseHub](https://www.parsehub.com) on November 3, 2020. All CRVs without price or mileage were removed from the data, as well as, those with rebuilt or salvage titles.
+
+Click the "Code" button to see the data.
+
+
+```{r}
+# datatable(Chocolate2) Why isn't this working?!?
+datatable(crv, options=list(lengthMenu = c(5,10,30)), extensions="Responsive")
+pander(crv)
+```
+
+
+</div>
+
+</div>
+
+<br />
+
+## Analysis
+
+#### Hypothesis
+The explanatory variable is the mileage of the CRV, and the response variable is the price of the CRV. The model below will be used for the regression analysis.
+$$
+  \underbrace{Y_i}_\text{Price} = \beta_0 + \beta_1 \underbrace{X_i}_\text{Mileage} + \epsilon_i \quad \text{where} \ \epsilon_i \sim N(0, \sigma^2) 
+$$
+
+The null hypothesis for the analysis is that the slope is zero; there is not a real relationship between the mileage and the price of CRVs. The alternative hypothesis is that slope is not zero; there is in actuality a relationship between the mileage and the price.The level of significance for the study will be 0.05.
+
+$$
+  H_0: \beta_1 = 0
+$$
+
+$$
+  H_a: \beta_1 \neq 0
+$$
+
+$$
+  \alpha = 0.05
+$$
+
+
+#### Graphics and Numerical Summaries
+
+The scatterplot below shows the relationship between mileage and price for the CRVs for sale by owner on Portland's Craigslist.
+
+
+```{r, scatterplot}
+
+plot(Price ~ Mileage, data=crv, main="Relationship Between Price and Mileage for Honda CRVs in Portland", ylab="Price in U.S. Dollars", pch=19, col=viridis(1))
+crv.lm <- lm(Price~Mileage, data=crv)
+abline(crv.lm)
+
+```
+
+</br>
+As one would expect, the scatterplot for the relationship between price and mileage shows a negative trend. As the mileage increases, the price of the vehicle decreases. 
+</br>
+
+#### Linear Regression
+
+
+```{r, warning=FALSE}
+
+pander(summary(crv.lm))
+
+```
+
+The y-intercept for the price is $19,542. For every mile the CRV is driven, the price decreases by $.07. The p-value for the slope is significantly different from 0; therefore there is sufficient evidence that the relationship between mileage and price is linear.
+
+$$p =  1.362e-15  <  \alpha = 0.05$$
+
+
+</div>
+</div>
+#### Appropriateness
+The residuals vs fitted plot indicates that the linear relationship assumption is violated because there is a distinct pattern, and the constant variance assumption is violated because the residuals tend to be positive on the low and high end of the fitted values, but negative in the middle. The qq plot of the residuals appears to be normal as most of the points are within the blue dotted lines this indicates that the error terms are likely normal. The error terms appear to be independent because there does not to be any trends or pattern in the residuals vs order plot. As both the linear relationship and constant variance assumptions are violated, the test results are unreliable. 
+
+```{r, message=FALSE, results="hide"}
+par(mfrow=c(1,3))
+plot(crv.lm, which=1, caption=NA)
+mtext(side=3, text="Residuals vs Fitted")
+qqPlot(crv.lm$residuals)
+mtext(side=3,text="Residuals QQ Plot")
+plot(crv.lm$residuals)
+mtext(side=3, text="Residuals vs Order")
+
+```
+
+
+
+## Conclusion
+
+There is sufficient evidence to reject the null; the p-value is 1.362e-15. This indicates a linear relationship between mileage and price of Honda CRVs in the Portland area. However, the residuals vs fitted plot indicates that the linear relationship and constant variance assumptions have been violated, so the results of the test are unreliable.
+
+
+
+
+```
+
 
 
