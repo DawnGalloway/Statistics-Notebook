@@ -2,42 +2,2033 @@
 title: "R Cheat Sheets & Notes"
 ---
 
-## Cheat Sheets
+[Test Tips], [Code Notes] <br>
+Class Notes: [Week 1] , [Week 2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14]
+Useful Tidbits: <a href="Notes">Class Notes</a>
 
-* [R Colors](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)
+### Cheat Sheets
 
-* [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
+* [R Color Guide](file:///C:/Users/rizen/OneDrive/Documents/BYUI/DataScience Certificate/INT STAT/Statistics-Notebook-master/RColorGuide.html)
 
-* [R Base Commands Cheat Sheet](https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf)
+* [R Base Graphics Cheat Sheet](http://www.joyce-robbins.com/wp-content/uploads/2016/04/BaseGraphicsCheatsheet.pdf)
 
-* [Keyboard Shortcuts](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts)
+* [R Base Commands Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf)
 
-## Notes
+* [R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
 
-Add your own notes here...
+* [ggplot2 Cheat Sheet](https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
 
-```{r}
-# Add R commands you want to remember here...
+* [Keyboard Shortcuts](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts)<br/>
 
-```
 
-```{r}
-# Or create other R chunks to put them in like this...
 
-```
+### Test Tips
+
+Read output carefully so you understand what it's saying! For quartemile time (qsec) a lower number is  better.<br>
+Read carefully so you don't miss info in the questions.<br>
+Carefully look at similar words linear v logistic!<br>
+Make sure to check whether the answer is positive or negative.<br>
+Check normality to know whether parametric or non-parametric.<br>
+Kruskal p-value total to the right of the line/total.<br>
+What each row represents cannot be a column name.<br>
+Curved regression line polynomial uses x and x2 so temp and temp2 in formula.<br>
+Chi squared 2 qualitative.<br>
+To know which test to use draw a graphic and compare with the ones next to the tests.<br>
+Check whether it should be a factor.(if number) catagorical variable must be a factor (qualitative) except might be if it's a zero and one ---If the number should be a catagorical then make it a factor<br>
+Regression--the only one that makes sense for two continuous variables is linear regression.<br>
+Make sure you put a zero before the decimal in Canvas.<br>
+When predicting logistic regression by hand make sure you have the parentheses in the right places, 
+exp(-6.6035+.3070*25)/(1+exp(-6.6035+.307*25)) the ones before the 1 and at the end are very important!<br>
+Since exp(0.3070) = 1.359341, we find that the odds of a success, i.e., that Yi =1 increases by 35.9341%, which rounds to 36% for every 1 unit increase in x.
+Notices that the 35.9341 came from 1.359341. If you have 1.36 of what you originally had, then you increased by 0.36 or 36%.<br>
+
+### Analysis code index
+#### Rent Analysis 
+Side-by-side boxplots with different colors (ggplot)
+
+  * Title and subtitle
+  * Justification(0-1)
+  * Blank background
+  * Increase font size
+  * X axes lines
+  
+5 number summary using rbind and pander
+
+Scatter plot (base r)
+
+  * Pch colored using case_when on a column 
+  * Legend 
+
+#### Stephanie Analysis
+Drop a column from a dataset 
+
+Abline example
+
+Rbind & pander
+
+#### High School Seniors
+
+
+### Code Notes
+
+#### Generic
+Ctrl + L to clear console
+Getwd()<br>
+Glimpse() to see the data and it's types (good for when ? Doesn't work)<br>
+In rmd ctr shft c to comment/uncomment<br>
+Echo = false means the code won't show just output<br>
+Double question marks tells you where<br>
+Don't put install in the script cause it'll do it every time<br>
+Say no to saving workspace instead save a script with everything.<br>
+Shortcut for pipe is ctrl + shift + m<br>
+
+#### Graphics
+Notebook add links to rmd files (can also put line number)<br>
+P + theme(text=element_text(size24))
+
+#### Problems
+Mismatched directories can sometimes cause you problems when you knit.<br> 
+Session>Set Working Directory to Source file location<br>
+NAs are contagious they will permiate your data, pass na.rm true to remove the nas<br>
+Session > restart R because he overwrote his data<br>
+Clicking on broom cleans out all the data<br>
+
+#### R Markdown
+
+#### Reminders
+Don't do anything to the original data file make sure to assign it to a new name!!!<br>
+Filter rows/select columns<br>
+Colnames() to see the column names<br>
+Tibble() see code for names and first few rows<br>
+Easier to do test questions in base R<br>
+Filter into a new data set before summarizing<br>
+
+<a id="Notes"></a>
+
+### Class Notes
+
+#### Intro to R Studio, Week 1
+
+<a id="1">
+Settings gear click Preview in viewer plane to see it all in R<br>
+Ctr + enter submits current line to console<br>
+In rmd ctr shft c to comment/uncomment<br>
+Echo = false means the code won't show just output<br>
+
+Things learned about scatterplots Base R<br>
+Pch plotting character<br>
+Type= p(points), l(lines), or b(both)<br>
+Xlab & ylab lab=label<br>
+Main= for main title, don't forget quotes<br>
+Col=<"color name"> or c(<"color1">, <"color2">, ...)<br>
+Y ~ x (NOT x ~ y)<br>
+
+
+##### Skills Quiz, Intro to R
+Create new column: mutate(<new column name> = <formula>) ie. weight = wt*1000
+
+##### Assessment Quiz
+Statistic most meaningful for describing typical cost of monthly gas bill:<br>
+Mean if normal, median if data skewed. Use boxplot or hist to check skew<br>
+Compute the average a of b: mean(a ~ b, data=<data>)<br>
+Good choice graphic when 2 quantatative is scatterplot<br>
+When growth of a as b: plot(a ~ b, data=<data>)<br>
+Which most likely at #, abline(...#)<br>
+<br>
+
+
+#### Intro to Data Wrangling & Visualization, Week 2 
+
+Mismatched directories can sometimes cause problems when you knit, use getwd(), session>set working<br> directory>To Source File Location
 
 ```{r, eval=FALSE}
-# Using ```{r, eval=FALSE} turns off the chunk, but still shows it.
-# Useful when you want to remember code, but not run it in this file.
+library(mosaic)
+library(tidyverse)
+View(KidsFeet)
+
+# Boxplot & five number summary
+# Side by side boxplot y~x
+# Length quantitative by gender quantitative
+boxplot(length ~ sex, data=KidsFeet)
+
+boxplot(KidsFeet$length ~ KidsFeet$sex, col="orange", main="Distribution of Feet Length by Sex", ylab="Length", xlab="Sex") 
+# Create a five - number summary table in support of the boxplot
+library(pander) # makes it look more pretty (numerical summaries)
+KidsFeet %>% 
+  group_by(sex) %>% 
+  summarise(min = min(length),
+            Q1 = quantile(length, .25),
+            median = median(length),
+            Q3 = quantile(length, .75), 
+            max = max(length)) %>% pander()
+
+# Bar plots and table counts
+# Counts how many of each occourrance each value occurs
+# Brother Palmers way
+total <- table(KidsFeet$sex)
+barplot(total)
+barplot(table(KidsFeet$sex))
+
+# Create a bar plot that shows how many boys and girls feet are in the data set
+table(KidsFeet$sex)
+
+# Scatterplot and correlation
+# Scatter plot shows relationship between, two quantitative variables
+plot(length ~ width, data = KidsFeet)
+# Correlation coefficient summarized scater plot data, cor here stands for correlation
+# Notice passed in opposite order (x, y)
+KidsFeet %>% summarise(cor(width, length))
+
+# Plot example with ggplot (if done as below already piped in data)
+KidsFeet %>%  ggplot(mapping = aes(x = width, y = length)) + geom_point()
+
+# ?mean()
+# For mean need to add mean(data$co, na.rm = true)
+# ?cor (stats)
+# Correlation does not have an remove na, for this one must find a different options pairwise.complete.obs
+
+auto <- filter(mtcars, am == 0)
+man <-   filter(mtcars, am == 1)
+mean(man$hp)
+
+palette(c("skyblue","firebrick"))
+
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), pch=16, xlab="Quarter Mile Time (seconds)", ylab="Miles per Gallon", main="1974 Motor Trend Vehicles")
+legend("topright", pch=16, legend=c("automatic","manual"), title="Transmission", bty='n', col=palette())
 ```
 
+##### Skills Quiz, Data Wrangling and Visualization
 
+Which graphic works best? Looks like stripchart works for 1 qual and 1 quant (plot, boxplot, stripchart answers)
+
+##### Assessment Quiz
+
+Read output carefully so you understand what it's saying! For quartemile time (qsec) a lower number is  better.
+```{r, eval=FALSE}
+# Gross hp of auto and man transmission
+mtcars %>% group_by(am) %>% summarize(mean(hp)) %>% pander()
+
+```
+<br>
+
+#### T-tests, Week 3
+
+Nos are more information than yeses. We set out to disprove our theories. Yeses just confirm your idea. If you think it's right you're just confirming bias Veritasium<br>
+They are all white<br>
+Is/are = must have an equals sign<br>
+We can disprove an equals sign. You can never prove something true, you can only disprove<br>
+2 things needed for p-value, a test statistic and the sampling distribution of the test statistic<br> (sampling distribution sampling of all possible distribution)<br>
+
+Two things are necessary to calculate a p-value 1) a test statistic 2) The sampling distribution of the test statistic<br>
+The probability of obtaining a sample mean Ctest statistic) at least as extreme as the one you got just by random chance, assuming the null hypothesis is true.<br>
+1. State the null and alternative hypotheses.<br>
+2. Determine p-value based on test statistic<br>
+3 decision regrading Ho<br>
+4 State the conclusion (in context). What do you say about Ho<br>
+  a. If reject Ho We have sufficient evidence to (Ha in English)<br>
+  b. If don't reject Ho- We have insufficient evedience to say that "Ha in English"<br>
+Remember Art (Alpha/Type 1 Reject True Ho) and BFF (Beta/Type II Fail to reject False Ho)
+
+                                Ho is True        Ha is True<br>
+conclusion: Don't Reject Ho      Correct        Type II error<br>
+Reject Ho                       Type I Error        Correct<br>
+
+Probabliity of Type 1 error = alpha (convicting an innocent man of a crime)<br>
+Probability of Type II Error = Beta (letting a guilty man go free)<br>
+Null hypothesis in jury is innocence so we either reject nul (guilty) or fail to reject null (not guilty), but we don't accept the null (innocence)<br>
+
+##### T-test, One-sample
+One sample t-test, xbar (stat), Ho: mu=# Ha: mu!=<>#, Req: Sampling distribution of xbar is normal shape, talks about one variable<br>
+Matched Pairs (Means of the Difference) Dbar mean(x1-x2) stat, Ho= mua= 0, Sampling distribution of dbar is normal, kniwing who's ingroup 1 tells you something about who's in group 2 like husbands and wives, siblings, same person measured twice, before and after--variables must have same units<br>
+
+##### Independent samples t-test (difference of Means)
+
+x1 -x2 (stat), Ho: mu1 - mu2 = 0 or mu1 <>!=mu2, Req: Sampling distribution of xbar1 is normal and sampling distribution of xbar2 is normal (check separately, knowing who's in group 1 tells you nothing about who's in group 2 Different sized groups allowed like comparing males to females
+Normal n>30, QQplot of the data is normal (if parent is normal, child is normal.) If not normal, use a non-parametric test
+Code for qqplot below in Skills quiz
+
+Boxplots work well with t-test pared and independent
+```{r, eval=FALSE}
+library(mosaic)
+library(car)
+library(tidyverse)
+
+View(KidsFeet)
+
+# By default the alternative is !
+t.test(x = KidsFeet$length, mu = 28)
+```
+
+##### Paired
+
+```{r, eval=FALSE}
+# Calculate the difference for each row, and then do a one sample t-test
+newdata <- KidsFeet %>% mutate(paired_diffs = length - 3 * width)
+# Didn't have to have mu = 0 because it's the default
+t.test(x = newdata$paired_diffs, mu = 0)
+# There's sufficient evidence of length and 3 times width is not 0?
+
+# Do the paired test right within the t.test command
+t.test(x = KidsFeet$length, y = KidsFeet$width * 3, paired = TRUE)
+# Evidence length is not equal to three times the width
+```
+
+##### Independent t-tests
 
 
 ```{r, eval=FALSE}
+#Hard Way
+#Square bracket allow you to subset the rows!
+#Careful use == or you will ruin your dataset
+t.test(x = KidsFeet$length[KidsFeet$sex == "B"], 
+       y = KidsFeet$length[KidsFeet$sex == "G"])
+# We have insufficient evidence to coclude that the mean boy foot length is less than girl
+
+# Easy Way, if data is nice and tidy
+# Right hand side is 1 for 1 sample, or factor with 2 levels
+t.test(KidsFeet$length ~ KidsFeet$sex)
+# Same result as hard way
+
+```
+
+##### QQ Plots
+Are not a graphical summary only for the purpose of making sure that data is normal<br>
+The car package is better because it has the dashed lines to help you see if the points are inside the boundaries
+```{r, eval=FALSE}
+install.packages("car")
+library(car)
+
+qqPlot(KidsFeet$length ~ KidsFeet$sex)
+# for one plot one vector
+qqPlot(KidsFeet$length)
+```
+Session > restart R because he overwrote his data
+Clicking on broom cleans out all the data
+
+###### Skills Quiz, t Tests (double check lft, rt, two.sided)
+
+These are small sample sizes. You will need to create Q-Q Plots of each sample of data to determine if the data in each group is normal or not. It turns out that making these Q-Q Plots in R is a little cumbersome. Here is the code that does it correctly.<br>
+
+``` {r, eval=FALSE}
+library(car)
+qqPlot(uptake ~ Type, data = CO2.chilled.250)
+```
+
+###### Assessment Quiz
+
+(no notes)
+
+<br>
+
+#### Wilcoxon Tests
+
+Equivalent to a one sample t-test or paired sample t-test version<br>
+Best for smaller sample sizes (data not normal)???CHECK<br>
+Nonparamentric version<br>
+Not good with tied rankings<br>
+Implied hypothesis if there truly was no difference (half would be neg and half positive) it would sum to the middle of the ranks (in our example 60)<br>
+<br>
+1) Order the magnitude (absolute value)
+2) Then rank them (if the value is negative add a negative value to the rank)
+3) Put into two groups neg and pos
+4) Choose the smaller group and take the absolute value of the sum.
+5) That's the test statistic
+	
+The median of the differences is not 0<br>
+Measured with the MEDIAN.<br>
+Ha: median<br>
+What's the difference between the hypothesized medium<br>
+Is 7.25<br>
+	
+If you have a sample size bigger than 30 use the regular t-test
+	
+##### Wilcoxon Rank Sum (Mann-Whitney) Independent samples
+
+Ho: difference in medians = 0<br>
+Or the distributions are stochastically equally (randomly)<br>
+Ho: median of boys feet length = median of girls foot length<br>
+Ha: median not equal<br>
+
+alpha = .05, p-value = .0836 >.05, fail to reject the null<br>
+Insufficient evidence to conclude that median boys feet length is different than girl median foot length.<br>
+Comparing 2 types of bread spray<br>
+If they truly have the same median they have the same distribution.<br>
+If they came from the same distribution then they can be ranked together<br>
+If tied take the middle value 9 10 11 all get 10 , 12 and 13 get 12>5<br>
+Return to their original groups<br>
+Pick one group sum the ranks get a value of 91.<br>
+We added bugspray As ranks it was on the high side so A is better at killing bed<br>
+Once I find out there truly is a difference then I can figure out which way<br>
+True location of mean isn't the same as the other. One distribution is to the right or left or other. We simplify it by talking about the median, but it's really matching the whole distribution.<br>
+The location being shifted. The median being shifted. (or mean if you're assuming it's a normal but we use this test because we don't believe it is.)<br>
+Alpha- ART Alpha Reject True reject true null hypothesis/type I error SIGNIFICANCE LEVEL<br>
+Beta- BFF Beta Fail to Reject False<br>
+1-Beta- Power-Ability to correctly detect an effect or a difference<br>
+1-alpha- Confidence level<br>
+Variance is a measure of spread<br>
+
+The box plot shows how similar they are. P-value shows whether that similarity likely be chance.<br>
+Friendly data set resides in the car package<br>
+Leave all the other text in word list analysis.<br>
+It appears there may be a slight shift in medians with the West being higher. Since the distibutions are similarly shaped (slightly right skewed), an official test of the hypotheses<br>
+H0:difference in medians=0<br>
+Ha:difference in medians≠0<br>
+can be performed. Using a Wilcoxon Rank Sum Test (using the normal approximation with continuity correction due to ties in the data), we obtain a test statistic of W=181 and a p-value of 0.2376. There is insufficient evidence to reject the null. We conclude that any differences in medians demonstrated by the above boxplot is simply due to random sampling. The mobility scores for the entire U.S. appear to be the same on average (median) between the East and West.
+
+```{r, eval=FALSE}
+library(mosaic)
+wilcox.test(length~sex, data=KidsFeet)
+```
+To determine if it is reasonable to infer that this conclusion is valid in general (for the full population) a Wilcoxon Rank Sum Test will be used. While the two samples are not identically shaped (shown in the boxplots above) they are not different enough to violate the assumption of identical shape and spread that is required by the Rank Sum Test.<br>
+Note that since there are ties present in the data, an exact p<br>
+-value cannot be computed. An approximation will be used instead. # Because of the small sample size, a continuity correction will # # also be applied. The results of the test are still valid and show # sufficient evidence to reject the null hypothesis (p=0.01771<α).
+
+
+Skills Quiz, Wilcoxon Tests (non-parametric)
+
+Assessment Quiz
+
+
+
+<br>
+
+####  ANOVA, Week 5
+
+Test all three things simultaneously<br>
+Analysis of variance 1) compares variation between each of the sample means and 2) the variation within each of the samples.<br>
+Anova tests whether several populations have the same mean by compariing how far apart the sample means are with how much variation there is within the samples<br>
+Ratio of variance is the F statistic<br>
+Between group variation: variation of group means around the grand mean<br>
+Within group variation: average variation of observations around there group means<br>
+
+Degree of Freedom: the number of idependant pieces of information that went into calculating the estimate OR The denominator in the variance caluculation.<br>
+Variance is kind of an avareage (or mean) of squared deviations<br>
+Variance sum of squares/degrees of freedom (the ave square distance from the mean)<br>
+
+Degrees of freedom for numerator (between group variance*)<br>
+Degrees of freedom for denomitor or within group all data points minus the number of groups df2 - n-m<br>
+
+Cell means Model x sub(ij) = musumi +Error(ij)<br>
+Ho: mu(A)=mu(C)=mu(M), Ha: At least one mean is different<br>
+Treatement Effects Model<br>
+xsub(ij)= mu + a(i) + error(ij)<br>
+Size of effect(a) for a given factor level is the distance from the factor to the grand mean<br>
+
+```{r, eval=FALSE}
+# New vocab, factor and level
+library(mosaic)
+# Are the mean air temp for the measured months all equal?
+# Ho: effect of each month = 0
+# Ha: at least one month has a non-zero effect on temperature
+# catagorical on x axis
+plot(Temp~Month, data = airquality)
+# In the case, the factor is Month (catagorical variable)
+# The factor levels are the month names (values within the category)
+my_aov <- aov(Temp~Month, data = airquality)
+summary(my_aov)
+# This didn't work because the month is an integer
+# This line creates the model
+my_aov <- aov(Temp~as.factor(Month), data = airquality)
+summary(my_aov)
+# p-value is basically 0
+# Reject Ho. There is sufficient evidence to suggest there is at least one month that has a non-zero month. In other words, there is sufficient evidence to suggest that month has an affect on temperature. 
+# You have to store it in an object and do summary the object
+# Residuals are normally distributed QQ plot, and scatterplot (residuals difference from mean (predicted)), effect how far off means are from grand mean???
+plot(my_aov, which=1:2) If you don't put 1:2 one to two you'll get 7
+# Looking for roughly the same spread, 
+# To get a qq plot with boundaries
+library(car)
+qqPlot(my_aov$residuals) # must have residuals plot
+# ANOVA is robust to violation of assumptions, the degree to which you violate the assumptions is the degree to which you should trust your p-value
+# Book walks through
+par(mfrow = c(1,2)) # Turns on a partition so you can see both at the same time
+plot(my_aov, which = 1)
+qqPlot(my_aov$residuals)
+boxplot(Temp~as.factor(Month), data=airquality)
+par(mfrow=c(1,1)) # Turns your partition off
+```
+
+Benefits of 2 way ANOVA<br>
+Interaction<br>
+Ho: Alpha has no effect on y or Ho: a1 = a2 = 0<br>
+Ho: Beta has no effect on y or Ho: b1 = b2 = 0<br>
+One way more than one factors<br>
+3 hypothesis 2 types of wool (levels)<br>
+does tension effect the breaks<br>
+Prefers the effects are all equals to zero<br>
+null effect of tension the same for all types of wool<br>
+The last one is number of combinations so 6 levels 6-1 is 5 then subtract the other Dfs down to 2. You can multiply the previous degrees of freedom to get degree of freedom<br>
+IMPORTANT: Before looking at the p-values of your test, it is always important to check the degrees of freedom of the test. Remember, degrees of freedom should be one less than the number of levels of the factor. If this is not the case, then use as.factor(...) to fix the problem.<br>
+This residual v fitted is about the maximum variation to accept<br>
+For each test make sure to have a section covering requirements maybe sub divide sections
+
+``` {r, eval=FALSE}
+library(car)
+library(tidyverse)
+library(mosaic)
+
+#?Blackmore
+View(Blackmore)
+Blackmore$ageGroup <- cut(Blackmore$age, c(7,10,12,14,18), labels=c("Youth","Pre-Teen","Early-Teen","Late-Teen"), ordered_result=TRUE) #includes 10, next includes 12
+
+Blackmore <- Blackmore %>%
+   mutate(ageGroup = case_when(age >= 8 & age <= 10 ~ "Youth",                                                    age > 10 & age <= 12 ~ "Pre-Teen",
+                                                      age > 12 & age <= 14 ~ "Early-Teen",
+                                                      age > 14 & age <= 18 ~ "Late-Teen"),
+                ageGroup = factor(ageGroup, levels=c("Youth", "Pre-Teen", "Early-Teen", "Late-Teen"), ordered=TRUE))
+
+table(Blackmore$ageGroup)
+exercise.aov <- aov(exercise~group + ageGroup + group:ageGroup, data=Blackmore)
+summary(exercise.aov)
+
+# test requirements
+par(mfrow = c(1,2))
+plot(exercise.aov, which = 1:2)
+# Remember: data points = n-1(data points - one should be the same as all degrees of freedom together)
+# 3 each factor and the interaction
+xyplot(Blackmore$exercise~Blackmore$group, type = c("p","a"))
+xyplot(Blackmore$exercise~Blackmore$ageGroup, type = c("p","a"))
+xyplot(Blackmore$exercise~Blackmore$group, groups = Blackmore$group, type = c("p","a"))
+interaction.plot(Blackmore$ageGroup, Blackmore$group, Blackmore$exercise) #can be better
+# Anova and it's associated p-values are not reliable
+```
+<br>
+##### Skills Quiz, ANOVA
+
+Tip if having to determine patterns look at the interaction plot
+``` {r, eval=FALSE}
+library(car)
+# One way ANOVA
+friendly.aov <- aov(correct~condition, data=Friendly)
+summary(friendly.aov)
+            Df Sum Sq Mean Sq F value Pr(>F)  
+condition    2  264.6  132.30   4.341 0.0232 *
+Residuals   27  822.9   30.48                 
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# Display side by side plots (req checks)
+par(mfrow=c(1,2))
+plot(friendly.aov, which=1:2)
+xyplot(correct~condition, data=Friendly, jitter.x=TRUE, type=c("p", "a"))
+?ToothGrowth
+View(ToothGrowth)
+# Check degrees of freedom to make sure correct and don't need to use as.factor
+my_aov <- aov(len ~ supp + as.factor(dose) + supp:as.factor(dose), data = ToothGrowth)
+summary(my_aov)
+                     Df Sum Sq Mean Sq F value
+supp                  1  205.4   205.4  15.572
+as.factor(dose)       2 2426.4  1213.2  92.000
+supp:as.factor(dose)  2  108.3    54.2   4.107
+Residuals            54  712.1    13.2        
+                       Pr(>F)    
+supp                 0.000231 ***
+as.factor(dose)       < 2e-16 ***
+supp:as.factor(dose) 0.021860 *  
+Residuals                        
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 3 needed graphs (one for each hyp)
+xyplot( len ~ supp, data=ToothGrowth, type=c("p","a")) 
+xyplot( len ~ dose, data=ToothGrowth, type=c("p","a"))
+xyplot( len ~ supp, data=ToothGrowth, groups=dose, type=c("p","a"), auto.key=TRUE)
+
+
+```
+Assessment Quiz
+<br>
+
+####  Kruskal-Wallis Tests, Week 6
+
+Kruskal-Wallis 3 or more for non-parametric<br>
+Testing 3 levels of a factor if data is in long form<br>
+comparing location of distribution<br>
+Use this hypothesis not the other one<br>
+Ho: Atll samples are form the same distribution<br>
+Ha: At east one sample's distribution is stochastically different<br>
+Test statistic is H (is approximately a chi squared distribution with a C-1)<br>
+no requirement placed on the data<br>
+There isn't a two-way Kruskal-Wallis<br>
+The way you calculate the statistic is more complicated than Wilcoxon (which was combinitorial)<br>
+It's advtage over Wilcoxon can go into three groups. (Advantage of Wilcoxon you can test directionally, but ANOVA and Kruskal Wallis you can only test one way.)<br>
+3 requirements You need a numerical summary, graphical summary, and test statistic. All of these will work with Y~X<br>
+No changes for this test of you have more than 3 levels<br>
+
+THIS-------------->Look over Wil and this and figure out the diff, Also add notes to front page para and no par If you have # Y, X ABC you ca use para = Anova (add link to your own case study), non-para Kruskal Wallis
+
+```{r, eval=FALSE}
+library(car)
+kruskal.test(correct~condition, data=Friendly)
+
+boxplot(correct~condition, data=Friendly)
+favstats(correct~condition, data=Friendly) # need mosiac
+# (first is test statistic H)5.1817, df = 2, p-value = 0.07496
+
+library(tidyverse)
+View(starwars)
+?starwars
+
+# drop droids since they aren't born anywhere
+```
+
+##### Skills Quiz, Kruskal-Wallis Test
+
+``` {r, eval=FALSE}
+dstarwars <- filter(starwars, species != 'Droid')
+kruskal.test(height~gender, data = dstarwars)
+
+boxplot(height~gender, data=dstarwars)
+
+
+library(mosaic)
+?SaratogaHouses
+View(SaratogaHouses)
+table(SaratogaHouses$fuel)
+kruskal.test(price~fuel, data=SaratogaHouses)
+boxplot(price~heating, data=SaratogaHouses)
+stripchart(price~heating, data=SaratogaHouses)
+SaratogaHouses %>% group_by(fuel) %>% summarise(Median = median(price))
+summary(SaratogaHouses)
+```
+
+C = The number of samples being compared<br>
+ni=The size of sample<br>
+N= The total number of observations<br>
+Ri=The sum of the Ranks belonging to sample i<br>
+Rbari= The mean of the ranks of each sample i<br>
+H=test statistic (how much ranks differ from the mean)<br>
+INCLUDE ALL TEST Statistics!<br>
+
+
+##### Assessment Quiz
+
+``` {r, eval=FALSE}
+library(mosaic)  
+library(car)
+View(Salaries)
+kruskal.test(salary~rank, data=Salaries)
+boxplot(salary~rank, data=Salaries)
+# H of the kruskal-Wallis can be described as a combined measurement of how muth the average ranks differ between each group.
+```
+<br>
+
+
+#### Simple Linear Regression, Week 7
+
+Y (dependant) is the variable you're trying to predict. X is the explanatory (independent variable)<br>
+Simple Linear Regression<br>
+Simple Ordinary Least Squares Regression (1 x, 1 y)<br>
+Ordinary Least-Squares Regression (Broader) (* x, 1 y)<br>
+Simple Linear Reqression (most common)<br>
+Linear Regression<br>
+If you're in an interview OLS regression<br>
+The "Best Fit" Line minimizes the sum of the distances from the points to the line<br>
+How do we define distance?<br>
+We use vertical distance because we're trying to predict the Y. We square the distances so the negatives go away. The sum of squares, we add the area of the squares<br>
+
+The True regression line is<br>
+It's the true mean<br>
+We can be condfident in a point estimate only a condifidence interval<br>
+Epsilon is the error term or residual
+
+```{r, eval=FALSE}
+library(tidyverse)
+?cars
+plot(cars$dist ~ cars$speed)
+
+create my linear modemappl, 
+lm(cars$dist ~ cars$speed)
+car_mod <- lm(cars$dist~cars$speed)
+summary(car_mod)
+# in the examples the formula on cars example came from the summary
+# If I want to add aline
+abline(reg = car_mod)
+abline (a = -17.5781, b / 3.9324, col = blue) #the same
+# ggplot ex
+ggplot(data=cars, mapping=aes(x=speed, y=dist)) + geom_point() + geom smooth(method="lm", se=FALSE) # last part removes the error bands
+
+# in analyses use cars thing to write out Ysub i = beto o etc.. p value for speed is less than .o5 Then I sate what the fitted model is thats the a17.58 part Say hence relation ship is real (not meaningful like example) Then write out the relationship Assuming the model is appropriate.... should say on average which sample doesn't You can see from the plot focused on the model
+plot(car_mod, which=1)# don't look at red line just look at points some concern here looks like the variance may be growing (not constant), Linear looks good (Make sure you teach him to read them in your analysis), there's no bends looking for constant variance as move lt to rt it seems to increase this assumption may be violated
+car::qqplot(car_mod$residuals) #explain why this is met
+plot(car_mod$residuals) # order plot? num 5 no distinct pattern or trend in the plot, I think assumpt num 5 that each _ is _ has been met
+```
+
+Remember you can look at the code to see how to do it<br>
+4 of assumptions (Maybe we assume that ____whatever 4 is because we can not check it directly)<br>
+If pattern showing in num 5 check your data, maybe there's something missing in your model, if there's something different on say day 5 you can add something for day of the week<br>
+This weeks analysis, State model and the terms of the model(know terms) Can state it either way in cars with nums stopping speed or all mahe way, state assumptions, hypothesis test (do even if you don't meet the requirements tell me but going to do it anyway)<br>
+diffence between diagnostic plot and graphic--graphic illustrate the data, diagonstic show whether meet assumptions<br>
+How do you use math chunks, you can use the LaTex code<br>
+Why important to include the simple linear regression model along with your hypothesis--He and maybe you wont' know how the model is pieced together<br>
+How interpret the value for the slope and intercept (slope is change in ave value of y), y is mean x when y is zero<br>
+
+
+##### Skills Quiz, Simple Linear Regression
+
+
+List where the Linear Regression parts can be found<br>
+Linear Regression (Under "Making Inference" on your webpage menu)<br>
+Explanation (for Simple Linear Regression)<br>
+R Instructions (for Simple Linear Regression)<br>
+Examples: bodyweight (for Simple Linear Regression)<br>
+Examples: cars (for Simple Linear Regression)<br>
+NOTES NEED TO HAVE WHICH PLOT FOR WHICH ASSUMPTION!<br>
+Requirement/How to Check/"Hot dog"<br>
+1 Linear Relationship/Scatterplot/Hot dog (double check hot dog)<br>
+1 Linear Relationship(partB)/Residual Plot/No pattern in residuals<br>
+2 Normal Error Term/Q-QPlot of the Residuals/Points in the QQplot close to line<br>
+3 Constant Variance/Residual Plot/No megaphone shape in residuals<br>
+4 X's are Known Constants/Cannot be checked directly<br>
+5 Obervations are Independant/Partially checked with a residuals vs. order plot/No pattern in residuals
+perform simple linear regression<br>
+
+```{r, eval=FALSE}
+plot(Height~Volume, data=trees)
+trees.lm<-lm(Height~Volume, data=trees)
+abline(trees.lm)
+#Check assumptions
+par(mfrow=c(1,2))
+plot(trees.lm, which=1:2) # reverse megaphone, not close to line, answer says it violates Normal Errors, Constant Variance, and Linear Relation
+par(mfrow=c(1,1)) #This resets your potting window for future plots
+```
+
+The residuals vs. fitted values plot diagnoses the constant variance and Linear Relation assumptions<br> (independent observations are checked by residuals vs. order) par(mfrow=c(1,3))<br>
+QQplot diagnoses the Normal Errors assumption plot(mylim, which=1:2)<br>
+Residuals v Order diagnoses Independent Errors plot(mylm$residuals)<br>
+
+```{r, eval=FALSE}
+# BE CAREFUL WITH LINEAR REGRESSION
+# Perform a simple linear regression to determine if the expected wating time to the next eruption (this goes in first position) can be modeled by the previous eruption (this goes in second position)
+?faithful
+
+plot(waiting~eruptions, data=faithful)
+oldfaithful.lm<-lm(waiting~eruptions, data=faithful)
+abline(oldfaithful.lm)
+summary(oldfaithful.lm)
+
+# Check assumptions
+par(mfrow=c(1,2))
+plot(oldfaithful.lm, which=1:2)
+par(mfrow=c(1,1)
+    # For this one the answer said the errors appear to be normally distributed and we can assume the variance of the errors is constant, and appears appropriate to use the model 
+```
+
+##### Assessment Quiz
+
+```{r, eval=FALSE}
+library(mosaic)
+?KidsFeet
+plot(length~width, data=KidsFeet)
+feet.lm<-lm(length~width, data=KidsFeet)
+abline(feet.lm)
+summary(feet.lm)
+```
+<br>
+
+#### Multiple Linear Regression, Week 8
+
+```{r, eval=FALSE}
+# Example from cars
+# you are entering the x's not the Beta's (similar to the Anova/model is written the same way)
+lm.2lines <-lm(mpg~qsec + am + qsec:am, data=mtcars) (B3)
+# qsec slope when B is0
+# am change changedFiles(qsec:am) the slope is qsec plus the qsec:am
+# run palette before plot if you want it loaded
+palette(c("skyblue", "firebrick"))
+mymod <- lm(mpg~qsec + am + qsec:am, data=mtcars)
+summary(mymod)
+plot(mpg~qsec, col=factor(am), pch = 19, data=mtcars)
+# store coefficients of model in a vector and name it
+b <- mymod$coefficients
+# best fit line when x2 = 0
+abline(a= b[1], b=b[2], col="skyblue")
+# best fit line when x1=0, remember to add the change to the original!!!!
+abline(a= b[3]+b[1], b=b[4]+b[2], col="firebrick")
+# diagnose if appropriate
+plot(mymod, which=1) # linear and constant variance assumptions appear met/should not be an obvious pattern in the data points and should be about constant top to bottom not megaphone shape, not following a curve
+car::qqPot(mymod$residuals)
+# looks pretty good one or two outside but not overly concerned
+plot(mtcars$mpg) # no strong patterns, use the y!
+```
+
+Use summary to do hypothesis test<br>
+Null hypothesis for intercept pr(t) is not interesting Bnaught, 2nd tells whether reference line = slope of zero (not too interested), what I really want to know is the last one, does the transmission have effect on the slope and maybe 3rd does transmission have effect on mpg, if playing by the rulles really strictly, therei's insufficient (or marginal)evidenc to suggest transmission on slope (4th), Does transmission have an effect on mpg(this is the third in the list), insufficient (BTW, the second is the simple linear regression)<br>
+          Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -9.0099     8.2179  -1.096  0.28226<br>
+qsec          1.4385     0.4500   3.197  0.00343 **<br>
+am          -14.5107    12.4812  -1.163  0.25481<br>
+qsec:am       1.3214     0.7017   1.883  0.07012<br>
+Classroom activity quiz<br>
+Seems a bit confusing:<br>
+In class Y=(Bo + B2)+(B1 + B3)<br>
+When calculating Yi values use the model not the slope formula above<br>
+
+##### Indices
+
+In code  Y=([1]+[3])+([2]+[4]) using lm$coefficient indices<br>
+If no beta2 both have same intercept therefore<br>
+No beta2 Y=([1]+0)+([2]+[3]) not using a beta lowers the # of indices<br>
+No beta3 Y=([1]+[3])+([2]+0) indices<br>
+
+##### No Beta 2 example
+
+``` {r, eval=FALSE}
+palette(c("skyblue","firebrick"))
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
+# same intercept--Notice in the summary that beta2 (am) is not significant--rewrite the model so beta2 is not used, REMEMBER INDICES=3! Y=([1]+0)+([2]+[3])
+nobeta2<-lm(mpg~qsec + qsec:am, data=mtcars)
+summary(nobeta2)
+abline(a= nobeta2$coefficients[1], b= nobeta2$coefficients[2], col=palette()[1])
+abline(a= nobeta2$coefficients[1], b=  nobeta2$coefficients[2] + nobeta2$coefficients[3], col=palette()[2])
+```
+
+##### No beta 3 example
+
+``` {r, eval=FALSE}
+# parallel lines--Notice beta3 is not significant--rewrite the model so beta3 (qsec:am) is not used, REMEMBER INDICES=3! Y=([1]+[3])+([2]+0)
+palette(c("skyblue","firebrick"))
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
+nobeta3<-lm(mpg~qsec + am, data=mtcars)
+summary(nobeta3)
+abline(a= nobeta3$coefficients[1], b=nobeta3$coefficients[2], col=palette()[1])
+abline(a=nobeta3$coefficients[1]+nobeta3$coefficients[3], b=nobeta3$coefficients[2], col=palette()[2])
+```
+
+##### Full model example
+
+``` {r, eval=FALSE}
+
+# Full/diff slopes & diff intercepts--Notice full uses everything, REMEMBER INDICES=4! Y=([1]+[3])+([2]+[4])
+palette(c("skyblue","firebrick"))
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
+full<-lm(mpg~qsec + am + qsec:am, data=mtcars)
+summary(nobeta3)
+abline(a= full$coefficients[1], b=full$coefficients[2], col=palette()[1])
+abline(a=full$coefficients[1]+full$coefficients[3], b=full$coefficients[2]+full$coefficients[4], col=palette()[2])
+```
+
+##### Legend
+legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="Transmission (am)", bty="n")
+
+
+##### Skills Quiz, Multiple Linear Regression
+
+``` {r, eval=FALSE}
+?SaratogaHouses
+library(mosaic)
+
+SH2<-filter(SaratogaHouses, bedrooms==3, newConstruction=="Yes")
+View(SH2)
+
+SHmod<-lm(price~livingArea + fireplaces + livingArea:fireplaces, data=SH2)
+summary(SHmod)
+plot(price~livingArea, data=SH2, col=as.factor(livingArea))
+abline(a= SHmod$coefficients[1], b=SHmod$coefficients[2], col="yellow")
+abline(a=SHmod$coefficients[1]+SHmod$coefficients[3], b=SHmod$coefficients[2]+SHmod$coefficients[4], col= "skyblue")
+
+SHmod<-lm(price~livingArea + livingArea:fireplaces, data=SH2)
+summary(SHmod)
+plot(price~livingArea, data=SH2, col=as.factor(livingArea))
+abline(a= SHmod$coefficients[1], b= SHmod$coefficients[2], col="yellow")
+abline(a= SHmod$coefficients[1], b=  SHmod$coefficients[2] + SHmod$coefficients[3], col="skyblue")
+
+library(car)
+par(mfrow=c(1,3))
+plot(SHmod, which=1)
+qqPlot(SHmod$residuals, id=FALSE)
+plot(SHmod$residuals)
+
+library(car)
+?Highway1
+View(Highway1)
+ratemod<-lm(formula = rate ~ slim + shld + trks, data=Highway1)
+summary(ratemod)
+plot(ratemod, which=1:2)
+
+library(mosaic)
+?mpg
+View(mpg)
+
+plot(hwy ~ cty, data = mpg)
+mpg.lm <- lm(hwy ~ cty, data=mpg)
+
+summary(mpg.lm)
+
+par(mfrow=c(1,2)); plot(mpg.lm, which=1:2)
+par(mfrow=c(1,3))
+
+plot(mpg.lm$residuals ~ cyl , data=mpg)
+
+plot(mpg.lm$residuals ~ as.factor(drv), data=mpg)
+
+plot(mpg.lm$residuals ~ displ, data=mpg)
+
+mpg.lm <- lm(hwy ~ cty + drv, data=mpg)
+
+summary(mpg.lm)
+```
+
+Optional: To verify this result, see if you can use mPlot(mpg) to visually recreate a near depiction this regression. Email your code to your instructor to see how you did. Doing this will help you on your Analysis for this week and is recommended even though it is optional.
+
+##### Assessment Quiz
+
+``` {r, eval=FALSE}
+View(Orange)
+orangemod<-lm(Orange$circumference~Orange$age)
+summary(orangemod)
+plot(Orange$circumference~Orange$age)
+abline(orangemod)
+predict(orangemod, data.frame(tree=2))
+#abline(oangemod)
+par(mfrow=c(1,2))
+plot(orangemod, which=1:2)
+par(mfrow=c(1,1)
+
+kids.lm <- lm(length ~ width + as.factor(birthyear), data=KidsFeet)
+summary(kids.lm)
+# Which of the following correctly interprets the results of this regression?
+# Answer: Because the p-value of Beta2 is insignificant, the two lines should just be one line.
+```
+<br>
+
+#### Practice Final 1, Week 9
+
+
+1 x **Medians** equal wilcox oops<br>
+2 Continue to believ the logistic regression was appropriate<br>
+3 x p-value for Kruskal add up observations to the right of the line divide by total number<br>
+4 x Check the normality before deciding which test is appropriate should have been Kruskal<br>
+5 x billing period if it's a column header it's not what a row represents<br>
+6 x if the line is curved then Xi is used twice so temp and temp 2<br>
+7 hot summer cold winter<br>
+8 no significant difference in slopes, p-value = .8883<br>
+9 x two qualitative variables (no quant) use CHI squared<br>
+10 if they ask for recommendation consider using a five number summary rather than viewing the data<br>
+11 use histogram<br>
+12 yes anova<br>
+13 charged 10.9 cents/kwh<br>
+14 x Remember, the two things needed to get a p-value are a test statistic, in this case a chi-squared statistic equal to 4.9575, and a distribution of the test statistic, in this case a chi-squared distribution with 2 degrees of freedom, i.e., df=2. Going to the "Making Inference" page of the textbook and looking up the chi-squared distribution with 2 degrees of freedom, we see the value of 5 isn't too likely, but has some height to the curve above that value. Looking out to the right, we might guess around 5% or so for the p-value, and since 0.0838 is the only value close to that, we guess that as our answer.<br>
+15 x predicting on a curve<br>
+     kids.glm <- glm(birthyear==88 ~ length, data=KidsFeet, family=binomial)<br>
+     predict(kids.glm, data.frame(length=26), type="response")<br>
+16 p-value = .995<br>
+17 x Using e^b1, exp(-0.014717) = 0.9853908, shows that the odds are 98.54% of what they were for every 1 unit increase in X. This means the odds are decreasing by 1-0.9853908 = 0.01460923, or 1.46%.<br>
+18 linear<br>
+19 Kruskal<br>
+20 x chi-squared not appropriate because there are quantative variable for which test questions draw the image and compare<br>
+21 boxplot low high<br>
+22 However, since it is a logistic regression, then we are using a quantitative x-variable (birth weight in this case) to predict a binomial outcome (whether or not the mother smoked in this case). Thus, the correct answer would be "Can the birth weight of the child predict whether or not the mother smoked during the pregnancy?"<br>
+23 barplot could have been easier<br>
+    table(KidsFeet$sex, KidsFeet$birthmonth)<br>
+24 t stat & dist<br>
+25 faster= mean(length~sex, data=subset(KidsFeet, birthmonth==1))<br>
+<br>
+
+
+#### Logistic Regression, Week 10
+
+
+Probability that we get a success given(|) the number fro xi. We exponentioate the expression). We represent the result with a pi. We still have bnaught and b1 but diff to interpret, When we evaluate the exponetialization of the line we learn interesting things about the probability.<br>
+B for every 1 degree in crease in temp the increase in odds. If beta 1 = 0 there is no effect. if it's not (there is a slope)<br>
+
+Remember to include the equation with e and the line results<br>
+If there's a lot of overplotting change the alpha (transparency)<br>
+plot(y~x, data=data)#can add label pcu<br>
+curve(exp(Bnaught+B1x)/(1+exp(Bnaught+B1)))<br>
+can use coefficients<br>
+curve((exp(-\15.04-.2322*x+ so on , add=TRUE)))<br>
+don't need to use numbers can hardcode<br>
+eponentiate = e raised to a power<br>
+Run a hypothesis test to test whether the model is valid<br>
+H0 the model is good fit<br>
+Ha the model is not a good fit (if you reject the null, you shouldn't use the test)<br>
+Deviance Goodness of Fit Test you have 3 or 4 levels<br>
+most of the time you'll run the Hosmer-Lemeshow Goodness of Fit test, must use library(ResourceSelection), the g was 6 because there wasn't a lot of data, often 10 first 10 percentile of data then the next 10 percent divide data into 10 chunks, compare it to the predicted value. Default is 10. generally the more groups the better. (Problem you can alter the groups to give whatever results you want)<br>
+p > than .05 fail to reject insufficient evidenc that it's a bad fit
+the other test, use residual deviance and the degrees of freedom. P value high then not enough evidence is to reject the glm test<br>
+if the pvalue of the requirements test is low then we reject the model<br>
+exp(-.2322)<br>
+
+##### Phrasing the prediction
+
+For every one degree warmer in F, the odds of an o-ring failure change by a factor of .79(answer for the exp(B1))The odds of an o-ring failure decrease by 21% (multiply the b1 by 100)<br>
+use .glm in name so predict can tell by the end that the class<br>
+must be a dataframe<br>
+predict(model, newdata=data.frame(Temp=31), type = 'response')<br>
+It's the linear model for the log odds<br>
+response type is a probability prediction<br>
+in the explanaton always exponentiate the answer<br>
+
+
+```{r, eval=FALSE}
+library(mosaic)
+library(tidyverse)
+?KidsFeet
+# Don't have to have the yes= and no=, can nest an ifelse other mutate example ifelse(myvar == "Yes", 1, 0)
+
+kf <- KidsFeet %>%  
+  mutate(sexb = ifelse(sex=="B", yes=1, no=0))
+View(kf)
+# generalizedlogistic model
+my.glm<-glm(data=kf, sexb~length, family="binomial")
+# the plot will go i order so 0 first
+palette(c("pink", "skyblue"))
+plot(sexb~length, data=kf, pch=16, main="KidsFeet Logistic Regression", col = factor(sexb))
+# doing it this way gives more precision over hard coding
+b<- my.glm$coefficients
+curve(exp(b[1]+b[2]*x)/(1+exp(b[1]+b[2]*x)), add=TRUE)
+b
+```
+
+Pay attention here, predict the probability for a child being male if their foot length is 25cm (this is not the observed probability more like the mean)
+This alone is the log odds, must add response to get the probability
+Predict can give more info
+predict(my.glm, newdata=data.frame(length =25), type="response")
+or this just gives the prob
+x=25
+``` {r. eval=FALSE}
+exp(b[1]+b[2]*x)/(1+exp(b[1]+b[2]*x))
+```
+The estimated value of e raised to $\beta_1$ is
+(remember we don't interpret the B1 just the eporentiated B1)
+For every 1 unit increase in footlength the odds of being a boy are multiplied by 1.66. or For every 1 unit increase i footlength, the odds of being a boy grow by 66% or odds of being a boy change by a factor of 1.66.
+  odds of two to one the odds of it occuring is twice as likely as it not occuring
+LOOK UP ODDS and what e to the B1 means online!!!!
+every unit increase in x the quantity will grow by 1.66 (multiply by 1.66)
+summary(my.glm)
+
+##### Skills Quiz, Logistic Regression
+
+With some algebra the simple logistic regression moel can be reorganized as pi-i/1-pi=e raised to (B1*xi). The following statements are true for this equation pi-i/1-pi is the odds of success, the odds of success equal eB0 when xi=0, the odds of success increas by the factor of eB1 for every one unit increase in xi.
+pi-i represents the notation P(Yi=1|Xi)
+exp(-.232)
+a one unit increase in outside temp results in a .7929 change in the odds of an o-ring failure B1 = -.232
+
+``` {r, eval=FALSE}
+View(infert)
+?infert
+infert.glm<- glm((spontaneous>0)~age, data=infert, family=binomial)
+summary(infert.glm)
+b<-infert.glm$coefficients
+plot((spontaneous>0)~age, data=infert)
+curve(exp(b[1]+b[2]*x)/(1+exp(b[1]+b[2]*x)), add=TRUE)
+table(infert$age)
+# note to self it is glm$y and glm$fitted literally
+library(ResourceSelection)
+hoslem.test(infert.glm$y, infert.glm$fitted, g=?)
+#but for repeated values
+pchisq(334.01, 246, lower.tail=FALSE)
+
+library(mosaic)
+View(Galton)
+?Galton
+my.glm<-glm((sex=="M")~height, data=Galton, family="binomial")
+summary(my.glm)
+b<-my.glm$coefficients
+plot((sex=="M")~height, data=Galton)
+curve(exp(b[1]+b[2]*x)/(1+exp(b[1]+b[2]*x)), add=TRUE)
+exp(b[2])
+predict(my.glm, newdata=data.frame(height =65), type="response")
+hoslem.test(my.glm$y, my.glm$fitted, g=10)
+# Assessment Quiz
+
+library(mosaic)
+library(tidyverse)
+  View(Gestation)
+
+  ?Gestation
+gest<-Gestation %>% mutate(smokeb = ifelse(smoke=="never", 0,1))
+my.glm<-glm(smokeb~wt, data=gest, family=binomial)
+summary(my.glm)
+exp(.0370*25)
+```
+<br>
+
+#### Practice Final 2, Week 11
+
+```{r, eval=FALSE}
+# Skills Quiz, Mulitple Logistic Regression
+library(mosaic)
+library(tidyverse)
+#1 
+my.lm<-lm(length~width, data=KidsFeet)
+summary(my.lm)
+
+#2 Residuals v fitted & QQ Plot wonky did AOV then did the assumption tests
+Kruskal-Wallis
+RT <- RailTrail
+
+RT$Season <- as.factor(with(RT, spring + 2*summer + 3*fall))
+
+#3 Go back and check this
+my.glm <- glm(formula=volume~Season, data=RT)
+summary(my.glm)
+
+##redo
+#4 
+table(KidsFeet$sex)
+
+#5
+mean(length~as.factor(birthyear), data=KidsFeet)
+
+
+# 19 Normality of error terms
+library(car)
+par(mfrow=c(1,3))
+plot(my.lm, which=1, caption=NA)
+mtext(side=3, text="Residuals vs Fitted")
+qqPlot(my.lm$residuals, id=FALSE)
+mtext(side=3,text="Residuals QQ Plot")
+plot(my.lm$residuals)
+mtext(side=3, text="Residuals vs Order")
+
+# 21 
+Wilcoxon Rank Sum Test  Order & Independent
+
+# Assessment Quiz
+```
+
+
+#### Chi-Squared Test, Week 12
+
+##### Barplot, rbind, cbind
+rowbind & colbind change the the orientation of binded vectors<br>
+
+Data.frame has the info
+A table is summarized counts (not individual values it's summarized counts)<br>
+```{r, eval=FALSE}
+View(Titanic)
+# It's a table because the frequency col tells how many of each type (summarized count)
+# Can use class function
+class(Titanic)
+library(car)
+View(TitanicSurvival)
+class(TitanicSurvival)
+
+
+library(mosaic)
+View(KidsFeet)
+# create a table
+# first see what the col names on
+names(KidsFeet)
+# first not useful, generally want two catagorical variables like second
+table(KidsFeet$birthmonth, KidsFeet$width)
+table(KidsFeet$birthmonth, KidsFeet$sex)
+
+# barplot() and chisq.test() want a table not data.frame
+View(HairEyeColor)
+HEC1 <- HairEyeColor[,,"Male"] + HairEyeColor[,,"Female"]
+View(HEC1)
+HEC1
+
+# The columns of the table become the x-axis in the barplot!!!
+barplot(HEC1)
+# clustered barplots are easier to read
+barplot(HEC1, beside=TRUE, legend.text= TRUE, xlab="Eye Color")
+
+# want to switch--transpose the table
+t(HEC1)
+# now eye color on the rows, hair color on the column
+barplot(t(HEC1), beside=TRUE, legend.text= TRUE, xlab="Hair Color")
+
+
+```
+Can use c or rbind to create a table or if using data set that's a frame, use table<br>
+
+##### Chi Squared Test
+Ho= Row Variable and Column variable are independent (Independent of time of day the proportion of people that are single is the same, independent of relationship status the percent of people at diff times or day is the same--independent of what group I'm looking at they're the same) It's still a statement of equality. <br>
+
+Ha: Row Variable and Column variable are associated<br>
+
+Expected Count = Row total # col total / total<br>
+
+Chi-squared distribution is a right-skewed distribution. Can't be negative. As Df increases it becomes more normal
+```{r, eval=FALSE}
+
+mytable <- rbind(Single=c(Morning=25, Afternoon=20, Evening=105), Dating=c(15,15,40), Married=c(15,15,50))
+barplot(mytable, beside=TRUE, legend.text=TRUE)
+
+
+```
+Fail to reject the null hypothesis. I don't have enough evidence to support relationship status and time at the gym are related.
+
+Requirements:<br>
+All expected counts need to be > 5, or if all counts are greater than 1 AND the mean is greater than 5. (5 isn't a magic number. It just seems to work.)<br>
+
+```{r, eval=FALSE}
+testobject<-chisq.test(mytable)
+names(testobject)
+testobject$observed
+
+Digging Deeper with residuals
+
+# Distance between observed value and the expected value (observed count minus expected count divided by the square root of the expected ) We're doing it to each cell individually
+testobject$residuals
+# I observed fewer people in the morning than would have expected
+
+
+```
+Allows you to say, "Here's where the relationship lies... there are less people at x time than we would have expected
+
+
+##### Skills Quiz, Chi Squared Tests
+```{r, eval=FALSE}
+glasses <- cbind( Males = c(Glasses = 5, Contacts = 12, None = 18), Females = c(Glasses = 4, Contacts = 14, None = 22))
+
+glasses
+
+barplot(glasses, beside=TRUE, legend.text=TRUE, args.legend=list(x = "topleft", bty="n"))
+
+chis.glasses <- chisq.test(glasses)
+
+chis.glasses$expected 
+
+chis.glasses
+
+chis.glasses$residuals
+
+
+education <- cbind( `United States` = c(Engineering = 61941, `Natural Science` = 111158, `Social Science` = 182166), `Western Europe` = c(Engineering = 158931, `Natural Science` = 140126, `Social Science` = 116353), Asia = c(280772, 242879, 236018))
+
+education
+
+chis.edu<-chisq.test(education)
+
+barplot(education, main="College Degrees Awarded by Region", beside=TRUE, legend.text=TRUE, args.legend=list(x = "topleft", bty="n"))
+
+chis.edu$residuals
+
+?InsectSprays
+View(InsectSprays)
+my_aov <- aov(count~spray, data = InsectSprays)
+summary(my_aov)
+
+qqPlot(my_aov$residuals) # must have residuals plot
+# ANOVA is robust to violation of assumptions, the degree to which you violate the assumptions is the degree to which you should trust your p-value
+# Book walks through
+par(mfrow = c(1,2)) # Turns on a partition so you can see both at the same time
+plot(my_aov, which = 1)
+car::qqPlot(my_aov$residuals)
+```
+
+##### Assessment Quiz
+```{r, eval=FALSE}
+
+What type of statistical test would be appropriate for understanding how gender impacts the risk a person of a certain age has of having a heart attack? MULTIPLE logistic regression (heart attack risk=y, age=quantatative, gender=qualitative) We are trying to predict an outcome, whether or not the person will experience a heart attack, using their age and gender. Age is a quantitative measurement, gender is a qualitative measurement, and the response variable Y could be 1 for a heart attack and 0 for no heart attack. This is the perfect scenario of a multiple logistic regression. ()
+
+Which statistical method would be best suited for determining how the age and gender of an individual can predict their annual income, measured in thousands of dollars? The response variable of this scenario, annual income measured in thousands, is quantitative. Since we have a quantitative explanatory variable of age and a qualitative explanatory variable of gender, a multiple linear regression would be the best choice. We can make a prediction using the predict()
+
+palette(c("red","blue","green"))
+plot((Wind > 10) ~ Temp, data=airquality, xlab="Daily Average Temperature", ylab="Probability Daily Average Wind Speed (mph) > 10", main="La Guardia Airport Measurements in 1973", col=as.factor(Month))
+b <- air.glm$coefficients
+curve(exp(b[1]+b[2]*x)/(1+exp(b[1]+b[2]*x)), add=TRUE)
+
+air.glm <- glm(Wind > 10 ~ Temp + as.factor(Month), data=airquality, family=binomial)
+air.glm
+
+During which month is there a significant change in the probability that the daily average wind speed will be greater than 10 mph, for all values of daily average temperature? No change. You can see it on the graph, it is pretty consistant, but look at the summary values if NONE ARE SIGNIFICANT then there is no change. Here the pvalues for months were .18, .31., .16, .053
+```
+
+
+#### Randomization Testing, Week 13
+
+A $p$-value is the probability we get a test statistics at least as extreme as the one we got, assuming the null hypothesis is true. In other words what's the probability we could get that result by chance alone.
+
+6 out of 15 girls. We can take lots of random mixtures, is it likely or possible that you could get all in one group.
+
+Parametric distribution has parameters, you just change some of the paramaters. An F or t distribution always has the same function. Non-parametric tests use distributions that can't be defined simply by a function.
+
+```{r, eval=FALSE}
+library(mosaic)
+library(tidyverse)
+
+boxplot(rnorm(30, mean = 10, sd = 2), rnorm(30, mean = 10, sd = 2), names = c("sample1", "sample2"))
+
+## comparison of 2 genders kid length of feet
+boxplot(length ~ sex, data = KidsFeet)
+
+### Perform a t-test (parametric test) to compare the genders foot length
+# Step 1: get the original observed test statistic
+ttestout <- t.test(length ~ sex, data = KidsFeet)
+
+#### Randomization Testing
+# We need a test statistic and a distribution of the test statistic
+#Step2: Doing the randomization
+# Test stat
+
+observed_test_stat <- ttestout$statistic
+
+# Distribution (for loops)
+# Under the null hypothesis of random chance alone
+
+N <- 2000 # represents how many random samples iterated
+
+# Randomized test called permutation testing
+permTestStats <- rep(NA, N)
+
+# if I feed a vector into sample it'll give adifferent random order sample(data$col)
+# for loop
+# start count : end count (default count by 1 ? can you change it)
+# alternatively could have reorganized the length (x or y)
+for (i in 1:N) {
+  permutedTest <- t.test(length ~ sample(sex), data=KidsFeet)
+
+  permTestStats[i] <- permutedTest$statistic
+  }#stores it in index i
+
+# Step 3: get the p-value
+# coerce to vector from list
+
+hist(as.numeric(permTestStats))
+abline(v = observed_test_stat)
+
+# comput the p-value
+permTestStats > observed_test_stat
+# gives vector of true and false - can be recoded as 0 1
+# one sided
+sum(permTestStats > observed_test_stat) / N
+
+# p-value of two-taled- multiply by 2
+(sum(permTestStats > observed_test_stat) / N) * 2
+
+for(i in seq(1,N))
+```
+#### Part 2
+Question 1
+Perform an independent two-sample t test using a permutation test.  Use the mtcars dataset and test whether the average weight of the four cylinder cars differs from the average weight of eight cylinder cars.  Use the following psuedo code as a starting spot.
+```{r, eval=FALSE}
+?mtcars
+mtcars$cyl
+library(tidyverse)
+library(mosaic)
+
+# filter the data for what we want, 4 & 8 cylinders
+mtcars48 <- mtcars %>% 
+  filter(cyl != 6)
+
+# Step 1 find the test original statistic (t.test & stat) = -6.4444974
+observedTestStat <- t.test(wt ~ cyl, data=mtcars48)$statistic
+
+# Step 2, perform the permutations
+  # set n
+N <- 2000
+   #create empty vector to fill with 2000 test statistics
+permutedTestStats <- rep(NA, N)
+for(i in 1:N){
+  # randomize eithre the group assignments or the weights
+  # They do 3 steps -> randomly permute the data, perform the test with the data, get the test statistic
+  permutedTestStats[i] <- t.test(wt ~ sample(cyl), data=mtcars48)$statistic # samply will randomize
+  
+}
+
+# look at the vector of test stats
+hist(permutedTestStats)
+abline(v = observedTestStat)
+
+# differs = two tailed
+# it's off the grid, but we can see which ones are
+# we can add the values that are less than or equal to what we orginally observed then we divide by the number of tests after that then we multiply by two for the two tails
+
+sum(permutedTestStats <= observedTestStat) / N * 2 
+
+
+```
+Question 3
+Perform a One-way ANOVA using a permutation test.  Use the diamonds dataset and test whether the average price of the diamonds depends on the clarity.  Use the following psuedo code as a starting spot.  (Hint: because the diamonds dataset has 53,000 rows we start with a small N value)
+
+```{r, eval=FALSE}
+# Step 1 get observed test statistic
+aov(price ~ clarity,  data=diamonds)
+# We need to get the f statistic since it isn't in the test, 2.2e-16
+myTest <- anova(aov(price ~ clarity,  data=diamonds))
+names(myTest)
+myTest`F value`[1]
+# double square brackets in r means give me a number, you can do ths as an alternative to the one above
+observedTestStat <- myTest[[c(4, 1)]]
+# or can do it this way
+observedTestStat <- summary(myTest)[[1]]$`F value`[1]
+
+# Step 2, perform permutiation tests
+# He's using anova in the place of summary
+N<-100
+permutedTestStats <- rep(NA, N) #rep stands for repeat
+for(i in 1:N){
+  # anova doesn't have a slick way to pull out the f statistic, so use summary
+  permutedTest <- anova(aov(sample(price)~ clarity, data=diamonds))
+  # pull out the test statistic
+  permutedTestStats[i] <- permutedTest[[c(4,1)]]
+}
+
+# hists aren't working for some reason
+#STep 3, get the p-vaule from the generated distribution (visually first)
+hist(permutedTestStats)
+ablive(v=observedTestStat)
+
+sum(permutedTestStats >= observedTestStat) / N
+
+
+```
+Question 5
+Perform a Logistic Regression Test using a permutation test.  Use the SAT dataset (mosaic library) and test whether the likelihood of scoring above 1000 (sat > 1000) on the SAT depends on the expenditure per pupil (expend).  Use the following psuedo code as a starting spot.
+
+```{r, eval=FALSE}
+filter the data
+SAT2 <- SAT %>% 
+  mutate(highscore = ifelse(sat>1000, 1, 0))
+
+# Step 1 run the glm to get the statistic, -2.499955
+mymod <- glm(highscore ~ expend, data = SAT2, family="binomial")
+summary(mymod)
+names(summary(mymod))
+observedTestStat <- summary(mymod)$coefficients[2,3]
+
+#Step 2, do the permutation test statistic
+N <- 100
+permutedTestStats <- rep(NA, N)
+for(i in 1:N){
+  
+  permutedTest <- glm(sample(highscore) ~ expend, data = SAT2, family="binomial")
+  permutedTestStats[i] <- summary(permutedTest)$coefficients[2,3]
+}
+
+# Step 3, get p-value from generated distribution
+hist(permutedTestStats)
+abline(v=observedTestStat, col ="red")
+
+# actually calculate the p-value
+sum(permutedTestStats <= observedTestStat) / N * 2
+
+# sufficient evidence to suggest tehir is evidence
+# If we fail to the slop of B1 is not 0 what are we doing with the null and based on that we make a conclusion about the alternative
+
+All of the tests you've done can be done as a non-parametrict test
 
 ```
 
 
 
+##### Skills Quiz, Permutation Tests
 
+
+```{r, eval=FALSE}
+# Create the data:
+set.seed(1140411)
+sample1 <- rnorm(30, 69, 2.5)
+sample2 <- rnorm(30, 69, 2.5)
+theData <- data.frame(values = c(sample1,sample2), group = rep(c(1,2), each=30))
+View(theData)
+boxplot(values ~ group, data = theData)
+
+myTest <- t.test(values~group, data=theData, mu=0)
+observedTestStat <- myTest$statistic
+
+N <- 2000
+permutedTestStats <- rep(NA,N)
+for (i in 1:N){
+  permutedData <- sample(x=theData$group)
+  permutedTest <- t.test(values~permutedData, data=theData, mu=0)
+  permutedTestStats[i] <- permutedTest$statistic
+}
+hist(permutedTestStats)
+abline(v=observedTestStat)
+sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+# It asked for greater than, less than, & two sided p-values. I multiplied the smaller one by 2 (.46)
+
+
+#Question 4
+set.seed(121)
+sample1 <- rnorm(30, 185, 8)
+sample2 <- sample1 - rnorm(30, 0, 3.5)
+theData <- data.frame(values = c(sample1,sample2), group = rep(c(1,2), each=30), id = rep(c(1:30),times=2))
+View(theData)
+with(theData, hist(values[group==1] - values[group==2]))
+
+myTest <- t.test(values~group, data=theData, paired=TRUE, mu=0)
+observedTestStat <- myTest$statistic
+
+N <- 2000      
+permutedTestStats <-  rep(NA, N)
+for  (i in 1:N ) {
+   permutedData <- sample(x=c(1,-1), size=30, replace=TRUE)
+   permutedTest <-  with(theData, t.test(permutedData*(values[group==1]-values[group==2]),mu=0))
+   permutedTestStats[i]  <-  permutedTest$statistic
+}
+hist(permutedTestStats)
+abline(v=observedTestStat)
+sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+
+# Question 5
+library(mosaic)
+?SaratogaHouses
+View(SaratogaHouses)
+table(SaratogaHouses$fuel)
+
+myTest <- kruskal.test(price~fuel, data=SaratogaHouses)
+observedTestStat <- myTest$statistic
+
+boxplot(price~fuel, data=SaratogaHouses)
+median(SaratogaHouses$price[SaratogaHouses$fuel=="gas"])
+
+?ToothGrowth
+xyplot(len ~ dose, groups=supp, data=ToothGrowth, type=c("p","a"), auto.key=TRUE)
+
+myaov <- aov(len ~ as.factor(dose)+supp+as.factor(dose):supp, data=ToothGrowth)
+summary(myaov)
+
+ ?RailTrail
+boxplot(cloudcover ~ weekday, data=RailTrail, names=c("Weekend/Holiday", "Weekday"), ylab="Cloud Cover Measurement (in oktas)")
+View(RailTrail)
+# ind samples
+t.test(cloudcover ~ weekday, data = RailTrail, mu = 0, alternative = "two.sided", conf.level = 0.95)
+
+```
+
+
+##### Assessment Quiz
+```{r, eval=FALSE}
+
+# Question 3
+### Some of these I straight out remembered the answers from before. Some I reused my previous code and notes. I hope that's okay since it's open notebook and I kept notes on my each assessment.
+library(car)
+library(mosaic)
+Util <- Utilities
+
+  Util$Season <- cut(Util$month%%12, c(0,2,5,8,11), c("Winter","Spring","Summer","Fall"))
+
+  boxplot(elecbill ~ Season, data=Util, main="A Residence in Minnesota", ylab="Monthly Electricity Bill (US Dollars)", xlab="Season of the Year", col=c("skyblue","darkseagreen3","coral","goldenrod"))
+  
+  kruskal.test(elecbill~Season, data=Util)
+  
+   barplot(KidsFeet$length)
+
+  View(KidsFeet)
+  my.lm <- lm(elecbill~kwh, data = Utilities)
+summary(my.lm)
+  plot(elecbill ~ kwh, data=Utilities, col=as.factor(kwh))
+abline(my.lm)
+
+     kids.glm <- glm(birthyear==88 ~ length, data=KidsFeet, family=binomial)
+     predict(kids.glm, data.frame(length=26), type="response")
+```
+t.test(mpg ~ as.factor(cyl), data=mtcars)
+
+boxplot(width~sex, data=KidsFeet)
+
+t.test(width~sex, data=KidsFeet, conf.level=0.95, alternative="two.sided")
+
+boxplot(length~sex, data=subset(KidsFeet, birthmonth==1))
+
+mean(length~sex, data=subset(KidsFeet, birthmonth==1))
+
+<br>
+
+### Useful R Tidbits
+
+
+#### GG Plot Basis, [Sharp Sight: The Ultimate Guide to the GGPlot Boxplot]([Sharp Sight: The Ultimate Guide to the GGPlot Boxplot])
+
+Importantly, geoms have “aesthetic attributes.”<br>
+
+Again, this is more simple than it sounds like, so don’t overthink it.<br>
+
+An “aesthetic attribute” is just a graphical attribute of the things that we draw. Aesthetic attributes are the attributes of geoms. So, we’re drawing things (geoms) and those geoms have attributes (aesthetic attributes).
+
+What sorts of aesthetic attributes do geoms have? Simple things like their position along the x-axis, position along the y axis, color, shape, etc. So for example, if you draw points (geom_point()), those points will have x-axis positions, y-axis positions, colors, shapes, etc.
+
+In very simple visualizations (like the ggplot boxplot), we’ll just be plotting variables on the x-axis and y-axis. How do we indicate which variable to “connect” to the x-axis and which variable to “connect” to the y-axis?
+
+We do this with the aes() function.
+
+In slightly more technical terms, we use the aes() function to create a “mapping” from the dataset to the “aesthetic attributes” of the things that we plot. The term “aesthetic
+
+```{r, eval=FALSE}
+# PLOT BOXPLOT
+ggplot(data = msleep, aes(x = vore, y = sleep_total)) +
+  geom_boxplot()
+```
+
+What have we done here?
+
+We called the ggplot() function. Inside the ggplot() function, we specified that we will plot data from the msleep dataframe with the code data = msleep.
+
+Also inside of the ggplot() function, we called the aes() function. Here, the aes() function indicates that we are going to “map” the vore variable to the x-axis and we will map the sleep_total variable to the y-axis.
+
+Finally, on the second line, we indicated that we will plot a boxplot by using the syntax geom_boxplot().
+
+Like I said … it’s really straightforward to make a boxplot in ggplot2 once you know how ggplot2 works.
+
+
+[Sharp Sight: The Ultimate Guide to the GGPlot Boxplot]([Sharp Sight: The Ultimate Guide to the GGPlat Boxplot])
+
+<br>
+
+#### Creating Factors, [R 4 Data Science: Factors](https://r4ds.had.co.nz/factors.html)
+
+
+Imagine that you have a variable that records month:
+
+```{r, eval=FALSE}
+x1 <- c("Dec", "Apr", "Jan", "Mar")
+```
+
+Using a string to record this variable has two problems:
+
+There are only twelve possible months, and there’s nothing saving you from typos:
+
+```{r, eval=FALSE}
+    x2 <- c("Dec", "Apr", "Jam", "Mar")
+```
+
+It doesn’t sort in a useful way:
+
+```{r, eval=FALSE}
+sort(x1)
+#> [1] "Apr" "Dec" "Jan" "Mar"
+```
+
+You can fix both of these problems with a factor. To create a factor you must start by creating a list of the valid levels:
+
+```{r, eval=FALSE}
+month_levels <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
+```
+
+Now you can create a factor:
+```{r, eval=FALSE}
+y1 <- factor(x1, levels = month_levels)
+y1
+#> [1] Dec Apr Jan Mar
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+sort(y1)
+#> [1] Jan Mar Apr Dec
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+# And any values not in the set will be silently converted to NA:
+
+y2 <- factor(x2, levels = month_levels)
+y2
+#> [1] Dec  Apr  <NA> Mar 
+#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+```
+
+If you want a warning, you can use readr::parse_factor():
+
+```{r, eval=FALSE}
+y2 <- parse_factor(x2, levels = month_levels)
+#> Warning: 1 parsing failure.
+#> row col           expected actual
+#>   3  -- value in level set    Jam
+```
+
+If you omit the levels, they’ll be taken from the data in alphabetical order:
+```{r, eval=FALSE}
+factor(x1)
+#> [1] Dec Apr Jan Mar
+#> Levels: Apr Dec Jan Mar
+```
+
+Sometimes you’d prefer that the order of the levels match the order of the first appearance in the data. You can do that when creating the factor by setting levels to unique(x), or after the fact, with fct_inorder():
+
+```{r, eval=FALSE}
+f1 <- factor(x1, levels = unique(x1))
+f1
+#> [1] Dec Apr Jan Mar
+#> Levels: Dec Apr Jan Mar
+
+f2 <- x1 %>% factor() %>% fct_inorder()
+f2
+#> [1] Dec Apr Jan Mar
+#> Levels: Dec Apr Jan Mar
+```
+
+If you ever need to access the set of valid levels directly, you can do so with levels():
+
+```{r, eval=FALSE}
+levels(f2)
+#> [1] "Dec" "Apr" "Jan" "Mar"
+
+# Note from elsewhere: if factor sort by level, if character sort alphabetically
+```
+<br>
+
+#### Change Levels, [Stack Overflow levels](https://stackoverflow.com/questions/4622060/case-statement-equivalent-in-r)
+
+```{r, eval=FALSE}
+# If you got factor then you could change levels by standard method:
+df <- data.frame(name = c('cow','pig','eagle','pigeon'), 
+             stringsAsFactors = FALSE)
+df$type <- factor(df$name) # First step: copy vector and make it factor
+# Change levels:
+levels(df$type) <- list(
+    animal = c("cow", "pig"),
+    bird = c("eagle", "pigeon")
+)
+df
+#     name   type
+# 1    cow animal
+# 2    pig animal
+# 3  eagle   bird
+# 4 pigeon   bird
+```
+
+<br>
+
+#### Case_when, [Rdocumentation](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/case_when)
+
+A general vectorised if
+
+This function allows you to vectorise multiple if and else if statements. It is an R equivalent of the SQL CASE WHEN statement.
+
+Usage
+
+case_when(...)
+
+Arguments
+
+...
+
+   A sequence of two-sided formulas. The left hand side (LHS) determines which values match this case. The right hand side (RHS) provides the replacement value.
+
+    The LHS must evaluate to a logical vector. The RHS does need to be logical, but all RHSs must evaluate to the same type of vector.
+
+    Both LHS and RHS may have the same length of either 1 or n. The value of n must be consistent across all cases. The case of n == 0 is treated as a variant of n != 1.
+
+   These dots support tidy dots features.
+
+ Value
+
+A vector of length 1 or n, matching the length of the logical input or output vectors, with the type (and attributes) of the first RHS. Inconsistent lengths or types will generate an error.
+
+Examples
+
+```{r, eval=FALSE}
+# NOT RUN {
+x <- 1:50
+case_when(
+  x %% 35 == 0 ~ "fizz buzz",
+  x %% 5 == 0 ~ "fizz",
+  x %% 7 == 0 ~ "buzz",
+  TRUE ~ as.character(x)
+)
+
+# Like an if statement, the arguments are evaluated in order, so you must
+# proceed from the most specific to the most general. This won't work:
+case_when(
+  TRUE ~ as.character(x),
+  x %%  5 == 0 ~ "fizz",
+  x %%  7 == 0 ~ "buzz",
+  x %% 35 == 0 ~ "fizz buzz"
+)
+
+# All RHS values need to be of the same type. Inconsistent types will throw an error.
+# This applies also to NA values used in RHS: NA is logical, use
+# typed values like NA_real_, NA_complex, NA_character_, NA_integer_ as appropriate.
+case_when(
+  x %% 35 == 0 ~ NA_character_,
+  x %% 5 == 0 ~ "fizz",
+  x %% 7 == 0 ~ "buzz",
+  TRUE ~ as.character(x)
+)
+case_when(
+  x %% 35 == 0 ~ 35,
+  x %% 5 == 0 ~ 5,
+  x %% 7 == 0 ~ 7,
+  TRUE ~ NA_real_
+)
+# This throws an error as NA is logical not numeric
+# }
+# NOT RUN {
+case_when(
+  x %% 35 == 0 ~ 35,
+  x %% 5 == 0 ~ 5,
+  x %% 7 == 0 ~ 7,
+  TRUE ~ NA
+)
+# }
+# NOT RUN {
+# case_when is particularly useful inside mutate when you want to
+# create a new variable that relies on a complex combination of existing
+# variables
+starwars %>%
+  select(name:mass, gender, species) %>%
+  mutate(
+    type = case_when(
+      height > 200 | mass > 200 ~ "large",
+      species == "Droid"        ~ "robot",
+      TRUE                      ~  "other"
+    )
+  )
+
+```
+
+<br>
+
+#### Create your own operator, [StackOverflow Concat/Operator](https://stackoverflow.com/questions/7201341/how-can-two-strings-be-concatenated)
+
+```{r, eval=FALSE}
+# You can create you own operator :
+
+'%&%' <- function(x, y)paste0(x,y)
+"new" %&% "operator"
+# [1] newoperator`
+
+# You can also redefine 'and' (&) operator :
+
+'&' <- function(x, y)paste0(x,y)
+"dirty" & "trick"
+"dirtytrick"
+```
+Messing with baseline syntax is ugly, but so is using paste()/paste0() if you work only with your own code you can (almost always) replace logical & and operator with * and do multiplication of logical values instead of using logical 'and &'
+
+<br>
+
+
+#### Defining a function, [SWCarpentry](https://swcarpentry.github.io/r-novice-inflammation/02-func-R/)
+
+```{r, eval=FALSE}
+# SW Carp
+fahrenheit_to_celsius <- function(temp_F) {
+  temp_C <- (temp_F - 32) * 5 / 9
+  return(temp_C)
+}
+
+
+```
+
+<br>
+
+
+#### LaTeX
+
+```{r, eval=FALSE}
+# To put a tilde over a letter, we can use either \tilde or \widetilde. As for which one to use in which situation, compiling a document with the following as its part can help comparison.
+
+$\tilde{A}$ vs $\widetilde{A}$
+
+$\tilde{\mathcal A}$ vs $\widetilde{\mathcal A}$
+
+$\tilde{ABC}$ vs $\widetilde{ABC}$
+
+# To put a bar over a letter, we can use either \bar or \overline. It seems that \bar is to \overline what \tilde is to \widetilde. There don’t seem to be \overtilde or \widebar.
+
+$\bar{A}$ vs $\overline{A}$
+
+$\bar{\mathcal A}$ vs $\overline{\mathcal A}$
+
+$\bar{ABC}$ vs $\overline{ABC}$
+# Can no longer find the link for this, but it was a blogpost
+
+```
+<br>
+
+#### GG Plot Plot theme tricks
+
+```{r, eval=FALSE}
+
+# Default plot
+print(p)
+
+# Add titles
+p <- p + labs(title = "Effect of Vitamin C on Tooth Growth",
+              subtitle = "Plot of length by dose",
+              caption = "Data source: ToothGrowth")
+#Bold font
+p + theme(
+  plot.title = element_text(color = "red", size = 12, face = "bold"),
+  plot.subtitle = element_text(color = "blue"),
+  plot.caption = element_text(color = "green", face = "italic")
+)
+# Justification center
+p + theme(
+  plot.title = element_text(hjust = 0.5),
+  plot.subtitle = element_text(hjust = 0.5)
+)
+
+```
+
+<br>
+
+#### Cut funtion
+
+The intervals defined by the cut() function are (by default) closed on the right. To see what that means, try this:
+```{r, eval=FALSE}
+cut(1:2, breaks=c(0,1,2))
+# [1] (0,1] (1,2]
+```
+As you can see, the integer 1 gets included in the range (0,1], not in the range (1,2]. It doesn't get double-counted, and for any input value falling outside of the bins you define, cut() will return a value of NA.
+
+When dealing with integer-valued data, I tend to set break points between the integers, just to avoid tripping myself up. In fact, doing this with your data (as shown below), reveals that the 2nd and 3rd bins were actually incorrectly named, which illustrates the point quite nicely!
+<br>
+<br>
+
+#### Hide code messages, [R Markdown Cookbook: Hide Code ](https://bookdown.org/yihui/rmarkdown-cookbook/hide-one.html)
+
+By default, knitr displays all possible output from a code chunk, including the source code, text output, messages, warnings, and plots. You can hide them individually using the corresponding chunk options.
+
+Hide source code:
+```{r, echo=FALSE}
+1 + 1
+```
+
+Hide text output (you can also use `results = FALSE`):
+
+```{r, results='hide'}
+print("You will not see the text output.")
+```
+
+Hide messages:
+
+```{r, message=FALSE}
+message("You will not see the message.")
+```
+
+Hide warning messages:
+
+```{r, warning=FALSE}
+# this will generate a warning but it will be suppressed
+1:2 + 1:3
+```
+
+Hide plots:
+
+``{r, fig.show='hide'}
+plot(cars)
+``
+
+Note that the plot will be generated in the above chunk. It is just not displayed in the output.
+
+One frequently asked question about knitr is how to hide package loading messages. For example, when you library(tidyverse) or library(ggplot2), you may see some loading messages. Such messages can also be suppressed by the chunk option message = FALSE.
+
+You can also selectively show or hide these elements by indexing them. In the following example, we only show the fourth and fifth expressions of the R source code (note that a comment counts as one expression), the first two messages, and the second and third warnings:
+
+```{r, echo=c(4, 5), message=c(1, 2), warning=2:3}
+# one way to generate random N(0, 1) numbers
+x <- qnorm(runif(10))
+# but we can just use rnorm() in practice
+x <- rnorm(10)
+x
+
+for (i in 1:5) message('Here is the message ', i)
+
+for (i in 1:5) warning('Here is the warning ', i)
+```
+
+You can use negative indices, too. For example, echo = -2 means to exclude the second expression of the source code in the output.
+
+Similarly, you can choose which plots to show or hide by using indices for the fig.keep option. For example, fig.keep = 1:2 means to keep the first two plots. There are a few shortcuts for this option: fig.keep = "first" will only keep the first plot, fig.keep = "last" only keeps the last plot, and fig.keep = "none" discards all plots. Note that the two options fig.keep = "none" and fig.show = "hide" are different: the latter will generate plots but only hide them, and the former will not generate plot files at all.
+
+<br>
+
+#### Barplot customization, [Basic R Barplot Customization](https://www.r-graph-gallery.com/209-the-options-of-barplot.html), [Advanced R Barplot Customization](https://www.r-graph-gallery.com/210-custom-barplot-layout.html)
+
+
+
+The las argument allows to change the orientation of the axis labels:
+
+    0: always parallel to the axis
+    1: always horizontal
+    2: always perpendicular to the axis
+    3: always vertical.
+
+This is specially helpful for horizontal bar chart.
+Change the group names using the names.arg argument. The vector you provide must be the same length as the number of categories.
+
+
+Customize the labels:
+
+    font.axis: font: 1: normal, 2: bold, 3: italic, 4: bold italic
+    col.axis: color
+    cex.axis: size
+
+Customize axis title:
+
+    font.lab
+    col.lab
+    cex.lab
+
+```{r, eval=FALSE, }
+barplot(height=data$value, names=data$name, col="#69b3a2", horiz=T , las=1)
+barplot(height=data$value, names.arg=c("group1","group2","group3","group4","group5"), col="#69b3a2")
+
+# Customize labels
+barplot(height=data$value, names=data$name, 
+        names.arg=c("group1","group2","group3","group4","group5"), 
+        font.axis=2, 
+        col.axis="orange", 
+        cex.axis=1.5 
+        )
+
+# Customize title 
+barplot(height=data$value, names=data$name, 
+        xlab="category", 
+        font.lab=2, 
+        col.lab="orange", 
+        cex.lab=2  
+        )
+```
+
+#### Inset plot in another plot, [Inset a plot on another plot](https://www.r-bloggers.com/2016/10/create-an-inset-plot/)
+
+The difficulty of plotting one plot over the top of another in R has always frustrated me. I often end up opening some photo editing software (like Gimp, which is free) and doing it manually. However, manual editing can be frustrating if you need to change the plot.<br>
+
+A histogram with a boxplot inset
+
+I just learned a hassle free way to create insets (thanks to Ben Stewart-Koster) and wanted to share it, so here it is:
+
+First, let’s simulate some fake data
+x <- rnorm(100)  
+y <- rbinom(100, 1, 0.5)
+
+Now the key step, use par
+to set the fig
+param to your desired coordinate space. e.g. in the below we can specify figures positions in 0-1 on both the x and y coordinates:
+par(fig = c(0,1,0,1))
+
+Now plot your first figure
+hist(x)  
+
+Now the second key part, specify where in the coordinate space you want your inset figure to go:
+par(fig = c(0.07,0.5, 0.5, 1), new = T)  
+boxplot(x ~ y)  
+
+Voila that is it, we have our figure with an inset.<br>
+
+#### Viridis Arguments
+
+Other arguments passed on to discrete_scale(), continuous_scale(), or binned_scale to control name, limits, breaks, labels and so forth.
+alpha 	
+
+The alpha transparency, a number in [0,1], see argument alpha in hsv.
+begin 	
+
+The (corrected) hue in [0,1] at which the viridis colormap begins.
+end 	
+
+The (corrected) hue in [0,1] at which the viridis colormap ends.
+direction 	
+
+Sets the order of colors in the scale. If 1, the default, colors are ordered from darkest to lightest. If -1, the order of colors is reversed.
+option 	
+
+A character string indicating the colormap option to use. Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D", the default option) and "cividis" (or "E").
+aesthetics 	
+
+Character string or vector of character strings listing the name(s) of the aesthetic(s) that this scale works with. This can be useful, for example, to apply colour settings to the colour and fill aesthetics at the same time, via aesthetics = c("colour", "fill").
+values 	
+
+if colours should not be evenly positioned along the gradient this vector gives the position (between 0 and 1) for each colour in the colours vector. See rescale() for a convenience function to map an arbitrary range to between 0 and 1.
+space 	
+
+colour space in which to calculate gradient. Must be "Lab" - other values are deprecated.
+na.value 	
+
+Missing values will be replaced with this value.
+guide 	
+
+A function used to create a guide or its name. See guides() for more information.
+[GGPlot2 Viridis Lite](https://ggplot2.tidyverse.org/reference/scale_viridis.html)
