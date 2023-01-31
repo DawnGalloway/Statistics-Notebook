@@ -1,0 +1,336 @@
+---
+title: "Car Selling Prices"
+author: "Dawn Galloway"
+date: "1/20/2023"
+output: 
+    html_document:
+     theme: cerulean
+     code_folding: hide
+---
+
+
+<script type="text/javascript">
+ function showhide(id) {
+    var e = document.getElementById(id);
+    e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+ }
+</script>
+<style>
+  .btn-default {
+    border:0;
+  }
+  pre {
+    border:0;
+  }
+</style
+<br>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  comment = '',
+  tidy = TRUE,
+  warning = FALSE,
+  results = 'hold',
+  fig.show = 'hold',
+  message = FALSE)
+```
+
+<br/>
+<center>
+<img src="../../Images/Ford_Explorer.jpg">
+</center>
+<br/>
+
+## Selling Price of a Ford Explorer
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(car)
+library(pander)
+car_dat <- read.csv("CarPricesTrue.csv")
+
+# aesthetics
+palette(c("#ffc6c6", "#eeaa88", "#eec290", "grey", "#afc9c6", "#468499"))
+
+my_theme <-     
+  theme(legend.position = "none",
+          panel.background = element_blank(),
+          plot.background = element_blank(),
+          panel.grid.major.y = element_line(color = "grey88",
+                                            linetype = "dotted"),
+          panel.grid.major.x = element_line(color = "grey88",
+                                            linetype = "dotted"),
+          plot.title = element_text(color = "#0C4F7B",
+                                    size = 12,
+                                    face = "bold"),
+          plot.caption = element_text(color = "gray50",
+                                      face = "italic",
+                                      size = 6,
+                                      hjust = 0.5),
+          axis.ticks = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(color = "gray50"))
+
+# regression values
+lm.log <- lm(log(price) ~ mileage, data=car_dat)
+b.log <- coef(lm.log)
+
+# plotted regression
+car_plot <- ggplot(car_dat, aes(y=price, x=mileage)) + 
+  geom_point(color="forestgreen", pch=16) +
+  geom_text(x=92500, y=3000, label = "Purchased", color="forestgreen") +
+  labs(title="Ford Explorer Price vs Mileage", x="Mileage", y="Price (USD)") + 
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_x_continuous(labels = function(x) format(x, big.mark = ",")) +
+  my_theme 
+
+car_plot +
+    stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) 
+  
+```
+
+
+Clearly, re-selling the Ford Explorer immediately after purchase would have been the best decision.
+* I still need to add the sale point and a line segment with explanation. *
+<br>
+<br>
+
+## Technical Details
+
+### Data Collection
+
+The data for the mileage and price of over 154 Ford Explorers was collected from [TrueCar](https://www.truecar.com/) and [Cars.com](https://www.cars.com/) across a spectrum of miles. 
+
+</div>
+
+<a href="javascript:showhide('datatable')">Data Table <span style="font-size:8pt;">(click to view)</span></a>
+
+<div id="datatable" style="display:none;">
+
+Click the "Code" button to see the data.
+
+```{r}
+datatable(car_dat, options=list(lengthMenu = c(10,10,30)), extensions="Responsive")
+```
+
+</div>
+
+### Linear Regression
+
+We fit a linear regression model to the car data.
+
+$$
+  \underbrace{Y_i}_\text{Price} = \overbrace{\beta_0}^\text{y-int} + \overbrace{\beta_1}^\text{slope} \underbrace{X_i}_\text{Mileage} + \epsilon_i \quad \text{where} \ \epsilon_i \sim N(0, \sigma^2)
+$$
+
+#### Hypothesis
+
+The null hypothesis for the analysis is that the slope is zero; there is not a linear relationship between the mileage and the price of Ford Explorers. The alternative hypothesis is that slope is not zero; there is in a linear relationship between the mileage and the price. The level of significance for our purposes is 0.05.
+
+$$
+  H_0: \beta_1 = 0
+$$
+
+$$
+  H_a: \beta_1 \neq 0
+$$
+
+$$
+  \alpha = 0.05
+$$
+<br>
+
+#### Regression Plot
+
+We plot a linear regression on the price versus mileage.
+
+```{r echo=FALSE, fig.show='show'}
+# linear regressios
+car.lm <- lm(price ~ mileage, data=car_dat)
+
+# my_theme <-     
+#   theme(legend.position = "none",
+#           panel.background = element_blank(),
+#           plot.background = element_blank(),
+#           panel.grid.major.y = element_line(color = "grey88",
+#                                             linetype = "dotted"),
+#           panel.grid.major.x = element_line(color = "grey88",
+#                                             linetype = "dotted"),
+#           plot.title = element_text(color = "#0C4F7B",
+#                                     size = 12,
+#                                     face = "bold"),
+#           plot.caption = element_text(color = "gray50",
+#                                       face = "italic",
+#                                       size = 6,
+#                                       hjust = 0.5),
+#           axis.ticks = element_blank(),
+#           axis.title = element_blank(),
+#           axis.text.x = element_text(color = "gray50"))
+# 
+# # plotted regression
+# car_plot <- ggplot(car_dat, aes(y=price, x=mileage)) + 
+#   geom_point(color="forestgreen", pch=16) +
+#   geom_text(x=92500, y=3000, label = "Purchased", color="forestgreen") +
+#   labs(title="Ford Explorer Price vs Mileage", x="Mileage", y="Price (USD)") + 
+#   scale_y_continuous(labels = scales::dollar_format()) +
+#   scale_x_continuous(labels = function(x) format(x, big.mark = ",")) +
+#   my_theme 
+
+car_plot +   geom_smooth(method="lm", se=F, formula=y~x, color = 'grey') 
+
+```
+
+#### Regression Results
+
+Below is a summary of the results.
+
+```{r}
+# regression summary
+pander(car.sum <- summary(car.lm))
+```
+
+
+br>
+The y-intercept for the mean price is car.lm$coefficients[1]. For every mile, the mean price decreases by 0.20 dollars. The p-value for the slope is less than 0.05; therefore there is sufficient evidence to reject the null hypothesis that their is no relationship between price and mileage for Ford Explorers.
+
+
+$$
+  \underbrace{\hat{Y}_i}_\text{Mean Price} = \overbrace{ \$ 42,975.18}^\text{est. y-int} - \overbrace{0.20 }^\text{est. slope}* \underbrace{X_i}_\text{Mileage}
+$$
+
+
+
+$$p =  `r signif(car.sum$coefficients[7], digits=3)`  <  \alpha = 0.05$$
+<br>
+
+#### Regression Assumptions
+
+We examine the assumptions.
+```{r}
+par(mfrow=c(1,3))
+plot(car.lm, which = 1:2)
+plot(car.lm$residuals)
+
+#### BOXCOX RUN TO SEE WHAT IT SAYS
+```
+
+
+The residuals vs fitted plot shows issues with both the linearity and the variance, while the residuals vs Order indicates there may be issues with the independence of the error terms. 
+
+### Y Transformations
+
+
+
+We will compare different transformations to see whether we can improve the outcome.
+```{r}
+# lm.log <- lm(log(price) ~ mileage, data=car_dat)
+# b.log <- coef(lm.log)
+
+lm.sqrt <- lm(sqrt(price) ~ mileage, data=car_dat)
+b.sqrt <- coef(lm.sqrt)
+
+lm.1oY <- lm(1/(price) ~ mileage, data=car_dat)
+b.1oY <- coef(lm.1oY)
+
+
+b.y <- coef(car.lm)
+
+lm.y2 <- lm((price^2) ~ mileage, data=car_dat)
+b.y2 <- coef(lm.y2)
+
+lm.1oY2 <- lm(1/(price^2) ~ mileage, data=car_dat)
+b.1oY2 <- coef(lm.1oY2)
+
+
+# transformations plot
+car_plot +
+    stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) + 
+    stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) + 
+    stat_function(fun=function(x) 1/(b.1oY[1] + b.1oY[2]*x), aes(color="1/Y")) + 
+    stat_function(fun=function(x) b.y[1] + b.y[2]*x, aes(color="Y")) + 
+    stat_function(fun=function(x) sqrt(b.y2[1] + b.y2[2]*x), aes(color="Y^2")) + 
+    stat_function(fun=function(x) 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), aes(color="1/Y^2")) 
+  
+
+# ggplot(car_dat, aes(x=mileage, y=price)) + 
+#   geom_point(color="forestgreen") +
+#   geom_text(x=92500, y=3000, label = "Purchased", color="forestgreen") +
+#   stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) + 
+#   stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) + 
+#   stat_function(fun=function(x) 1/(b.1oY[1] + b.1oY[2]*x), aes(color="1/Y")) + 
+#   stat_function(fun=function(x) b.y[1] + b.y[2]*x, aes(color="Y")) + 
+#   stat_function(fun=function(x) sqrt(b.y2[1] + b.y2[2]*x), aes(color="Y^2")) + 
+#   stat_function(fun=function(x) 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), aes(color="1/Y^2")) + 
+#   labs(title="Ford Explorer Price vs Mileage", x="Mileage", y="Price (USD)") + 
+#   theme_minimal() +
+#   scale_y_continuous(labels = scales::dollar_format()) +
+#   scale_x_continuous(labels = function(x) format(x, big.mark = ",")) +
+#   my_theme
+
+#predict(mylm, data.frame(Barometer=30.35))
+# par(mfrow=c(1,3))
+# plot(mylm, which = 1:2)
+# plot(mylm$residuals)
+
+
+# plot(Price ~ Mileage, data=SedanPrices, col=Model, main="Relationship Between Price and Mileage", pch=16, ylab="Price in U.S. Dollars")
+# abline(a= sedansSim.lm$coefficients[1], b=sedansSim.lm$coefficients[2], col=palette()[2])
+# abline(a=sedansSim.lm$coefficients[1]+sedansSim.lm$coefficients[3], b=sedansSim.lm$coefficients[2], col=palette()[1])
+# legend("topright", col=palette(), pch=16, legend=c("Chevy Malibu", "Chevy Corolla"), bty="n", text.col = palette())
+# 
+# par(mfrow=c(1,3))
+# plot(sedansSim.lm, which=1, caption=NA)
+# mtext(side=3, text="Residuals vs Fitted")
+# qqPlot(sedansSim.lm$residuals)
+# mtext(side=3,text="Residuals QQ Plot")
+# plot(sedansSim.lm$residuals)
+# mtext(side=3, text="Residuals vs Order")
+# 
+
+```
+<br>
+Visually, the yellow line, representing a log transformation, fits the data the best.
+
+#### BoxCox
+
+```{r}
+boxCox(lm(price~mileage, data=car_dat))
+
+```
+
+When we run the Box Cox test, the center line suggests a $\lambda$ of 0.75. However, this isn't easily intepretable, so we will examine $\lambda$ values of 0.5 and 0.
+
+```{r out.width="50%"}
+car_plot + 
+   stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) +
+  labs(subtitle = "$\\lambda$ = 0.5")
+
+car_plot + 
+   stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) +
+  labs(subtitle = "$\\lambda$ = 0")   
+```
+Eventhough, the square root transformation version was closer to the Box Cox value selected by the function, the log version looks like it fits the data slightly better.
+
+#### Assumptions
+
+The assumptions for the log transformation plot (below, right three) look better, as the square root plot is having more difficulty with linearity.
+
+```{r out.width="50%"}
+par(mfrow=c(1,3))
+plot(lm.sqrt, which = 1:2)
+plot(lm.sqrt$residuals)
+
+par(mfrow=c(1,3))
+plot(lm.log, which = 1:2)
+plot(lm.log$residuals)
+
+```
+* I still need to add the equation for the transformation back in and label each set of three plots*
+<br>
+<br>
+<br>
+<br>
