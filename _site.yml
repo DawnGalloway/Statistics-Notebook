@@ -60,7 +60,7 @@ navbar:
           href: ./Analyses/StudentHousingPOOR.html
     - text: "R Help"
       menu:
-        - text: "R Cheatsheets & Notes"
+        - text: "LR Cheatsheets & Notes"
           href: RCheatSheetsAndNotes.html
         - text: "R Commands"
           href: RCommands.html
@@ -68,6 +68,8 @@ navbar:
           href: RMarkdownHints.html
         - text: "Data Sources"
           href: DataSources.html
+        - text: "Intermediate Stats"
+          href: IntermediateStatsNotes.html
 output_dir: '.'
 
 output: 
