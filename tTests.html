@@ -13,7 +13,7 @@
 
 <title>t Tests</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -130,11 +130,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -163,8 +167,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -172,16 +176,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -236,27 +233,6 @@ $(document).ready(function () {
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    R Help
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="RCommands.html">R Commands</a>
-    </li>
-    <li>
-      <a href="RMarkdownHints.html">R Markdown Hints</a>
-    </li>
-    <li>
-      <a href="RCheatSheetsAndNotes.html">R Cheatsheets &amp; Notes</a>
-    </li>
-    <li>
-      <a href="DataSources.html">Data Sources</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Describing Data
      
     <span class="caret"></span>
@@ -287,10 +263,10 @@ $(document).ready(function () {
       <a href="WilcoxonTests.html">Wilcoxon Tests</a>
     </li>
     <li>
-      <a href="Kruskal.html">Kruskal-Wallis Test</a>
+      <a href="ANOVA.html">ANOVA</a>
     </li>
     <li>
-      <a href="ANOVA.html">ANOVA</a>
+      <a href="Kruskal.html">Kruskal-Wallis</a>
     </li>
     <li>
       <a href="LinearRegression.html">Linear Regression</a>
@@ -302,7 +278,7 @@ $(document).ready(function () {
       <a href="ChiSquaredTests.html">Chi Squared Tests</a>
     </li>
     <li>
-      <a href="PermutationTests.html">Randomization</a>
+      <a href="PermutationTests.html">Randomization Testing</a>
     </li>
   </ul>
 </li>
@@ -314,6 +290,39 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="./Analyses/Rent.html">Rent Analysis</a>
+    </li>
+    <li>
+      <a href="./Analyses/Stephanie.html">Stephanie Analysis</a>
+    </li>
+    <li>
+      <a href="./Analyses/tTests/HighSchoolSeniors.html">T-tests High School Seniors</a>
+    </li>
+    <li>
+      <a href="./Analyses/WilcoxonTests/RecallingWords.html">Wilcoxon Recalling Words</a>
+    </li>
+    <li>
+      <a href="./Analyses/ANOVA/DayCare.html">ANOVA Day Care</a>
+    </li>
+    <li>
+      <a href="./Analyses/Kruskal-Wallis Test/Chocolate.html">Kruskal Wallis Chocolate</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/MySimpleLinearRegression.html">Simple Linear Regression Portland CRV</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/CarPrices.html">Multiple Linear Regression Chevy</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/PNWcrv.html">Consulting Project (MLR) PNW CRV</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/MyLogisticRegression.html">Simple Logistic Regression Breast Cancer</a>
+    </li>
+    <li>
+      <a href="./Analyses/Chi Squared Tests/MyChiSquaredTest.html">Chi Squared GSS</a>
+    </li>
+    <li>
       <a href="./Analyses/AnalysisRubric.html">Analysis Rubric</a>
     </li>
     <li>
@@ -322,35 +331,29 @@ $(document).ready(function () {
     <li>
       <a href="./Analyses/StudentHousingPOOR.html">Poor Example Analysis</a>
     </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    R Help
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="./Analyses/Rent.html">Rent</a>
+      <a href="RCheatSheetsAndNotes.html">LR Cheatsheets &amp; Notes</a>
     </li>
     <li>
-      <a href="./Analyses/Stephanie.html">Stephanie</a>
+      <a href="RCommands.html">R Commands</a>
     </li>
     <li>
-      <a href="./Analyses/t Tests/HighSchoolSeniors.html">High School Seniors</a>
+      <a href="RMarkdownHints.html">R Markdown Hints</a>
     </li>
     <li>
-      <a href="./Analyses/Wilcoxon Tests/RecallingWords.html">Recalling Words</a>
+      <a href="DataSources.html">Data Sources</a>
     </li>
     <li>
-      <a href="./Analyses/Kruskal-Wallis Test/Food.html">Food</a>
-    </li>
-    <li>
-      <a href="./Analyses/ANOVA/HighSchoolSeniors2.html">High School Seniors 2</a>
-    </li>
-    <li>
-      <a href="./Analyses/Linear Regression/MySimpleLinearRegression.html">My Simple Linear Regression</a>
-    </li>
-    <li>
-      <a href="./Analyses/Linear Regression/CarPrices.html">Car Prices</a>
-    </li>
-    <li>
-      <a href="./Analyses/Logistic Regression/MyLogisticRegression.html">My Logistic Regression</a>
-    </li>
-    <li>
-      <a href="./Analyses/Chi Squared Tests/MyChiSquaredTest.html">My Chi-sqaured Test</a>
+      <a href="IntermediateStatsNotes.html">Intermediate Stats</a>
     </li>
   </ul>
 </li>

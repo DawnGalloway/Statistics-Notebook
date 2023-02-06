@@ -4,17 +4,17 @@ title: "Statistics Notebook"
 
 <!-- You can delete the following copyright statement if you wish: -->
 
-<div style="color:gray;"><!-- Code to change the following paragraphs to gray text -->
+<div style="color:black;"><!-- Code to change the following paragraphs to gray text -->
 
-This page, and all pages of this notebook, are meant to be customized to become a useful *Guide to Statistical Analysis* in R for your *current* and *future* self. 
+<!--This page, and all pages of this notebook, are meant to be customized to become a useful *Guide to Statistical Analysis* in R for your *current* and *future* self. -->
 
 <div style="font-size:.8em;"><!-- Code to shrink font-size of following paragraph -->
 
-To begin customizing, [download](https://github.com/saundersg/Statistics-Notebook) your own copy of the book <span style="font-size:.8em;">(if you haven't already)</span>. Please note the [GNU General Public License](https://choosealicense.com/licenses/gpl-3.0/) when downloading. You are free to delete this commentary in your own copy of the notebook.
+<!--To begin customizing, [download](https://github.com/saundersg/Statistics-Notebook) your own copy of the book <span style="font-size:.8em;">(if you haven't already)</span>. Please note the [GNU General Public License](https://choosealicense.com/licenses/gpl-3.0/) when downloading. You are free to delete this commentary in your own copy of the notebook.-->
 
 </div><!-- Ends smaller font-size section -->
 
-</div><!-- End gray text section -->
+</div><!-- End gray text section --> 
 
 <!-- End of download and copyright instructions. -->
 
@@ -30,22 +30,17 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 
 ### Show Notes
 
-<!-- This is a great place to add general notes, then "Knit" the file to have your notes show up in your Statistics-Notebook. --------------- -->
+<!-- This is a great place to add general notes --------------- -->
+
+[Customization Help](RMarkdownHints.html)
 
 
 
 
-Wow! I typed some words. Some <span style="color:blue;">blue words</span>, some <span style="background-color:yellow;">highlighted words</span>, some <span style="font-size:2em;">big words</span>.
-
-Make a link to a meaningful page of the Statistics-Notebook: [Customization Help](RMarkdownHints.html) <- Read through this page!
-
-Or to a page on the internet: [R Colors](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)
 
 
 
-```{r}
-mean(airquality$Temp)
-```
+
 
 
 
@@ -72,12 +67,19 @@ mean(airquality$Temp)
 ## One Quantitative Response Variable Y {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
+<a href="GraphicalSummaries.html#Histograms">Histogram</a>- work better for large samples or less repeated data, help visualize mean and sd.<br>
+hist(data$col), ggplot(data, aes(x=col)) + geom_histogram()<br>
+
+<a href="GraphicalSummaries.html#boxplots">Boxplot</a>-  show the 5 number summary and outliers well, better for larger sample sizes or less repeated data. <br>
+ boxplot(data$col), ggplot(data, aes(y=col)) + geom_boxplot()<br>
+
+<a href="GraphicalSummaries.html#dotplots">Dot Plots</a>- work well for smaller samples with repeated values.<br>
+stripchart(data$col), ggplot(data, aes(=xcol) + geom_dotplot()<br>
 
 
-Add your own notes about graphics to use for this type of data here.
 
 
 
@@ -99,12 +101,21 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
+One Sample [t-test](tTests.html)-
+  t.test(y, mu=3) # Ho: mu=3
+  If the sample is representative (SRS) & sample $\bar{x}$ can be assumed to be normal with a) car::qqPlot(data$col) or b) n > 30. See [one sample sleep t-test](Analyses/t Tests/Examples/SleepOneSamplet.html).<br>
+  
+Paired Samples [t-test](tTests.html)-
+  t.test(y1,y2,paired=TRUE) # where y1 & y2 are numeric
+  If the sample of the differences is representative and $\bar{d}$ ($\bar{x}$ of the differences) can be assumed normal when a) car::qqPlot(data$colx) or sample size (n) of diff is large. See [Paired Samples Sleep T-test](Analyses/t Tests/Examples/SleepPairedt.html).<br>
+  
+[Wilcoxon Signed-Rank Test](WilcoxonTests.html)-
+  wilcox.test(y~x, data=data) or wilcox.test(object1, object2, mu= YourNull, alternative=YourAlt, conf.level=.95)
+  Non-parametric of the two tests above. Best for smaller sample sizes where the data is not normal. Can be used on oridinal data (ordered, not quite quantitative).$H_0$: median of differences = 0.Negatively affected by ties. See [Corn Heights Paired Wilcoxon](Analyses/Wilcoxon Tests/Examples/CornHeightsPairedWilcoxon.html), [Sleep Paired Wilcoxon](Analyses/Wilcoxon Tests/Examples/SleepPairedWilcoxon.html).<br>
 
-Add your own notes about appropriate inferential procedures for this type of data here.
-
-
+[Normal Probability Plots](Analyses/t Tests/Examples/NormalProbabilityPlots.html)
 
 
 
@@ -124,8 +135,6 @@ Add your own notes about appropriate inferential procedures for this type of dat
 <!--- End of Add content area.  ------------------>
 </div>
 
-
-
 #
 <div style="clear:both;"></div>
 
@@ -139,12 +148,15 @@ Add your own notes about appropriate inferential procedures for this type of dat
 ## Quantitative Y | Categorical X (2 Groups) {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about graphics to use for this type of data here.
 
+[Box plots](GraphicalSummaries.html)- Side-by-side, show the 5 number summary and outliers well, better for larger sample size or less repeated data. <br>
+boxplot(object~group, data), ggplot(data, aes(y=datacol, x=groupscol)) + geom_boxplot()<br>
 
+[Dot plots](GraphicalSummaries.html)- Side-by-side, work well for smaller samples with repeated values.<br>
+stripchart(object~group, data, method="stack"), ggplot(data, aes(y=datacol, x=groupscol)) + geom_dotplot()<br>
 
 
 
@@ -169,25 +181,32 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
-<!-- Add your customizations in the area below: -->
+<div style="padding-left:125px;color:black;">
 
+Independent Samples [t-test](tTests.html)-
+  t.test(Y ~ X, data = YourData, mu = YourNull, alternative = YourAlternative, conf.level = 0.95)
+  If both samples are representative (SRS) & sampling distribution of the difference of the sample means $(\bar{x}_1 - \bar{x}_2)$ can be assumed to be normal car::qqPlot(data$colY~X, data=data) or b) n > 30. See [High School Seniors](Analyses/t tests/HighSchoolSeniors.html), [Independent Sleep t-test](Analyses/t tests/Examples/SleepIndepentt.html), [Rail Trail t Test](Analyses/t tests/Student1Independent.html)<br>
+  
+  
+[Wilcoxon Rank Sum (Mann-Whitney) Test](WilcoxonTests.html)-
+  wilcox.test(y~x, data=data) or wilcox.test(object1, object2, mu= YourNull, alternative=YourAlt, conf.level=.95)
+  Non-parametric of the two tests above. Best for smaller sample sizes where the data is not normal. Can be used on oridinal data (ordered, not quite quantitative). $H_0$: difference in medians = 0. Negatively affected by ties. See [Recalling Words](Analyses/Wilcoxon Tests/RecallingWords.html), [Bug Spray](Analyses/Wilcoxon Tests/Examples/BugSprayWilcoxonRankSum.html), and [Moral Integration](Analyses/Wilcoxon Tests/Examples/MoralIntegration.html).<br>
 
+ 
 
+What's the difference between these two!!!!
 
+independent 2-group t-test
+t.test(y~x) # where y is numeric and x is a binary factor
 
-
-
+independent 2-group t-test
+t.test(y1,y2) # where y1 and y2 are numeric 
 
 
 
 
 <!--- End of Add content area.  ------------------>
 </div>
-
-
-
-
 
 ##
 <div style="clear:both;"></div>
@@ -202,10 +221,14 @@ Add your own notes about graphics to use for this type of data here.
 ## Quantitative Y | Categorical X (3+ Groups) {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about graphics to use for this type of data here.
+[Box plots](GraphicalSummaries.html)- Side-by-side, show the 5 number summary and outliers well, better for larger sample size or less repeated data. <br>
+boxplot(object~group, data), ggplot(data, aes(y=datacol, x=groupscol)) + geom_boxplot()<br>
+
+[Dot plots](GraphicalSummaries.html)- Side-by-side, work well for smaller samples with repeated values.<br>
+stripchart(object~group, data, method="stack"), ggplot(data, aes(y=datacol, x=groupscol)) + geom_dotplot()<br>
 
 
 
@@ -229,15 +252,26 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about appropriate inferential procedures for this type of data here.
+One-way (one factor-level combination) [ANOVA](ANOVA.html)-
+  myaov <- aov(y ~ A, data=YourDataSet)
+  summary(myaov)
+  If both samples are representative (SRS), data is normally distributed in each group (assumed when residuals are normally distributed)myaov, which=1:2, and  the population variance can be assumed to be the same (residuals show constant variance). See [Chick Weights One-Way](Analyses/ANOVA/Examples/ChickWeightANOVABlock.html)<br>
+  
+  
+Two-way/three-way (one factor-level combination) [ANOVA](ANOVA.html)-
+  myaov <- aov(y ~ A+B+A:B, data=YourDataSet)
+  summary(myaov)
+  If both samples are representative (SRS), data is normally distributed in each group (assumed when residuals are normally distributed)myaov, which=1:2, and  the population variance can be assumed to be the same (residuals show constant variance). Has three hypotheses. See [Day Care Analysis](Analyses/ANOVA/DayCare.html), [Warpbreaks Two-Way](Analyses/ANOVA/Examples/warpbreaksTwoWayANOVA.html), and [CO2 Three-way](Analyses/ANOVA/Examples/CO2ThreeWayANOVA.html)<br>
 
 
+START HERE---What's the coding difference between one-way and other anovas?????
 
-
-
+[Kruskal-Wallis Rank Sum Test](Kruskal.html)-
+  kruskal.test(x ~ g, data=YourDataSet), x = numeric, g = qualitative grouping variable--character or factor
+  Non-parametric version of ANOVA. Best where the data is not normal. $H_0$: All samples are fom the same distribution.  See [Chocolate Analysis](Analyses/Kruskal-Wallis Tests/Chocolate.html), [Pig Weights](Analyses/Kruskal-Wallis Test/Examples/pigweightsKruskal.html), and [Wages](Analyses/Kruskal-Wallis Test/Examples/wagesKruskal.html).<br>
 
 <!--- End of Add content area.  ------------------>
 </div>
@@ -246,63 +280,6 @@ Add your own notes about appropriate inferential procedures for this type of dat
 <div style="clear:both;"></div>
 
 ----
-
-
-
-
-<div style="float:left;width:125px;" align=center class="tooltipimage">
-<img src="./Images/QuantYMultQualX.png" width=80px;>
-  <span class="tooltipimagetext">Y is a single quantitative variable of interest, like "heights" of BYU-Idaho students. X1 is a categorical (qualitative) variable like gender, with levels "boy" and "girl." X2 is another categorical (qualitative) variable like "Classrank" with levels "Freshman", "Sophomore", and "Junior". Of course, both X1 and X2 can have as many levels as you want to work with, but must have at least two levels each.</span>
-</div>
-
-## Quantitative Y | Multiple Categorical X {.tabset .tabset-pills}
-
-### Graphics
-<div style="padding-left:125px;color:lightgray;">
-<!-- Add your customizations in the area below: -->
-
-Add your own notes about graphics to use for this type of data here.
-
-
-
-
-
-
-
-
-
-
-
-
-<a href="GraphicalSummaries.html#boxplots">
-  <img class="myhover" src="./Images/boxplotthree.png" alt="Side-by-side Boxplots" title="Side-by-side Boxplots 3+ Groups">
-</a>
-<a href="GraphicalSummaries.html#dot-plots">
-  <img class="myhover" src="./Images/dotplottriple.png" alt="Side-by-side Dot Plots" title="Side-by-side Dot Plots 3+ Groups">
-</a>
-
-<!--- End of Add content area.  ------------------>
-</div>
-
-### Tests
-<div style="padding-left:125px;color:lightgray;">
-<!-- Add your customizations in the area below: -->
-
-Add your own notes about appropriate inferential procedures for this type of data here.
-
-
-
-
-
-
-<!--- End of Add content area.  ------------------>
-</div>
-
-#
-<div style="clear:both;"></div>
-
-----
-
 
 <div style="float:left;width:125px;" align=center class="tooltipimage">
 <img src="./Images/QuantYQuantX.png" width=59px;>
@@ -312,10 +289,12 @@ Add your own notes about appropriate inferential procedures for this type of dat
 ## Quantitative Y | Quantitative X {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
+Scatterplot with regression line:<br>
+plot(Y ~ X, data=data, col=as.factor(X))<br>
+abline(my.lm)
 
-Add your own notes about graphics to use for this type of data here.
 
 
 
@@ -333,15 +312,33 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about appropriate inferential procedures for this type of data here.
+[Simple Linear Regression](LinearRegression.html)-<br>
+my.lm <- lm(Y~X, data = data)<br>
+summary(my.lm)<br>
+5 [assumptions](LinearRegression.html#.):<br>
 
+1. **Linear Relation**: the true regression relation between $Y$ and $X$ is linear. Tested with residuals vs fitted-values plot.<br>
+    
+2. **Normal Errors**: the error terms $\epsilon_i$ are normally distributed with a mean of zero. Tested with QQ plot.<br>
 
+3. **Constant Variance**: the variance $\sigma^2$ of the error terms is constant (the same) over all $X_i$ values.Tested with residuals vs fitted-values plot.<br>
 
+4. **Fixed X**: the $X_i$ values can be considered fixed and measured without error. Can't be directly measured (have to assume they are fixed.)<br>
 
+5. **Independent Errors**: the error terms $\epsilon_i$ are independent. Checked with residuals vs order plot.<br>
 
+par(mfrow=c(1,3))<br>
+plot(my.lm, which=1, caption=NA)
+mtext(side=3, text="Residuals vs Fitted")<br>
+qqPlot(my.lm\$residuals)<br>
+mtext(side=3,text="Residuals QQ Plot")<br>
+plot(my.lm\$residuals)<br>
+mtext(side=3, text="Residuals vs Order")<br>
+
+See: [My Simple Linear Regression](Analyses/Linear Regression/MySimpleLinearRegression.html), [Bodyweight](Analyses/Linear Regression/Examples/BodyWeightSLR.html), [Cars](carsSLR.html)<br>
 
 <!--- End of Add content area.  ------------------>
 </div>
@@ -359,16 +356,34 @@ Add your own notes about appropriate inferential procedures for this type of dat
 ## Quantitative Y | Multiple X {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
+Scatterplot with two regression lines:<br>
+palette("col1", "col2")<br>
+plot(Y ~ X1, col=as.factor(X2),data=data)<br>
 
-Add your own notes about graphics to use for this type of data here.
+<br>
+If no $\beta_2$, same y-intercept (REMEMBER INDICES=3! Yi=([1]+0)+([2]+[3])):<br>
+    b <- nobeta2\$coefficients
+    abline(a=b[1], b=b[2], col=palette()[1])<br>
+    abline(a=b[1], b=b[2] + b[3], col=palette()[2])<br>
 
+<br>
+If no $\beta_3$, parallel lines (REMEMBER INDICES=3! Yi=([1]+[3])+([2]+0)):<br>
+    b <- nobeta3\$coefficients<br>
+    abline(a=b[1], b=b[2], col=palette()[1])<br>
+    abline(a=b[1] + b[3], b=b[2], col=palette()[2])<br>
 
+<br>
+Full model (Indices Yi=([1]+[3])+([2]+[4]))<br>
+    b <- full\$coefficients<br>
+    abline(a= b[1], b=b[2], col=palette()[1])<br>
+    abline(a=b[1] + b[3], b=b[2] + b[4], col=palette()[2])<br>
 
+Finally, add legend:<br>
+legend("topright", col=palette(), pch=16, legend=c("Level1", "Level2"), bty="n", text.col = palette())<br>
 
-
-
+For more plotting more than two regression lines see [Price of Cadillacs](Analyses/Linear Regression/Examples/cadillacsMLR.html)
 
 
 
@@ -380,15 +395,47 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about appropriate inferential procedures for this type of data here.
+[Multiple Linear Regression](LinearRegression.html)-
+For two regression lines:<br>
+my.lm <- lm(Y ~ X1 + X2 + X1:X2, data=data)<br>
+summary(my.lm)<br>
 
+For more 2 or more:<br>
+my.lm<-lm(formula = X1 ~ X2 + X3 + X4 (+...), data=data)<br>
+summary(my.lm)<br>
 
+<br>
+Remember: Can access parts of the regression: my.lm\$coefficients, my.lm\$residuals, my.lm\$fitted.values<br>
+<br>
+Predict:predict(my.lm, data.frame(X=somenumber))<br>
 
+6 [assumptions](LinearRegression.html#.):<br>
 
+1. **Linear Relation**: the true regression relation between $Y$ and $X$ is linear. Tested with residuals vs fitted-values plot.<br>
+    
+2. **Normal Errors**: the error terms $\epsilon_i$ are normally distributed with a mean of zero. Tested with QQ plot.<br>
 
+3. **Constant Variance**: the variance $\sigma^2$ of the error terms is constant (the same) over all $X_i$ values.Tested with residuals vs fitted-values plot.<br>
+
+4. **Fixed X**: the $X_i$ values can be considered fixed and measured without error. Can't be directly measured (have to assume they are fixed.)<br>
+
+5. **Independent Errors**: the error terms $\epsilon_i$ are independent. Checked with residuals vs order plot.<br>
+
+6. **Important Variables**: All important variables included. Include $X_{new}$ Plot the residuals from current against $X_{new}$ (code?)<br>
+
+Code for assumptions:<br>
+par(mfrow=c(1,3))<br>
+plot(my.lm, which=1, caption=NA)<br>
+mtext(side=3, text="Residuals vs Fitted")<br>
+qqPlot(my.lm\$residuals)<br>
+mtext(side=3,text="Residuals QQ Plot")<br>
+plot(my.lm\$residuals)<br>
+mtext(side=3, text="Residuals vs Order")<br>
+
+See: [PNW CRV analysis](Analyses/Linear Regression/PNWcrv.html), [Car Prices](Analyses/Linear Regression/CarPrices.html), [Civic Vs Corolla](Analyses/Linear Regression/Examples/CivicVsCorollaMLR.html), and [Cadillac Prices](Analyses/Linear Regression/Examples/cadillacsMLR.html).<br>
 
 <!--- End of Add content area.  ------------------>
 </div>
@@ -406,11 +453,17 @@ Add your own notes about appropriate inferential procedures for this type of dat
 ## Binomial Y | Quantitative X {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about graphics to use for this type of data here.
+For [logistic regression](LogisticRegression.html), base R uses the same basic code that is used for scatterplots, but a curved line is added to the plot.
 
+my.glm <- (Y~X, data=data, family=binomial)<br>
+palette(c("col_for_Ylevel=1","col_for_Ylevel=1")) with transparency<br>
+plot(Y~X, data=data, col=as.factor(Y))<br>
+b <- my.glm\$coefficients<br>
+curve(exp(b[1]+b[2]\*x)/(1+exp(b[1]+b[2]\*x)), add=TRUE)<br>
+legend("topright", col=c("col_for_1", "col_for_0"), pch=16, legend=c("level=1", "level=2"), bty="n", text.col = c("col_for_level=1", "col_for_level=1")) putting the colors backward in legend makes them line up with where the colors will be, no transparency on text.col for legibility
 
 
 
@@ -425,10 +478,22 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about appropriate inferential procedures for this type of data here.
+[Logistic regression](LogisticRegression.html)-
+  my.glm <- (Y~X, data=data, family=binomial)<br>
+  summary(my.glm)<br>
+  predict(my.glm, newdata = data.frame(xVarname = somenumber), type= "response") Must pass newdata a data.frame, so use the data.frame function.<br>
+<br>
+Requirments are tested using a goodness of fit test. The null hypothesis is the fit is good. The alternate hypothesis is the fit is not good. (Make sure to View(my.glm\$X) to see how many values are repeated.)<br>
+    a) Deviance of Goodness of Fit Test (replicated values, used less often)<br>
+    pchisq(residual deviance, df for residual deviance, lower.tail=FALSE)<br> The residual deviance numbers are the last part of the logistic regression summary.<br>
+    b) Hosmer-Lemeshow Goodness of Fit Test (few if any replicated values, used most often)<br>
+    library(ResourceSelection)<br>
+    hoslem.test(my.glm\$y, my.glm\$fitted, g=10) 10 is used most often, can use 6 or another small number if the sample size is smaller.(Note: literally \$y & \$fitted)<br>
+ <br>   
+  See [Challenger Analysis](Analyses/Logistic Regression/Examples/challengerLogisticReg.html) and [Mouse Analysis](Analyses/Logistic Regression/Examples/mouseLogisticReg.html).<br>
 
 
 
@@ -451,12 +516,19 @@ Add your own notes about appropriate inferential procedures for this type of dat
 ## Binomial Y | Multiple X {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about graphics to use for this type of data here.
+As with logistic regression, a scatterplot is used, but with multiple curved lines added.
+my.glm <- (formula=Y~X1*x2, data=data, family=binomial)<br>
+b <- my.glm\$coefficients<br>
+palette(c("col1","col2"))
+plot(Y ~ X, data=data, pch=16)<br>
+curve(exp(b[1]+b[2]\*x)/(1+exp(b[1]+b[2]\*x)), add=TRUE, col = palette()[1])<br>
+curve(exp((b[1]+b[3])+(b[2]+b[4])\*x)/(1+exp((b[1]+b[3])+(b[2]+b[4])\*x)), add=TRUE, col = palette()[2])<br>
+legend("position", legend=c("Level 1", "Level 2"), col=palette(), lty=1, bty='n')<br>
 
-
+See [General Social Survey Analysis](Analyses/Logistic Regression/Examples/GSSMultipleLogisticReg.html).
 
 
 
@@ -470,10 +542,21 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
-
-Add your own notes about appropriate inferential procedures for this type of data here.
+[Multiple Logistic regression](LogisticRegression.html)-
+  my.glm <- glm(formula=Y~X1*X2, data=data, family=binomial)<br>
+  summary(my.glm)<br>
+  predict(my.glm, newdata = data.frame(xVarname = somenumber), type= "response") Must pass newdata a data.frame, so use the data.frame function.<br>
+<br>
+Requirments are tested using a goodness of fit test. The null hypothesis is the fit is good. The alternate hypothesis is the fit is not good. (Make sure to View the data to see how many values are repeated.)<br>
+    a) Deviance of Goodness of Fit Test (replicated values, used less often)<br>
+    pchisq(residual deviance, df for residual deviance, lower.tail=FALSE)<br> The residual deviance numbers are the last part of the logistic regression summary.<br>
+    b) Hosmer-Lemeshow Goodness of Fit Test (few if any replicated values, used most often)<br>
+    library(ResourceSelection)<br>
+    hoslem.test(my.glm\$y, my.glm\$fitted, g=10) 10 is used most often, can use 6 or another small number if the sample size is smaller.(Note: literally \$y & \$fitted)<br>
+ <br>   
+See [General Social Survey Analysis](Analyses/Logistic Regression/Examples/GSSMultipleLogisticReg.html).
 
 
 
@@ -493,14 +576,22 @@ Add your own notes about appropriate inferential procedures for this type of dat
   <span class="tooltipimagetext">Y is a single categorical variable of interest, like gender. X is another categorical variable of interest, like "hair color". This type of data would help us understand if men or women are more likely to have certain hair colors than the other gender.</span>
 </div>
 
-## Categorical Y | Categorical X {.tabset .tabset-pills}
+## Caterogical Y | Categorical X {.tabset .tabset-pills}
 
 ### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about graphics to use for this type of data here.
+Bar charts can be stacked or grouped side by side for multiple x's.<br>
+palette(c("#col1","#col2"))<br>
+// The first line of code allows things to be printed outside the plot and extends the right edge so theirs room for a table. Useful when the legend is large.<br>
+par(xpd=T, mar=par()\$mar+c(0,0,0,6)) <br>
+barplot(table(data\$col1, data\$col2), ylab="ylab", xlab = "xlab", main = "Title", col=palette(), beside=TRUE, bty="L")<br>
+legend("topleft", col=palette(), pch=16, legend=c("level1", "level2",level3"), bty="n", text.col = palette(), inset=c(1,0), xpd=TRUE)<br>
 
+  * xpd-allows printing outside the plot<br>
+  * beside-the default is stacking<br>
+  * bty-boxtype (o/default=complete, n/no box, also 7, L, C, U)<br>
 
 
 
@@ -514,11 +605,20 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 ### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
-
-Add your own notes about appropriate inferential procedures for this type of data here.
-
+[Chi-squared Tests](ChiSquaredTests.html)-
+Must be a table or a matrix. Can use cbind or row bind or create a table:<br>
+  x <- cbind(col1, col2) or x <- rbind(row1, row2)<br>
+  x <- table(data\$col1, data\$col2<br>
+  myx <- chisq.test(x)<br>
+  predict(my.glm, newdata = data.frame(xVarname = somenumber), type= "response") Must pass newdata a data.frame, so use the data.frame function.<br>
+The requirments are that each expected count is at least 5 or at least 1 if the average is 5 or greater.<br>
+  myx\$expected<br>
+Pearson Residuals are used for the interpretation
+  myx\$residuals<br>
+   
+See [Big Bang](Analyses/Chi Squared Tests/MyChiSquaredTest.html), [Hair Eye Color](Analyses/Chi Squared Tests/Examples/HairEyeColorChiSquaredTest.html), [Math 325 Student Ratings](Analyses/Chi Squared Tests/Examples/Math325StudentRatings.html).
 
 
 
@@ -533,4 +633,3 @@ Add your own notes about appropriate inferential procedures for this type of dat
 ----
 
 <footer></footer>
-
