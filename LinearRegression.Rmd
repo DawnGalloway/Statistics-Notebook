@@ -29,6 +29,7 @@ header-includes:
 </script>
 
 ```{r, include=FALSE}
+#install.packages("reshape2")
 library(car)
 library(mosaic)
 library(pander)

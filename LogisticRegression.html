@@ -13,7 +13,7 @@
 
 <title>Logistic Regression</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -122,13 +122,20 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -224,11 +231,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -257,8 +268,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -266,16 +277,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -330,27 +334,6 @@ $(document).ready(function () {
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    R Help
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="RCommands.html">R Commands</a>
-    </li>
-    <li>
-      <a href="RMarkdownHints.html">R Markdown Hints</a>
-    </li>
-    <li>
-      <a href="RCheatSheetsAndNotes.html">R Cheatsheets &amp; Notes</a>
-    </li>
-    <li>
-      <a href="DataSources.html">Data Sources</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Describing Data
      
     <span class="caret"></span>
@@ -381,10 +364,10 @@ $(document).ready(function () {
       <a href="WilcoxonTests.html">Wilcoxon Tests</a>
     </li>
     <li>
-      <a href="Kruskal.html">Kruskal-Wallis Test</a>
+      <a href="ANOVA.html">ANOVA</a>
     </li>
     <li>
-      <a href="ANOVA.html">ANOVA</a>
+      <a href="Kruskal.html">Kruskal-Wallis</a>
     </li>
     <li>
       <a href="LinearRegression.html">Linear Regression</a>
@@ -396,7 +379,7 @@ $(document).ready(function () {
       <a href="ChiSquaredTests.html">Chi Squared Tests</a>
     </li>
     <li>
-      <a href="PermutationTests.html">Randomization</a>
+      <a href="PermutationTests.html">Randomization Testing</a>
     </li>
   </ul>
 </li>
@@ -408,6 +391,39 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="./Analyses/Rent.html">Rent Analysis</a>
+    </li>
+    <li>
+      <a href="./Analyses/Stephanie.html">Stephanie Analysis</a>
+    </li>
+    <li>
+      <a href="./Analyses/tTests/HighSchoolSeniors.html">T-tests High School Seniors</a>
+    </li>
+    <li>
+      <a href="./Analyses/WilcoxonTests/RecallingWords.html">Wilcoxon Recalling Words</a>
+    </li>
+    <li>
+      <a href="./Analyses/ANOVA/DayCare.html">ANOVA Day Care</a>
+    </li>
+    <li>
+      <a href="./Analyses/Kruskal-Wallis Test/Chocolate.html">Kruskal Wallis Chocolate</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/MySimpleLinearRegression.html">Simple Linear Regression Portland CRV</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/CarPrices.html">Multiple Linear Regression Chevy</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/PNWcrv.html">Consulting Project (MLR) PNW CRV</a>
+    </li>
+    <li>
+      <a href="./Analyses/Linear Regression/MyLogisticRegression.html">Simple Logistic Regression Breast Cancer</a>
+    </li>
+    <li>
+      <a href="./Analyses/Chi Squared Tests/MyChiSquaredTest.html">Chi Squared GSS</a>
+    </li>
+    <li>
       <a href="./Analyses/AnalysisRubric.html">Analysis Rubric</a>
     </li>
     <li>
@@ -416,35 +432,29 @@ $(document).ready(function () {
     <li>
       <a href="./Analyses/StudentHousingPOOR.html">Poor Example Analysis</a>
     </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    R Help
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="./Analyses/Rent.html">Rent</a>
+      <a href="RCheatSheetsAndNotes.html">LR Cheatsheets &amp; Notes</a>
     </li>
     <li>
-      <a href="./Analyses/Stephanie.html">Stephanie</a>
+      <a href="RCommands.html">R Commands</a>
     </li>
     <li>
-      <a href="./Analyses/t Tests/HighSchoolSeniors.html">High School Seniors</a>
+      <a href="RMarkdownHints.html">R Markdown Hints</a>
     </li>
     <li>
-      <a href="./Analyses/Wilcoxon Tests/RecallingWords.html">Recalling Words</a>
+      <a href="DataSources.html">Data Sources</a>
     </li>
     <li>
-      <a href="./Analyses/Kruskal-Wallis Test/Food.html">Food</a>
-    </li>
-    <li>
-      <a href="./Analyses/ANOVA/HighSchoolSeniors2.html">High School Seniors 2</a>
-    </li>
-    <li>
-      <a href="./Analyses/Linear Regression/MySimpleLinearRegression.html">My Simple Linear Regression</a>
-    </li>
-    <li>
-      <a href="./Analyses/Linear Regression/CarPrices.html">Car Prices</a>
-    </li>
-    <li>
-      <a href="./Analyses/Logistic Regression/MyLogisticRegression.html">My Logistic Regression</a>
-    </li>
-    <li>
-      <a href="./Analyses/Chi Squared Tests/MyChiSquaredTest.html">My Chi-sqaured Test</a>
+      <a href="IntermediateStatsNotes.html">Intermediate Stats</a>
     </li>
   </ul>
 </li>
@@ -636,7 +646,7 @@ $$</code></pre>
 <table class="rconsole">
 <tr>
 <td>
-<span class="tooltiprout"> Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 <span class="tooltiprouttext">These “codes” explain what significance level the p-value is smaller than based on how many “stars” * the p-value is labeled with in the Coefficients table above.</span> </span>
+<span class="tooltiprout"> Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ’*’ 0.05 ‘.’ 0.1 ‘ ’ 1 <span class="tooltiprouttext">These “codes” explain what significance level the p-value is smaller than based on how many “stars” * the p-value is labeled with in the Coefficients table above.</span> </span>
 </td>
 </tr>
 </table>
@@ -1119,7 +1129,7 @@ $$</code></pre>
 <table class="rconsole">
 <tr>
 <td>
-<span class="tooltiprout"> Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 <span class="tooltiprouttext">These “codes” explain what significance level the p-value is smaller than based on how many “stars” * the p-value is labeled with in the Coefficients table above.</span> </span>
+<span class="tooltiprout"> Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ’*’ 0.05 ‘.’ 0.1 ‘ ’ 1 <span class="tooltiprouttext">These “codes” explain what significance level the p-value is smaller than based on how many “stars” * the p-value is labeled with in the Coefficients table above.</span> </span>
 </td>
 </tr>
 </table>
@@ -1293,7 +1303,7 @@ $$</code></pre>
 <p>
 <a href="javascript:showhide('MultipleLogisticggplot2')">
 <div class="hoverchunk">
-<p><span class="tooltipr"> ggplot(data=YourDataName, <span class="tooltiprtext">Initialize a ggplot.</span> </span><span class="tooltipr">  aes( <span class="tooltiprtext">Declare the aesthetics of the graph.</span> </span><span class="tooltipr"> x=X1, <span class="tooltiprtext">Set the x-axis to be your X1 variable.</span> </span><span class="tooltipr"> y=Y <span class="tooltiprtext">Set the y-axis to be your Y-variable.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for aes(…) function.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for ggplot(…) function.</span> </span><span class="tooltipr">  + <span class="tooltiprtext">Add a layer to the ggplot.</span> </span><br/><span class="tooltipr">   geom_point( <span class="tooltiprtext">Add dots to the ggplot.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for the geom_point() function.</span> </span><span class="tooltipr">  + <span class="tooltiprtext">Add a layer to the ggplot.</span> </span><br/><span class="tooltipr">   geom_smooth(method=“glm”, method.args=list(family=“binomial”), se=FALSE, <span class="tooltiprtext">Add the logistic regression curve to the plot.</span> </span><span class="tooltipr">   aes(color="X2) <span class="tooltiprtext">Create a different logistic regression curve for each group found in X2, and give each curve a different color.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for the geom_smooth() function.</span> </span><span class="tooltipr">  + <span class="tooltiprtext">Add a layer to the plot.</span> </span><br/><span class="tooltipr">   theme_bw() <span class="tooltiprtext">Add a black and white them to the plot.</span> </span></p>
+<p><span class="tooltipr"> ggplot(data=YourDataName, <span class="tooltiprtext">Initialize a ggplot.</span> </span><span class="tooltipr">  aes( <span class="tooltiprtext">Declare the aesthetics of the graph.</span> </span><span class="tooltipr"> x=X1, <span class="tooltiprtext">Set the x-axis to be your X1 variable.</span> </span><span class="tooltipr"> y=Y <span class="tooltiprtext">Set the y-axis to be your Y-variable.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for aes(…) function.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for ggplot(…) function.</span> </span><span class="tooltipr">  + <span class="tooltiprtext">Add a layer to the ggplot.</span> </span><br/><span class="tooltipr">   geom_point( <span class="tooltiprtext">Add dots to the ggplot.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for the geom_point() function.</span> </span><span class="tooltipr">  + <span class="tooltiprtext">Add a layer to the ggplot.</span> </span><br/><span class="tooltipr">   geom_smooth(method=“glm”, method.args=list(family=“binomial”), se=FALSE, <span class="tooltiprtext">Add the logistic regression curve to the plot.</span> </span><span class="tooltipr">   aes(color=“X2) <span class="tooltiprtext">Create a different logistic regression curve for each group found in X2, and give each curve a different color.</span> </span><span class="tooltipr"> ) <span class="tooltiprtext">Closing parenthesis for the geom_smooth() function.</span> </span><span class="tooltipr">  + <span class="tooltiprtext">Add a layer to the plot.</span> </span><br/><span class="tooltipr">   theme_bw() <span class="tooltiprtext">Add a black and white them to the plot.</span> </span></p>
 </div>
 <p></a></p>
 <div id="MultipleLogisticggplot2" style="display:none;">

@@ -68,7 +68,7 @@ navbar:
           href: RMarkdownHints.html
         - text: "Data Sources"
           href: DataSources.html
-        - text: "Intermediate Stats"
+        - text: "Intermediate Stats Notes"
           href: IntermediateStatsNotes.html
 output_dir: '.'
 

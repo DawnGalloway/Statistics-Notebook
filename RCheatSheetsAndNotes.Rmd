@@ -203,36 +203,179 @@ legend("topleft", legend=c("True Line", "Estimated Line"), lty=c(2,1), bty="n") 
 
 
 
-##### Skills Quiz, Intro to R
+##### Quizzes
 
-```{r}
+```{r eval=FALSE}
+
+# Assessment Quiz
+dav.lm <- lm(weight ~ height, data=subset(Davis, sex=="M"))
+predict(dav.lm, data.frame(height=180))
+
+# Perform a regression using this data that explains the average number of murder arrests in cities (per 100,000 in 1973) using the number of assault arrests (per 100,000) in a city.
+
+# Select the answer that provides the correct estimate of B1 in the formula:for the USArrests regression described above.
+lm(formula = Murder ~ Assault, data = USArrests)
+
+# Which of the following statements is a correct statement about the graphic shown below?
+
+# Note: the "Line of Equality" shows where the line would need to be if the reported heights were equal (on average) to the actual measured heights. Dots that fall on this line show men that knew their actual height before they were officially measure
+
+# The average actual height gets closer to the reported height for taller men, while shorter men seem more likely to under-report their height, on average.
+
 par(mfrow=c(1,3))
 plot(mylm, which = 1:2)
 plot(mylm$residuals)
+
+
 ```
 
 
 
-#### 2 ri, Sum of Squares, and R-squared  
+#### 2. ri, Sum of Squares, and R-squared  
 
-[Regression Applet](https://phet.colorado.edu/sims/html/least-squares-regression/latest/least-squares-regression_en.html) with sliders
+##### Terms
 
-Variance is squared units, sd is in original units
-Variance is an average of the sum of squares
+###### Mean Measure of Center
+
+add all the data values up and divide by the total number of values<br>
+mean(object) or mean(object, na.rm=TRUE)<br>
+$$\bar{x} = \frac{\sum_{i=1}^n x_i}{n}$$
+<br>
+
+###### Variance Measure of Spread
+
+Seldom used because it's diffucult to interpret due to squared units (use sd instead, notes $s$)<br>
+var(object)<br>
+<br>
+
+$$s^2 = \frac{\sum_{i=1}^n(x_i-\bar{x})^2}{n-1}$$
+
+Variance is squared units, sd is in original units<br>
+Variance is an average of the sum of squares<br>
 
 *  the values being squared in the numerator are the deviations of each data point from mean
 *  Var is large when very spread from mean
 *  Var is small when data tightly clustered around mean
+*  Var is 0 when data equal to mean
 *  Var never negative
+<br>
+
+###### Standard Deviation Measure of Spread
+
+Sometimes called the RMSE (root mean squared error)<br>
+The denominator is called the degrees of freedom ($n$-1)<br>
+Never negative only 0 if all values are the same.
+$$s = \sqrt{\frac{\sum_{i=1}^n(x_i-\bar{x})^2}{n-1}}$$
+
+We will denote a residual for individual $i$ by $r_i$,<br>
+
+$$r_i = \underbrace{Y_i}_{\substack{\text{Observed} \\ \text{Y-value}}} - \underbrace{\hat{Y}_i}_{\substack{\text{Predicted} \\ \text{Y-value}}} \quad \text{(residual)}
+$$
+
+###### Residual 
+
+The residual $r_i$ estimates the true error for individual $i$, $\epsilon_i$ <br>
+
+$$\epsilon_i = \underbrace{Y_i}_{\substack{\text{Observed} \\ \text{Y-value}}} - \underbrace{E\{Y_i\}}_{\substack{\text{True Mean} \\ \text{Y-value}}} \quad \text{(error)}
+$$
+Keep in mind the idea that the errors $\epsilon_i$ “created” the data and that the residuals $r_i$ are computed after using the data to “re-create” the line.
+
+Residuals have many uses in regression analysis. They allow us to
+
+*  diagnose the regression assumptions (Assumptions)
+*  estimate the regression relation (Estimating the Model Parameters)
+*  estimate the variance of the error terms (Estimating the Model Variance)
+*  and assess the fit of the regression relation (Assessing the Fit of a Regression)<br>
+
+
+[Regression Applet](https://phet.colorado.edu/sims/html/least-squares-regression/latest/least-squares-regression_en.html) with sliders
+
+
 
 SSE SSR SSTO R2 r(correlation)
 
+Multiple R-squared is R^2
 
-##### Class code
+If the dots are on the line the correlation coefficient moves toward 1 and the sum of squared residuals goes to 0.
+Correlation describes the strength and direction of association between two quantative variables, between -1 and 1. 0 means no association
 
+###### Correlation Measure of Association
 
+Measures the strength and direction between to quantative vars<br>
+Greater insight in using the square of corr -> $R^2$
+cor(object1,object2)<br>
+
+In fact, the correlation squared is equal to SSR/SSTO ($R^2$)
+
+$$r = \frac{\textstyle\sum\left(\frac{x-\bar{x}}{s_x}\right)\left(\frac{y-\bar{y}}{s_y}\right)}{n-1}$$
+###### SSE Sum of Squared Errors (actually residuals)
+
+Measures how much the residuals deviate from the regression line<br>
+SSE = SSTO-SSR<br>
+$$\text{SSE} = \sum_{i=1}^n \left(Y_i - \hat{Y}_i\right)^2$$
+<br>
+SSE is the unexplained variability.
+sum( lmObject$res^2 )
+```{r}
+sum(cars.lm$res^2 )
+```
+<br>
+
+###### SSR Sum of Squares Regression
+Measures how much the regression line deviates from the average y-value.<br>
+A good regression should decrease the var, so SSE should be less than SSTO.<br>
+SSR = SSTO - SSE<br>
+$$\text{SSR} = \sum_{i=1}^n \left(\hat{Y}_i - \bar{Y}\right)^2$$
+<br>
+SSR is the explained variablility
+sum( (lmObject$fit - mean(YourData$Y))^2 )
+```{r}
+cars.ssr <- sum( (cars.lm$fit - mean(cars$dist))^2 )
+```
+
+<br>
+
+###### SSTO Total Sum of Squares
+
+Measures how much the y-values deviate from the average y-value (the total amount of variability in your data).<br>
+SSTO = SSE + SSR<br>
+$$\text{SSTO} = \sum_{i=1}^n \left(Y_i - \bar{Y}\right)^2$$
+SSTO
+sum( (YourData$Y - mean(YourData$Y))^2 )
+```{r}
+cars.ssto <- sum( (cars$dist - mean(cars$dist))^2 )
+```
+
+If SSE is large (close to SSTO) then SSR is small (close to zero) and visa versa. The following three graphics demonstrate how this works.<br>
+<br>
+SSE small SSR large -> excellent fit<br>
+SSE medium SSR medium -> good fit<br>
+SSE large SSR small -> poor fit<br>
+<br>
+
+###### R-Squared  
+
+$$\underbrace{R^2 = \frac{SSR}{SSTO} = 1 - \frac{SSE}{SSTO}}_\text{Interpretation: Proportion of variation in Y explained by the regression.}$$
+If this is high,we're getting more explanation. If it's close to 0 then it's close to the average, so it's not telling us anything.The smallest R2 can be is zero, and the largest it can be is 1. This is because SSR must be between 0 and SSTO, inclusive.<br>
+Any time you square a decimal it gets smaller, so R^2 is stricter on the correlation.<br>
+R2 is the ratio between explanation and total SSR/SSTO
+```{r}
+cars.ssr/cars.ssto
+```
+
+Note: r (correlation is the square root of $R^2$)
 
 ```{r}
+sqrt(cars.ssr/cars.ssto)
+```
+
+
+
+##### Class Code
+
+
+
+```{r eval=FALSE}
 # Monday
 cars2 <- cars[sample(1:50, 10), ]
 View(cars2)
@@ -260,8 +403,9 @@ ggplot(cars2, aes(x=speed, y=dist)) +
   geom_point(aes(x=17.5, y=50), color="blue", cex=2) + 
   geom_rect(aes(xmin=17.5, xmax=17.5+.65, ymin=45.297, ymax=50), alpha=0.1) + 
   geom_rect(aes(xmin=speed, xmax=speed+carslm$residuals*.15, ymin=dist, ymax=carslm$fitted.values), alpha=0.1, fill="blue")
-```
-```{r}
+
+
+
 install.packages("plotly")
 library(plotly)
 
@@ -309,14 +453,39 @@ plot_ly(cars2,
   add_segments(x = 0, xend = 25, y = sum(coef(cars.lm)*c(1,0)), yend = sum(coef(cars.lm)*c(1,25)), line=list(color="darkgray", width=1), inherit=FALSE, name=TeX("\\hat{Y}"), showlegend=T) %>%
   config(mathjax = 'cdn') %>%
   animation_opts(frame=2000, transition=1000, redraw=T)
+
+library(tidyverse)
+View(diamonds)
+plot(price ~ carat, data=diamonds)
+
+diamonds.lm <- lm(price ~ carat, data=diamonds)
+summary(diamonds.lm)
+
+abline(diamonds.lm, col="green", lwd=2)
+
+
+
+
+
+plot(dist ~ speed, data=cars)
+cars.lm <- lm(dist ~ speed, data=cars)
+summary(cars.lm)
+abline(cars.lm)
+points(dist ~ speed, data=cars[23,], col="orange", pch=16)
+
+View(cars)
+cars[23, ]
+cars.lm$residuals[23]
+cars$dist[23] - cars.lm$fitted.values[23] #Y_i - Yhat_i
 ```
 
-Which graphic works best? Looks like stripchart works for 1 qual and 1 quant (plot, boxplot, stripchart answers)
+
 
 ##### Quizzes
 
-Mobius
-```{r}
+
+```{r eval=FALSE}
+# Mobius
 # wt
 mtwt.lm <- lm(mpg~wt, mtcars)
 summary(mtwt.lm)
@@ -387,12 +556,294 @@ predict(mtcyl.lm, data.frame(cyl=3*365))
 par(mfrow=c(1,3))
 plot(mtcyl.lm, which = 1:2)
 plot(mtcyl.lm$residuals)
+
+
+# Assessment: Residuals, Sums of Squares, and R squared
+# A regression was performed for a sample of n = 5 data points.
+# The y-values of the regression are: 3.78, 6.08, 6.65, 9.25, and 9.92.
+# The residuals from the regression are: -0.266, 0.489, -0.486, 0.569, and -0.306.
+# What is the R-squared value for this regression?
+y <- c(3.78, 6.08, 6.65, 9.25, 9.92)
+
+SSTO <- sum( (y - mean(y))^2 )
+#SSTO = 24.83372
+
+res <- c(-0.266, 0.489, -0.486, 0.569, -0.306)
+SSE <- sum(res^2)
+#SSE = 0.96347
+
+R2 = 1 - SSE/SSTO
+#R2 = 0.9612032
+
+
+mt.lm <- lm(mpg ~ wt, data=mtcars) #perform the regression
+plot(mpg ~ wt, data=mtcars) #draw the regression (not needed, but nice)
+abline(mt.lm) #add the regression line (not needed, but nice)
+points(2.7, 21, pch=16, col="skyblue") #add the Nissan Sentra value (not needed, but nice)
+predict(mt.lm, data.frame(wt=2.7)) #get predicted value for Nissan Sentra
+1
+22.85505
+lines(c(2.7, 2.7), c(21, 22.85505), col="skyblue") #add residual line (not needed, but nice)
+myresidual <- 21 - 22.85505 #calculate difference between Y and Y-hat
+
+myresidual
+-1.85505
+
 ```
 
 <br>
 
-#### 3
+#### 3. Diagnosing the Model and Model Transformations
 
+Residual Plots & Regression Assumptions & Transformations
+
+*  residuals vs. fitted-values (which=1), most important
+*  Q-Q Plot of Residuals (which=2), 2nd most important
+*  Residuals vs Order (lm$residals)
+Five Assumptions:
+
+1)  The regression relation between Y and X is linear. res v fit (red line straight) If bent results are meaningless--it affects everything. plot(mylm, which=1)
+2)  The error terms are normally distributed with E{ϵi}=0. QQ checks normality -> unwise to put too much trust in the residual standard error as an estimate of the standard deviation σ when not normal dist. plot(mylm, which=2)
+3)  The variance of the error terms is constant over all X values. Distance constant on res v fit--the residual standard error however should not be considered to be meaningful as it will be too large on one end of the regression and too small on the other end. plot(mylm, which=1)
+4)  The X values can be considered fixed and measured without error.
+5)  The error terms are independent. res v order (no pattern)--While the slope and intercept are often still meaningful when the independence assumption is violated, the residual standard error could be unnecessarily large in this case. plot(mylm$residuals, ylab="Residuals")
+$$Y_i = \underbrace{\beta_0 + \beta_1 \overbrace{X_i}^\text{#4}}_{\text{#1}} + \epsilon_i \quad \text{where} \ \overbrace{\epsilon_i \sim}^\text{#5} \overbrace{N(0}^\text{#2}, \overbrace{\sigma^2}^\text{#3})$$
+
+
+How does plot change when we look at residuals vs fitted-values Which is the y
+How check assumption 4 Does it make sense th.n having x fixed is workes
+Explain the difficulties that arise when there is an outlier present. (how do outliers skew) biases the slope
+
+
+##### Class Code
+
+```{r eval=FALSE}
+lm.mt <- lm(mpg ~ qsec, data=mtcars)
+plot(mpg ~ qsec, data=mtcars)
+abline(lm.mt)
+
+plot(lm.mt, which=1)
+
+
+
+
+plot(drat ~ wt, data=mtcars)
+lm2 <- lm(drat ~ wt, data=mtcars)
+abline(lm2)
+
+plot(lm2, which=1)
+
+
+plot(height ~ age, data=Loblolly)
+lmlob <- lm(height ~ age, data=Loblolly)
+abline(lmlob)
+
+plot(lmlob, which=1)
+
+summary(lmlob)
+
+plot(circumference ~ age, data=Orange)
+
+
+
+
+
+boxplot(islands, col="forestgreen")
+boxplot(log(islands), col="forestgreen")
+
+
+
+library(mosaicData)
+View(Utilities)
+?Utilities
+
+
+
+gas.lm <- lm(gasbill ~ temp, data=Utilities)
+plot(gasbill ~ temp, data=Utilities)
+abline(gas.lm)
+# res v fitted
+plot(gas.lm, which=1)
+
+
+gas.lm.log <- lm(log(gasbill) ~ temp, data=Utilities)
+b <- coef(gas.lm.log)
+
+plot(log(gasbill) ~ temp, data=Utilities)
+abline(gas.lm.log)
+
+
+plot(gas.lm.log, which=1)
+summary(gas.lm.log)
+
+
+plot(gasbill ~ temp, data=Utilities)
+curve(exp(6.031885 - 0.041435*x), add=TRUE)
+
+plot(gasbill ~ temp, data=Utilities)
+abline(gas.lm)
+curve(exp(b[1] + b[2]*x), add=TRUE, col="skyblue")
+
+# Graphing Transformations
+ggplot(Orange, aes(x=age, y=circumference)) + 
+  geom_point(color="orangered") +
+  stat_function(fun=function(x) ())
+  labs(title="Growth of Orange Trees", x="Age of Tree in Days", y="Circumference of Tree (mm)") + 
+  theme_bw( )
+
+# Bro Saunders code
+  lm.log <- lm(log(circumference) ~ age, data=Orange)
+b.log <- coef(lm.log)
+b.log[1]
+b.log[2]
+
+lm.sqrt <- lm(sqrt(circumference) ~ age, data=Orange)
+b.sqrt <- coef(lm.sqrt)
+
+lm.1oY <- lm(1/circumference ~ age, data=Orange)
+b.1oY <- coef(lm.1oY)
+
+lm.y <- lm(circumference ~ age, data=Orange)
+b.y <- coef(lm.y)
+
+lm.y2 <- lm(circumference^2 ~ age, data=Orange)
+b.y2 <- coef(lm.y2)
+
+lm.1oY2 <- lm(1/circumference^2 ~ age, data=Orange)
+b.1oY2 <- coef(lm.1oY2)
+
+
+# Base Graphic
+
+
+plot(circumference ~ age, data=Orange, pch=16, col="orangered", main="Growth of Orange Trees", xlab="Age of Tree in Days", ylab="Circumference of Tree (mm)")
+
+curve( exp(b.log[1] + b.log[2]*x), add=TRUE, col="red")
+curve( (b.sqrt[1] + b.sqrt[2]*x)^2, add=TRUE, col="blue")
+curve( 1/(b.1oY[1] + b.1oY[2]*x), add=TRUE, col="green")
+curve( b.y[1] + b.y[2]*x, add=TRUE, col="gray")
+curve( sqrt(b.y2[1] + b.y2[2]*x), add=TRUE, col="orange")
+curve( 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), add=TRUE, col="forestgreen")
+
+# ggplot Graphic
+
+library(tidyverse)
+
+ggplot(Orange, aes(x=age, y=circumference)) + 
+  geom_point(color="orangered") +
+  stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) + 
+  stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) + 
+  stat_function(fun=function(x) 1/(b.1oY[1] + b.1oY[2]*x), aes(color="1/Y")) + 
+  stat_function(fun=function(x) b.y[1] + b.y[2]*x, aes(color="Y")) + 
+  stat_function(fun=function(x) sqrt(b.y2[1] + b.y2[2]*x), aes(color="Y^2")) + 
+  stat_function(fun=function(x) 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), aes(color="1/Y^2")) + 
+  labs(title="Growth of Orange Trees", x="Age of Tree in Days", y="Circumference of Tree (mm)") + 
+  theme_bw( ) 
+
+library(car)
+boxCox(lm.y)
+
+
+YoungOrange <- filter(Orange, age < 1200)
+
+
+lm.log <- lm(log(circumference) ~ age, data=YoungOrange)
+b.log <- coef(lm.log)
+
+lm.sqrt <- lm(sqrt(circumference) ~ age, data=YoungOrange)
+b.sqrt <- coef(lm.sqrt)
+
+lm.1oY <- lm(1/circumference ~ age, data=YoungOrange)
+b.1oY <- coef(lm.1oY)
+
+lm.y <- lm(circumference ~ age, data=YoungOrange)
+b.y <- coef(lm.y)
+
+lm.y2 <- lm(circumference^2 ~ age, data=YoungOrange)
+b.y2 <- coef(lm.y2)
+
+lm.1oY2 <- lm(1/circumference^2 ~ age, data=YoungOrange)
+b.1oY2 <- coef(lm.1oY2)
+
+
+
+ggplot(Orange, aes(x=age, y=circumference)) + 
+  geom_point(color="orangered") +
+  geom_vline(aes(xintercept=1200)) + 
+  stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) + 
+  stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) + 
+#  stat_function(fun=function(x) 1/(b.1oY[1] + b.1oY[2]*x), aes(color="1/Y")) + 
+  stat_function(fun=function(x) b.y[1] + b.y[2]*x, aes(color="Y")) + 
+  stat_function(fun=function(x) sqrt(b.y2[1] + b.y2[2]*x), aes(color="Y^2")) + 
+#  stat_function(fun=function(x) 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), aes(color="1/Y^2")) + 
+  ylim(c(0,300)) + 
+  labs(title="Growth of Orange Trees", x="Age of Tree in Days", y="Circumference of Tree (mm)") + 
+  theme_bw( ) 
+```
+
+
+
+
+
+##### Quizzes
+
+Mean Squared Error
+$$\begin{equation}
+  s^2 = MSE = \frac{SSE}{n-2} = \frac{\sum(Y_i-\widehat{Y}_i)^2}{n-2} = \frac{\sum r_i^2}{n-2}
+\end{equation}$$
+
+``` {r, eval=FALSE}
+View(Orange)
+o.lm <- lm(circumference ~ age, data=Orange)
+summary(o.lm)
+
+
+ggplot(data=Orange, mapping=aes(y=circumference, x=age)) + geom_point(color = "orange", pch=16) +
+geom_smooth(method="lm", formula=y~x, se=F) +
+stat_function(fun=function(x) (b[1] + b.[2]*x)^2, aes(color="sqrt(Y)")) + 
+  theme_minimal()
+
+# sqrt(MSE)
+sqrt(sum(o.lm$residuals^2)/(35-2))
+
+plot(o.lm, which=1:2)
+plot(o.lm$residuals)
+# the variance is not constant, minor issues with linearity, minor issues with normality
+
+library(car)
+boxCox(o.lm)
+o.sqrt.lm <- lm(sqrt(circumference) ~ age, data=Orange)
+summary(o.sqrt.lm)
+b <- coef(o.sqrt.lm)
+t.lm <- lm((b[0] + b[1]*age)^2 ~ age, data=Orange)
+
+ggplot(data=Orange, mapping=aes(y=sqrt(circumference), x=age)) + geom_point(color = "orange", pch=16) +
+geom_smooth(method="lm", formula=y~x, se=F) +
+  theme_minimal()
+
+plot(o.sqrt.lm, which=1:2)
+plot(o.sqrt.lm$residuals)
+
+plot(circumference ~ age, data=Orange)
+abline(o.lm)
+curve((b[1] + b[2]*x)^2, add=TRUE)
+
+ggplot(data=Orange, mapping=aes(y=circumference, x=age)) + geom_point(color = "orange", pch=16) +
+geom_smooth(method="lm", formula=y~x, se=F) +
+  
+  theme_minimal()
+
+o.pred <- predict(o.sqrt.lm, data.frame(age=500))
+o.pred^2  # use predict on the transformed model and then reverse the answer
+```
+
+
+
+<br>
+
+#### 4. Hypothesis Tests for Model Parameters
+
+From Intermediate Stats: 
 1. State the null and alternative hypotheses.<br>
 2. Determine p-value based on test statistic<br>
 3 decision regrading Ho<br>
@@ -409,52 +860,299 @@ Probabliity of Type 1 error = alpha (convicting an innocent man of a crime)<br>
 Probability of Type II Error = Beta (letting a guilty man go free)<br>
 Null hypothesis in jury is innocence so we either reject nul (guilty) or fail to reject null (not guilty), but we don't accept the null (innocence)<br>
 
-##### Class Code
-One sample t-test, xbar (stat), Ho: mu=# Ha: mu!=<>#, Req: Sampling distribution of xbar is normal shape, talks about one variable<br>
-Matched Pairs (Means of the Difference) Dbar mean(x1-x2) stat, Ho= mua= 0, Sampling distribution of dbar is normal, kniwing who's ingroup 1 tells you something about who's in group 2 like husbands and wives, siblings, same person measured twice, before and after--variables must have same units<br>
-
-
  68-95-99.7 rule, with a normal distribution we can assume that within 2 standard deviations above and below the mean lies 95% of the data.
+	
+Some of the most common approaches to making inference about $\mu$ utilize a test statistic that follows a t distribution.
+	
+##### Class Code
 
+Standard error (estimated sd) = residual standard error
 
-##### Quizzes
+$$t = \frac{b_0 - \overbrace{0}^\text{a number}}{s_{b_0}}$$
+pt(-abs(tvalue), degrees of freedom) for left tailed or *2 for both
 
-These are small sample sizes. You will need to create Q-Q Plots of each sample of data to determine if the data in each group is normal or not. It turns out that making these Q-Q Plots in R is a little cumbersome. Here is the code that does it correctly.<br>
+$$MSE = \frac{\sum_{i=1}^n (Y_i - \hat{Y}_i)^2}{n-2} = \frac{SSE}{n-2}$$
+True Value of standard error of $b_1$<br>
+$$\sigma^2_{b_1} = \frac{\sigma^2}{\sum_{i=1}^n(X_i - \bar{X})^2}$$ 
 
-``` {r, eval=FALSE}
-library(car)
-qqPlot(uptake ~ Type, data = CO2.chilled.250)
+Estimated value of standard error of $b_1$<br>
+$$s^2_{b_1} = \frac{MSE}{\sum_{i=1}^n(X_i - \bar{X})^2}$$ 
+<br>
+<br>
+True Value of standard error of $b_2$<br>
+$$\sigma^2_{b_0} = \sigma^2 \left[\frac{1}{n} + \frac{\bar{X}^2}{\sum_{i=1}^n(X_i - \bar{X})^2}\right]$$
+
+Estimated value of standard error of $b_2$<br>
+$$s^2_{b_0} = MSE\left[\frac{1}{n} + \frac{\bar{X}^2}{\sum_{i=1}^n(X_i - \bar{X})^2}\right]$$
+The first term is variability in the data and the second is the variability on the Y.
+
+```{r eval=FALSE}
+confint(mylm)
 ```
 
-##### Assessment Quiz
 
-(no notes)
+```{r eval=FALSE}
+# Sampling Distributins of Model Parameters
+
+
+# Hypothesis Tests for Model Parameters
+
+## Simulation to Show relationship between Standard Errors
+
+##-----------------------------------------------
+## Edit anything in this area... 
+
+n <- 100 #sample size
+Xstart <- 30 #lower-bound for x-axis
+Xstop <- 100 #upper-bound for x-axis
+
+beta_0 <- 2 #choice of true y-intercept
+beta_1 <- 3.5 #choice of true slope
+sigma <- 13.8 #choice of st. deviation of error terms
+
+## End of Editable area.
+##-----------------------------------------------
+```
+
+**True Model**
+
+$$
+  Y_i = \overbrace{\beta_0}^{`r beta_0`} + \overbrace{\beta_1}^{`r beta_1`} X_i + \epsilon_i \quad \text{where} \ \epsilon_i \sim N(0, \overbrace{\sigma^2}^{\sigma=`r sigma`})
+$$
+
+```{r, fig.height=8, fig.width=8, eval=FALSE}
+X <- rep(seq(Xstart,Xstop, length.out=n/2), each=2) #Create X #n must be even
+N <- 5000 #number of times to pull a random sample
+storage_b0 <- storage_b1 <- storage_rmse <- rep(NA, N)
+for (i in 1:N){
+  Y <- beta_0 + beta_1*X + rnorm(n, 0, sigma) #Sample Y from true model
+# B0 + B1 is fixed (deterministic), rnorm is random (stochastic) as sigma is allowed to increase, we see more fuzz around the data/line and the harder it is to know 
+# the last r norm is the sigma, we're telling the data what law to obey
+  # could do runif(n, 30, 100) random uniform, the numbers are different each time and the lowest is may be as low or high as the lowest and highest value
+# assumption x is fixed and without error
+  
+# want to look at the distribution of   get a sample, get stat, store stat, get a new sample (scatterplot), then throw it back after you've captured the line
+  mylm <- lm(Y ~ X)
+  storage_b0[i] <- coef(mylm)[1]
+  storage_b1[i] <- coef(mylm)[2]
+  storage_rmse[i] <- summary(mylm)$sigma
+}
+
+
+layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE), widths=c(2,2), heights=c(3,3))
+
+Ystart <- 0 #min(0,min(Y)) 
+Ystop <- 500 #max(max(Y), 0)
+Yrange <- Ystop - Ystart
+
+plot(Y ~ X, xlim=c(min(0,Xstart-2), max(0,Xstop+2)), 
+     ylim=c(Ystart, Ystop), pch=16, col="gray",
+     main="Regression Lines from many Samples\n Plus Residual Standard Deviation Lines")
+text(Xstart, Ystop, bquote(sigma == .(sigma)), pos=1)
+text(Xstart, Ystop-.1*Yrange, bquote(sum ((x[i]-bar(x))^2, i==1, n) == .(var(X)*(n-1))), pos=1)
+text(Xstart, Ystop-.25*Yrange, bquote(sqrt(MSE) == .(mean(storage_rmse))), pos=1)
+
+
+for (i in 1:N){
+  abline(storage_b0[i], storage_b1[i], col="darkgray")  
+}
+abline(beta_0, beta_1, col="green", lwd=3)
+abline(beta_0+sigma, beta_1, col="green", lwd=2)
+abline(beta_0-sigma, beta_1, col="green", lwd=2)
+abline(beta_0+2*sigma, beta_1, col="green", lwd=1)
+abline(beta_0-2*sigma, beta_1, col="green", lwd=1)
+abline(beta_0+3*sigma, beta_1, col="green", lwd=.5)
+abline(beta_0-3*sigma, beta_1, col="green", lwd=.5)
+
+par(mai=c(1,.6,.5,.01))
+
+  addnorm <- function(m,s, col="firebrick"){
+    curve(dnorm(x, m, s), add=TRUE, col=col, lwd=2)
+    lines(c(m,m), c(0, dnorm(m,m,s)), lwd=2, col=col)
+    lines(rep(m-s,2), c(0, dnorm(m-s, m, s)), lwd=2, col=col)
+    lines(rep(m-2*s,2), c(0, dnorm(m-2*s, m, s)), lwd=2, col=col)
+    lines(rep(m-3*s,2), c(0, dnorm(m-3*s, m, s)), lwd=2, col=col)
+    lines(rep(m+s,2), c(0, dnorm(m+s, m, s)), lwd=2, col=col)
+    lines(rep(m+2*s,2), c(0, dnorm(m+2*s, m, s)), lwd=2, col=col)
+    lines(rep(m+3*s,2), c(0, dnorm(m+3*s, m, s)), lwd=2, col=col)
+    legend("topleft", legend=paste("Std. Error = ", round(s,3)), cex=0.7, bty="n")
+  }
+
+# Inference in linear regression, the gray bands are the collection of 2000 regression lines (we look at one of the samples of data, but the whole distribution of means)
+# We have the most accuracy and least variability we should make our prediction in the middle, we have an advantage because the variability around Ybar is less than it was when we just guessed
+
+  h0 <- hist(storage_b0, 
+             col="skyblue3", 
+             main="Sampling Distribution\n Y-intercept",
+             xlab=expression(paste("Estimates of ", beta[0], " from each Sample")),
+             freq=FALSE, yaxt='n', ylab="")
+  m0 <- mean(storage_b0)
+  s0 <- sd(storage_b0)
+  addnorm(m0,s0, col="green")
+  
+  h1 <- hist(storage_b1, 
+             col="skyblue3", 
+             main="Sampling Distribution\n Slope",
+             xlab=expression(paste("Estimates of ", beta[1], " from each Sample")),
+             freq=FALSE, yaxt='n', ylab="")
+  m1 <- mean(storage_b1)
+  s1 <- sd(storage_b1)
+  addnorm(m1,s1, col="green")
+
+
+
+
+
+
+# Test Statistics, t Distributions, and P-values
+curve(dt(x, 3), from=-4, to=4, lwd=2)
+curve(dnorm(x), add=TRUE, col="gray")
+abline(h=0, v=c(-1,1), col=c("gray","orange","orange"), lwd=c(1,2,2))
+
+pt(-1, 3)*2 
+
+
+cars.lm <- lm(dist ~ speed, data=cars)
+summary(cars.lm)
+
+pt(-2.601, 48)*2
+
+
+
+round(pt(-1.285, 13)*2,4)
+
+round(pt(-2.991, 48)*2,4)
+
+
+
+cars.lm <- lm(dist ~ speed, data=cars)
+summary(cars.lm)
+confint(cars.lm)
+```
+
+MSE is the average box (mean squared). It is an estimate of sigma^2. It is Y direction variability around the line.
+When you take the sqrt of a square you get a distance. The average length of distance.
+Sigma^2 of B1, how muchc the slope can vary, is equal of the distribution of Y  (It's like the ssto but in the x direction)
+Does it make sence that the variability of the slope is the variation of the difference of x and variton of the same for 
+sigma^2_bi = sigma^2/ssum of (xi -xhat)^2 true value
+s^2_b1 = MSE/sums(of Xi-xhat)^2 the estimated value. The bottom one is the variability of the run
+
+What would happen to those grey lines. If I were to reduce the distance of the dots, the grey lines would increase (because the distance on x is the denominator). We introduce more variability in the slopes . If we have larger sample, the denominator grows so the variability in y decreases. 
+
+
+[t distribution applet](http://byuimath.com/apps/normprobwitht.html)
+
+The quantile of the t distribution is the t-value that yields a certain probability of being less than that value. In other words, the t-value that corresponds to a given percentile.
+
+Shading only the left tail is called a percentile.
+```{r eval=FALSE}
+qt(1-0.05/2, 48)
+
+cars.lm <- lm(dist ~ speed, data=cars)
+.97.5
+```
+
+
+Change the percentile (area) to be 0.975 (97.5 percentile)
+
+If the middle is filled it's the confidence interval
+
+```{r eval=FALSE}
+# Set up the function:
+tprob <- function(t=1, df=3, show.normal=TRUE, xlim=c(-4,4)){
+  curve(dt(x, df), from=xlim[1], to=xlim[2], lwd=2)
+  xlo = seq(xlim[1], -abs(t), length.out=100)
+  xhi = seq(abs(t), xlim[2], length.out=100)
+  polygon(c(xlo[1],xlo,xlo[100]), c(0,dt(xlo,df),0), col="#128b37", border=NA)
+  polygon(c(xhi[1],xhi,xhi[100]), c(0,dt(xhi,df),0), col="#128b37", border=NA)  
+  abline(h=0, v=c(-abs(t),abs(t)), col=c("gray","orange","orange"), lwd=c(1,3,3))
+  text(xlo[1], dt(.5,df), paste("Area = ", round(pt(-abs(t), df)*2,4)), pos=4)
+  if(show.normal){
+    curve(dnorm(x), add=TRUE, col="gray")
+  }
+}
+
+# Use the function
+tprob(t=-2)
+tprob(t=-8, xlim=c(-9,9))
+tprob(t=-2, df=15)
+```
+
 
 <br>
 
-#### 4
 
 
-	
-##### Class Notes
+###### Quizzes
+
+The t-value from a regression in R is found by taking the "Estimate" and dividing by the "Std. Error". This is because R always uses the null hypothesis that the true parameter (for either the slope or the intercept) is zero. So the t-value is computed by t = (estimate - 0)/std. error = estimate/std. error.
+
+Since a 95% confidence interval is obtained by the formula: estimate +/- margin of error, and the margin of error is given by (t*)(std. error) then we have:
+
+qt(1-0.05/2, 397) #gives the critical value for t* = 1.965957
+
+and std. error = 0.4379 #as shown in the summary output
+
+So, 
+
+8.5621 - 1.965957 * 0.4379 #lower bound
+
+8.5621 + 1.965957 * 0.4379 #upper bound
+
+If you used instead
+
+8.5621 +/- 2 * 0.4379 
+
+then you would have still come close to the correct answer, but it would not be as correct as using the actual critical value from the t distribution with 397 degrees of freedom.
+
+The margin of error can be found from the confidence interval by using (-7.453 - -0.947)/2 = -3.253. Similarly, the estimate of the slope can be found by finding the middle of the confidence interval (-7.453 + -0.947)/2 = -4.2.
+
+Then, the critical value of the margin of error can be found using qt(1-0.05/2, 100-2) = 1.984467.
+
+This allows us to recover just the standard error of the slope, which is margin of error / critical value = -3.253/1.984467 = -1.639231.
+
+Thus, t = (estimate - hypothesized)/std. error = (-4.2 - -10)/-1.639231 = -3.538244, and the corresponding p-value is clearly very small, but can be computed exactly by pt(-3.538244, 98)*2 which gives p-value = 0.0006175379.
+
+```{r eval=FALSE}
+# Mobius
+library(Ecdat)
+cl.lm <- lm(tsales~hourspw, data=Clothing)
+summary(cl.lm)
+ggplot(data=Clothing, mapping=aes(y=tsales, x=hourspw)) +
+  geom_point(pch=16, color="skyblue") +
+  geom_smooth(method="lm", se=F, formula=y~x)
+
+# test statistic esimate b0-B0(hyp)/sd
+(1745-1500)/67479
+# pvalue (both sides)2*pt(-abs(t), df)
+2*pt(-abs(0.003630759), 398)
+
+(43884-35000)/3320 # slope
+2*pt(-abs(2.675904), 398)
+
+t.lm <- lm(sqrt(sqrt(tsales))~log(hourspw), Clothing)
+summary(t.lm)
+ggplot(data=Clothing, mapping=aes(y=sqrt(sqrt(tsales)), x=log(hourspw))) +
+  geom_point(pch=16, color="skyblue") +
+  geom_smooth(method="lm", se=F, formula=y~x)
+
+boxCox(cl.lm)
+
+# Assessment
+
+
+```
+
+
+
 
 <br>
 
+####  5. Confidence and Prediction Intervals for Yhath
 
+The t distribution is a little more spread out not as central. As df increases gets closer to normal.
 
-Skills Quiz, Wilcoxon Tests (non-parametric)
-
-Assessment Quiz
-
-
-
-<br>
-
-####  5
-
-
-<br>
-##### Class Notes
+##### Class Code
 
 Tip if having to determine patterns look at the interaction plot
 
@@ -465,15 +1163,15 @@ By using teh degrees of freedom and resdiuals std error you can get back to
 
 
 
-```{r s}
+```{r eval=FALSE}
 library(ggplot2)
 cars.lm <- lm(dist~ speed, data=cars)
 summary(cars.lm)
 confint(cars.lm)
 
-SSE
+# SSE
 15.38^2
-*48 is the 
+*48 
 
 #SSTO
 # SSTO = SSE + SSR
@@ -485,7 +1183,7 @@ R^2 = SSR/SSTO = 1- SSE= SSTO
 
 figure out how to say these
 
-```{r}
+```{r eval=FALSE}
 #Faithful
 plot(waiting ~ eruptions, data=faithful, pch=21, col="darkgray")
 faith.lm <- lm(waiting ~ eruptions, data=faithful)
@@ -529,9 +1227,44 @@ ggplot(faithful, aes(x=eruptions, y=waiting)) +
 
 
 ```{r}
-# Wednesday
+# Notes
+# pt takes a quantile  or t statistic
+# z-score times margin of error sd
+# pt(quantile, df)
+# qt(percentil, df) for pvalue
+# pt only gives us the left tail it has to be on the negative side -abs value or put in a negative number and then you don't have to use -abs
+# left-tailed (pt(-abs(tvalue), degreeoffreedom)) double it to get both sides
+# now you how to get the p-valueu compute it or use the applet from 221
+pt(-abs((3.9324-5)/.4155), 48)*2
+# if our estimate is closer to the truth it'l be a bigger pvalue because our estimate is closer to the new hypothesis than the zero hypothesis it's more likely to happen so # the p-value increases
+
 
 ```
+
+An interesting hypothesis: is the intercept the actual msrp
+automatic values only test the null hypothesis<br>
+You can calculate both the basic calculation my estimate - /sd<br>
+difference between the std error the tvalue is the <br>
+t-value is how many std errors the estimate is from H0:B0=0<br>
+What is the probability of being that far away (maybe p-value)<br>
+Do one percent things happen--I got married.<br>
+It could have happened but it’s not very likely.<br>
+If this impossible thing is occurring my belief system is wrong.<br>
+There must be another reason this happens.<br>
+How could this happen if there was a god. God didn't let that happen, man chose this it's all on uspop God forbid it, man did it anyway.<br>
+When something impossible is happening we actual decide we were wrong reject the null and accept an alternate hypothesis.<br>
+```{r eval=FALSE}
+round(pt(-1.285, 13)*2,4)
+qt(1-0.05/2, 48)
+```
+
+ 
+If we ignore the two tails we .05 is alpha 1-alpha over 2 that's confidienc 95 if alphas point 1 then 90 for ronfint<br>
+significance is on the outside and confidence is on the outside<br>
+what people see verses what we have on the inside<br>
+t-value is estimate-  over std error<br>
+the test statistic (comes from data) and the pvalue have 1to1 rational()<br>
+critical value is upt to a point from left<br>
 
 
 Confidence is for estimating the mean. Prediction is for estimating an individual. Learning when to use which takes practice. Confidence is always for mean average.
@@ -539,18 +1272,101 @@ Confidence is for estimating the mean. Prediction is for estimating an individua
 Predict Interval says the actual temp or eruption will fall between _
 
 ```{r}
-
+ qt(1-0.1/2,13)
 ```
 
+t* is a test statistic it's testing how far from the value<br>
+critical value<br>
+once I know my confidence I can find my t-value<br>
+t* a choice my confidence<br>
+test statics t- comes from data and my 
+critial value is how far<br>
+
+cmy test statics has to get to reject the null, alpha<br>
+test statistic to tstar<br>
+our critical value is 1.77 at 90% roszihen ig less than 01 is level of significance<br>
+
+t if tscore values in tales, reject null
+if tscore in confidence, fail to reject the null
+probability is bigger than the absolute value of t
+tscore is bigger than tstar then you pvalue is smaller than level of signific
+who gives alpha is tstar
+who gives pvalue the test statistic or tvalue
+```{r eval=FALSE}
+cars.lm <- (dist ~ speed, cars)
+summary(cars.lm)
+confint(cars.lm)
+```
+
+estimate intercept is little b0 which equals Ybar - b1X   if I have some data, and I know where the middle of the data is with regards to x the ybar xbar is the middle of the data.<br>
+What it's saying is slopes rise over run x is run, if you know how far you're running from zero, then how far should you fall. You should fall the slope xbar times after going xbar times over you'll be at 0 ybar minus the slope times xbar.<br>
+its's like an ssto in the x direction <br>
+std error measures for every other sample the variabilty<br>
+<br>
+confint gives 2.5 the lower bound and 97.5 upper boiund these two numbers are centered around the estimate 95 percent confident it's between here and here<br>
+What matters is how spread out the x-values are and the y. That information, that dna, is always found in one sample. When the slope varies a lot, the variability of the y intercept changes. If we select data at the ends, there's more variability than at the middle.<br>
+<br>
+If you combine x and y, variances are additive, so Var[x+y] = var[x] + var[y]<br>
+sigma^2_xbar = sigma^2/n<br>
+The farther we get from the interecept the more variability we have. (The origin of the line of information we have assume it startss at the origin, 0 space and 0 time). Carbon dating, most people just throw out the date but not the confidence interval.<br>
 
 
 
-```{r s}
+```{r eval=FALSE}
+# Wed 2-1
+lm.u <- lm(gasbill ~ temp, data=Utilities)
+summary(lm.u)
+
+lm.u.sqsq <- lm(sqrt(sqrt(gasbill)) ~ temp, data=Utilities)
+summary(lm.u.sqsq)
+plot(lm.u.sqsq, which=1)
+
+b <- coef(lm.u.sqsq)
+
+pred.u <- predict(lm.u, data.frame(temp=30), interval="prediction")
+pred.u.sqsq <- predict(lm.u.sqsq, data.frame(temp=30), interval="prediction")^4
+
+pred.u2 <- predict(lm.u, data.frame(temp=70), interval="prediction")
+pred.u.sqsq2 <- predict(lm.u.sqsq, data.frame(temp=70), interval="prediction")^4
+
+
+plot(gasbill ~ temp, data=Utilities)
+abline(lm.u, col="hotpink")
+abline(225.7804 + 26.45, -2.9704, lty=2, col="hotpink")
+abline(225.7804 - 26.45, -2.9704, lty=2, col="hotpink")
+curve((b[1] + b[2]*x)^4, add=TRUE, col="skyblue", lwd=2)
+curve((b[1]+0.2258 + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2)
+curve((b[1]-0.2258 + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2)
+abline(h=pred.u, lty=2, col="hotpink")
+abline(h=pred.u.sqsq, lty=2, col="skyblue")
+abline(v=c(30,70), lty=2)
+abline(h=pred.u2, lty=2, col="hotpink")
+abline(h=pred.u.sqsq2, lty=2, col="skyblue")
+
+plot(lm.u, which=1)
+View(Utilities)
+
+library(car)
+boxCox(lm.u)
+
+
+
+ggplot(Utilities, aes(x=temp, y=gasbill)) + 
+  geom_point() + 
+  geom_smooth(method="lm", formula=y~x, se=T) +
+  stat_function(fun=function(x) (b[1] + b[2]*x)^4) + 
+  geom_segment(aes(x=30,xend=30, y=pred.u[2], yend=pred.u[3]), alpha=0.01, lwd=3, col="hotpink") + 
+  geom_segment(aes(x=30,xend=30, y=pred.u.sqsq[2], yend=pred.u.sqsq[3]), alpha=0.01, lwd=2, col="skyblue") + 
+  geom_segment(aes(x=70,xend=70, y=pred.u2[2], yend=pred.u2[3]), alpha=0.01, lwd=3, col="hotpink") + 
+  geom_segment(aes(x=70,xend=70, y=pred.u.sqsq2[2], yend=pred.u.sqsq2[3]), alpha=0.01, lwd=2, col="skyblue") 
+  
+
+
 library(mosaic)
 library(tidyverse)
 lm.u <- lm(gasbill ~ temp, data=Utilities)
 summary(lm.u)
-lm.u.sqsq <- lm(sqrt(sqrt(gasbill))) ~ temp, data=Utilities)
+lm.u.sqsq <- lm(sqrt(sqrt(gasbill)) ~ temp, data=Utilities)
 summary(lm.u.sqsq)
 plot(lm.u.sqsq, which=1)
 
@@ -558,6 +1374,7 @@ plot(lm.u.sqsq, which=1)
 b <- coef(lm.u.sqsq)
 
 pred.u <- predict(lm.u, data.frame(temp=30), interval="prediction")
+pred.u
 pred.u.sqsq <- predict(lm.u.sqsq, data.frame(temp=30), interval="prediction")^4
 
 pred.u <- predict(lm.u, data.frame(temp=30), interval="prediction")
@@ -568,14 +1385,14 @@ pred.u.sqsq <- predict(lm.u.sqsq, data.frame(temp=30), interval="prediction")^4
 # first plot which 2 is mirrored
 plot(gasbill ~ temp, data=Utilities)
 abline(lm.u, col="hotpink")
-abline(225.7804 + 26.45, -2.9704, lty=2, col="hotpink")
-abline(225.7804 - 26.45, -2.9704, lty=2, col="hotpink")
-curve(((b[1] + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2))
-curve(((b[1] + 0.2258 + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2))
-curve(((b[1] - 0.2258 + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2))
-abline(h=pred.u, lty=2)
+#abline(225.7804 + 26.45, -2.9704, lty=2, col="hotpink")
+#abline(225.7804 - 26.45, -2.9704, lty=2, col="hotpink")
+curve(((b[1] + b[2]*x)^4), add=TRUE, col="skyblue")
+#curve(((b[1] + 0.2258 + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2))
+#curve(((b[1] - 0.2258 + b[2]*x)^4, add=TRUE, col="skyblue", lty=2, lwd=2))
+abline(h=pred.u, lty=2, col="hotpink")
 abline(h=pred.u.sqsq, lty=2, col="skyblue")
-abline(v=c(30,70) lty=2, col="hotpink")
+abline(v=30, lty=2, col="skyblue")
 
 
 # because I made it transparent
@@ -610,7 +1427,8 @@ discuss them in conclusion
  
  $\underbrace{Y_i}_\text{Scale}  = \beta_0 + \beta_1 \underbrace{X_i}_{Length} + \epsilon_i \quad \text{where} \ \epsilon_i\sim N(0,\sigma^2)$
 
-```{r}
+```{r eval=FALSE}
+# Transformations
 library(car)
 ?Davis
 
@@ -692,6 +1510,97 @@ abline(h=9.848869, lty=2, col="hotpink")
 abline(h=3.171672, lty=2, col="skyblue")
 
 
+# More Back Transformations
+lm.log <- lm(log(circumference) ~ age, data=Orange)
+b.log <- coef(lm.log)
+b.log[1]
+b.log[2]
+
+lm.sqrt <- lm(sqrt(circumference) ~ age, data=Orange)
+b.sqrt <- coef(lm.sqrt)
+
+lm.1oY <- lm(1/circumference ~ age, data=Orange)
+b.1oY <- coef(lm.1oY)
+
+lm.y <- lm(circumference ~ age, data=Orange)
+b.y <- coef(lm.y)
+
+lm.y2 <- lm(circumference^2 ~ age, data=Orange)
+b.y2 <- coef(lm.y2)
+
+lm.1oY2 <- lm(1/circumference^2 ~ age, data=Orange)
+b.1oY2 <- coef(lm.1oY2)
+
+
+# Base Graphic
+
+
+plot(circumference ~ age, data=Orange, pch=16, col="orangered", main="Growth of Orange Trees", xlab="Age of Tree in Days", ylab="Circumference of Tree (mm)")
+
+curve( exp(b.log[1] + b.log[2]*x), add=TRUE, col="red")
+curve( (b.sqrt[1] + b.sqrt[2]*x)^2, add=TRUE, col="blue")
+curve( 1/(b.1oY[1] + b.1oY[2]*x), add=TRUE, col="green")
+curve( b.y[1] + b.y[2]*x, add=TRUE, col="gray")
+curve( sqrt(b.y2[1] + b.y2[2]*x), add=TRUE, col="orange")
+curve( 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), add=TRUE, col="forestgreen")
+
+# ggplot Graphic
+
+library(tidyverse)
+
+ggplot(Orange, aes(x=age, y=circumference)) + 
+  geom_point(color="orangered") +
+  stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) + 
+  stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) + 
+  stat_function(fun=function(x) 1/(b.1oY[1] + b.1oY[2]*x), aes(color="1/Y")) + 
+  stat_function(fun=function(x) b.y[1] + b.y[2]*x, aes(color="Y")) + 
+  stat_function(fun=function(x) sqrt(b.y2[1] + b.y2[2]*x), aes(color="Y^2")) + 
+  stat_function(fun=function(x) 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), aes(color="1/Y^2")) + 
+  labs(title="Growth of Orange Trees", x="Age of Tree in Days", y="Circumference of Tree (mm)") + 
+  theme_bw( ) 
+
+library(car)
+boxCox(lm.y)
+
+
+YoungOrange <- filter(Orange, age < 1200)
+
+
+lm.log <- lm(log(circumference) ~ age, data=YoungOrange)
+b.log <- coef(lm.log)
+
+lm.sqrt <- lm(sqrt(circumference) ~ age, data=YoungOrange)
+b.sqrt <- coef(lm.sqrt)
+
+lm.1oY <- lm(1/circumference ~ age, data=YoungOrange)
+b.1oY <- coef(lm.1oY)
+
+lm.y <- lm(circumference ~ age, data=YoungOrange)
+b.y <- coef(lm.y)
+
+lm.y2 <- lm(circumference^2 ~ age, data=YoungOrange)
+b.y2 <- coef(lm.y2)
+
+lm.1oY2 <- lm(1/circumference^2 ~ age, data=YoungOrange)
+b.1oY2 <- coef(lm.1oY2)
+
+
+
+ggplot(Orange, aes(x=age, y=circumference)) + 
+  geom_point(color="orangered") +
+  geom_vline(aes(xintercept=1200)) + 
+  stat_function(fun=function(x) exp(b.log[1] + b.log[2]*x), aes(color="log(Y)")) + 
+  stat_function(fun=function(x) (b.sqrt[1] + b.sqrt[2]*x)^2, aes(color="sqrt(Y)")) + 
+#  stat_function(fun=function(x) 1/(b.1oY[1] + b.1oY[2]*x), aes(color="1/Y")) + 
+  stat_function(fun=function(x) b.y[1] + b.y[2]*x, aes(color="Y")) + 
+  stat_function(fun=function(x) sqrt(b.y2[1] + b.y2[2]*x), aes(color="Y^2")) + 
+#  stat_function(fun=function(x) 1/sqrt(b.1oY2[1] + b.1oY2[2]*x), aes(color="1/Y^2")) + 
+  ylim(c(0,300)) + 
+  labs(title="Growth of Orange Trees", x="Age of Tree in Days", y="Circumference of Tree (mm)") + 
+  theme_bw( ) 
+
+
+
 
 ob <- coef(wb.lm)
 summary(wb.lm)
@@ -714,6 +1623,78 @@ confint(sqrt.lm)
 
 wb.preds <- predict(wb.lm, data.frame(Length=250), interval="prediction")
 sqrt.preds <- predict(sqrt.lm, data.frame(Length=250), interval="prediction")
+
+install.packages("Ecdat")
+library(Ecdat)
+library(car)
+View(Caschool)
+mylm <- lm(testscr ~ mealpct, data=Caschool)
+plot(testscr ~ mealpct, data=Caschool)
+abline(mylm)
+summary(mylm)
+confint(mylm, level=.95)
+plot(mylm, which=1:2)
+plot(mylm$residuals, ylab="Residuals")
+
+View(Clothing)
+mylm1 <- lm(tsales ~ hourspw, data=Clothing)
+mylm2 <- lm(tsales ~ hourspw, data=Clothing2)
+plot(tsales ~ hourspw, data=Clothing2)
+abline(mylm)
+summary(mylm)
+confint(mylm, level=.95)
+plot(mylm, which=1:2)
+plot(mylm$residuals, ylab="Residuals")
+pt(-abs(1500), 398)
+Clothing2 <- Clothing[-397,]
+bc1 <-boxCox(mylm)
+bc$
+library(MASS)
+bc <- boxcox(mylm1)
+bc$
+#pull the max lambda
+lamdba <-bc$x[which.max(bc$y)]
+lamdba
+boxcox()
+BoxCox(mylm, lam)
+library(car)
+boxCox(mylm)
+
+
+library(forecast)
+BoxCox(mylm)
+
+
+```
+
+
+
+
+#### 6. Different Types of Regression  Models
+
+All models are wrong. Some are useful. ~Box<br>
+If you can't visualize it. Don't trust it. (in Stats)
+
+[Desmos](https://www.desmos.com/calculator)<br>
+New Models<br>
+
+
+* Quadratic * <br>
+The numberline is made of uncountable infinite dots.
+In math the highest order wins. The shape is determined by it's highest ordered term. So as we move away from zero on x, x^2 has more influence.<br>
+If you can place the vertex (b1), and y intercept (b0), you can place it.<br>
+$ax^2 + bX + c$ $a$ = quadratic, $b$ = slope term, $c$ = constant term<br>
+You cannot just square X if you actually have a parabola in the data<br>
+In this model you have to have a color label.
+$$Y_i = \overbrace{\underbrace{\beta_0 + \beta_1 X_i + \beta_2 X_i^2}_{E\{Y_i\}}}^\text{Quadratic Model} + \epsilon_i$$
+
+* $\beta_0$ Y-intercept of the Model<br>
+* $\beta_1$ Controls the x-position of the vertex of the parabola by $\frac{-\beta_1}{2\cdot\beta_2}$
+* $\beta_2$ Controls the concavity and “steepness” of the Model: negative values face down, positive values face up; large values imply “steeper” parabolas and low values imply “flatter” parabolas. Also involved in the position of the vertex, see $\beta_1$'s explanation.<br>
+
+##### Class Code
+
+```{r}
 
 
 
