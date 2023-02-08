@@ -1,0 +1,135 @@
+---
+title: "DifferentModels"
+output:
+    html_document
+author: "Dawn Galloway"
+date: "2/6/2023"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Simple Linear Regression Models
+
+```{r}
+ ## Simulating Data from a Regression Model
+  ## This R-chunk is meant to be played in your R Console.
+  ## It allows you to explore how the various elements
+  ## of the regression model combine together to "create"
+  ## data and then use the data to "re-create" the line.
+
+  set.seed(101) #Allows us to always get the same "random" sample
+                #Change to a new number to get a new sample
+
+  n <- 30 #set the sample size
+
+  X_i <- runif(n, 15, 45) # random uniform gives n random values in a uniform distribution from 15 to 45
+    #Gives n random values from a uniform distribution between 15 to 45.
+
+  beta0 <- 3 #Our choice for the y-intercept. 
+
+  beta1 <- 1.8 #Our choice for the slope. 
+
+  sigma <- 2.5 #Our choice for the std. deviation of the error terms.
+
+
+  epsilon_i <- rnorm(n, 0, sigma) 
+    #Gives n random values from a normal distribution with mean = 0, st. dev. = sigma.
+
+  Y_i <- beta0 + beta1*X_i + epsilon_i 
+    #Create Y using the normal error regression model
+
+  fabData <- data.frame(y=Y_i, x=X_i) 
+    #Store the data as data
+
+  View(fabData) 
+  
+
+  #In the real world, we begin with data (like fabData) and try to recover the model that 
+  # (we assume) was used to created it.
+
+  fab.lm <- lm(y ~ x, data=fabData) #Fit an estimated regression model to the fabData.
+
+  summary(fab.lm) #Summarize your model. 
+
+  plot(y ~ x, data=fabData) #Plot the data.
+
+  abline(fab.lm) #Add the estimated regression line to your plot.
+
+
+  # Now for something you can't do in real life... but since we created the data...
+
+  abline(beta0, beta1, lty=2) 
+    #Add the true regression line to your plot using a dashed line (lty=2). 
+
+  legend("topleft", legend=c("True Line", "Estimated Line"), lty=c(2,1), bty="n") 
+    #Add a legend to your plot specifying which line is which.
+```
+
+
+## Quadratic Regression
+
+```{r}
+library(ggplot2)
+ ## Simulating Data from a Regression Model
+  ## This R-chunk is meant to be played in your R Console.
+  ## It allows you to explore how the various elements
+  ## of the regression model combine together to "create"
+  ## data and then use the data to "re-create" the line.
+
+  set.seed(101) #Allows us to always get the same "random" sample
+                #Change to a new number to get a new sample
+
+  n <- 120 #set the sample size
+
+  X_i <- runif(n, 0, 10) # random uniform gives n random values in a uniform distribution from 15 to 45
+    #Gives n random values from a uniform distribution between 0 to 10.
+
+  beta0 <- -.45 #Our choice for the y-intercept. 
+
+  beta1 <- 1.28 #Our choice for the slope. 
+  
+  beta2 <- -0.1
+  sigma <- .25 #Our choice for the std. deviation of the error terms.
+
+
+  epsilon_i <- rnorm(n, 0, sigma) 
+    #Gives n random values from a normal distribution with mean = 0, st. dev. = sigma.
+
+  Y_i <- beta0 + beta1*X_i + beta2*X_i^2 + epsilon_i 
+    #Create Y using the normal error quadratic regression model
+
+  fabData <- data.frame(y=Y_i, x=X_i) 
+    #Store the data as data
+
+  #View(fabData) 
+  
+
+  #In the real world, we begin with data (like fabData) and try to recover the model that 
+  # (we assume) was used to created it.
+
+  fab.lm <- lm(y ~ x + I(x^2), data=fabData) #Fit an estimated regression model to the fabData.
+b <- coef(fab.lm)
+  summary(fab.lm) #Summarize your model. 
+  
+  ggplot(fabData, aes(y=Y_i, x=X_i)) + 
+    ylim(0,4) +
+  geom_point(pch=21, bg="gray83", color="skyblue") +
+  #geom_smooth(method="lm", se=F, formula = y ~ poly(x, 2)) + #easy way, but the more involved manual way using stat_function (see below) is more dynamic.
+  stat_function(fun = function(x) b[1] + b[2]*x + b[3]*x^2, lty=1) +
+  stat_function(fun = function(x) beta0 + beta1*x + beta2*x^2, lty=2) +
+  labs(title="Quadratic Regression Relation Diagram", lty=c("E{Y} is the", "Yhat")) +
+    theme(legend.position = "bottom", legend.title = element_blank()) +
+    theme_minimal()
+  
+
+  # Now for something you can't do in real life... but since we created the data...
+
+ # curve(beta0, beta1, beta2,lty=2) 
+    #Add the true regression line to your plot using a dashed line (lty=2). 
+
+  #legend("topleft", legend=c("True Line", "Estimated Line"), lty=c(2,1), bty="n") 
+    #Add a legend to your plot specifying which line is which.
+```
+

@@ -1,0 +1,142 @@
+---
+title: "Fix"
+author: "Dawn Galloway"
+date: "2/1/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+explain how the plot is changing when we go to residuals ve fitted
+
+
+The plot above is the SSTO--this is the total amount of variability in your data.
+SSR A good regression should decrease the var, so SSE should be less than SSTO. 
+Sum of Square Regression Error mesured for every x even.
+The only way your line could be worse than ybar is if it moved away from the data so it's not possible because Yhat is the best fit (is in the middle).
+Why does dividing SSR/SSTO give a good? We want $\hat{Y}$ to be far from $\hat{Y}$--we're getting more explanation. If it's close to 0 then it's close to the average, so it's not telling us anything.
+Proportion of variation in Y explained by the regression.
+
+SSE is the unexplained variability
+sum( lmObject$res^2 )
+```{r}
+sum(cars.lm$res^2 )
+```
+<br>
+SSR is the explained variablility
+sum( (lmObject$fit - mean(YourData$Y))^2 )
+```{r}
+cars.ssr <- sum( (cars.lm$fit - mean(cars$dist))^2 )
+```
+<br>
+SSTO
+sum( (YourData$Y - mean(YourData$Y))^2 )
+```{r}
+cars.ssto <- sum( (cars$dist - mean(cars$dist))^2 )
+```
+<br>
+R2 is the ration between explanation and total SSR/SSTO
+```{r}
+cars.ssr/cars.ssto
+```
+<br>
+r (correlation) is square root of $R^2$
+
+```{r}
+sqrt(cars.ssr/cars.ssto)
+```
+
+
+
+# Type 1 error is significant lie
+# A significant result doesn't mean that it's true, it only means it's significant
+
+
+Describe the data
+SS an area measure is a square if we add up residuals we get zero every time 
+sum of square residual
+the line in the middle on the average it's the smallest sum of least squares or the least squares line
+what's difference and a residual and epsilon residual obs - predicted epsilon is the obs - actual 
+residual how far you think I'm from Christ epsilon is how far I am from Christ
+epsilon is theoretical assumption because it's based on a truth we can't see
+no other line can minimize the squares as much as the best fit
+
+We can't get residuals until we get a line, but the line is picked by minimizing the residuals
+Residuals gave you the line as a gift
+
+R2 of 1 gives you nothing because residuals are one, but .99 is good if you get really high R squared we suspect you did sometging wrong like using Y to predict Y
+
+proportion or variation in Y that's used by using the regression (x variable)
+cool graph to make in r
+
+not ri squared r squared  r is the correlation written R^2
+Any time you square a decimal it gets smaller R^2 is stricter on the correlation
+If you signed up for a tutor, a good question would be what was your grade in 425
+
+As the line moves to the middle of the data the SSE decreases 
+SSR is reserved for how far the regression line is from Ybar
+best fit line
+Residuals give us the line and R2
+value of a regression, which is the proportion of variation in Y explained by the regression model. The  SSR/SSTO
+
+The SSE IS the unexplained the amount that we still have in errors (we don't like SSE because it's what we still don't know)
+The SSR is the part explained by the regression line (we like SSR because we understand) Subtract the R2 a barchart could show that.
+R2 is the part of the variability we've come to explain or 1-the part we hcan't explani
+R2 is not the portion of the data that has been explained by regression line the
+It's the variability (departure of the dot from average) that is explained by the data
+
+Why hard to understand R2, we don't know what proportion is or variability what is explained (if we have an R2 of one we've totally explained the data)
+
+Does god ever doanything unexpected He's steady and constant and true. There is no variability in him.
+                                                                                              What variance means is suddenly you're not where you used to be. God doesn't have any SSE
+
+Could we have a small p-value and a vary large R2?
+  pvalue measures the explanation compared to random chance--He's only seen it once a low slow and a million data points. But it's not normal
+R2 isn't necessarily the steepness but how tight the dots are line
+
+p-value measures whether their is a law
+If there is no law then who cares whether the data follows it
+If their is the law
+p-value doesn't mean you found truth but you found something significant.
+R2 how close the data is to the line
+There are laws that exist but people don't follow them
+No one doesn't fall the law of gravity
+
+3rd What else do residuals do. 
+
+First, residuals are the key to obtaining the "least squares estimates" of the regression parameters and. give us the line
+
+Second, residuals are an important part in measuring the value of a regression, which is the proportion of variation in Y explained by the regression model.
+tell us the line
+
+hird, residuals give insight about how much an individual of a given x-value differs from average in their y-value.
+
+Residuals estimate tells us sigma2
+residual standard error is sqt(SSE/n-p)
+MSE = SSE/(n-p) Estimate of signma2 p is parameters
+Residual Standard Error is estimating the sigma of the dots
+Fourth, (and this one you haven't seen yet) residuals can be used to estimate the variance parameter of a regression, i.e.,in the equation
+
+Fifth, (and we will see this one in more detail next week) residuals can be used to determine if a linear regression model is appropriate for a given data set.
+
+We got line from residuals tell how good it is from residuals can estimpate the model praarmeters ilke sigma whether the residuals are appropriate
+
+
+SSE is all the boxes added together
+MSE is the average size of the boxes mean average se the errors 
+
+
+residual tells how far you are from the line
+
+
+		
+
+The SSR divided by the SSTO gives the proportion of variation in Y explained by the regression, which is R-squared. The square root of R-squared is the correlation.
+		
+
+The square root of SSR divided by SSTO gives the value of the correlation.
+
+
